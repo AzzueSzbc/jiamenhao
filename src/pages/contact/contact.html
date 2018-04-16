@@ -1,17 +1,40 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Contact
-    </ion-title>
-  </ion-navbar>
+<ion-header no-border>
+  <div class="nav-warp">
+
+  </div>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-start></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+  <ion-card *ngIf="islogined==false">
+    <ion-card-content>
+      <ion-item no-lines (click)="openLoginPage()">
+        <ion-avatar item-start>
+          <img src="../../assets/imgs/uncomfortable.jpg">
+        </ion-avatar>
+        <h2 subitem-title text-wrap>请登录</h2>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="islogined">
+    <ion-card-content>
+      <ion-item no-lines (click)="openUserdataPage()">
+        <ion-avatar item-start>
+          <img [src]="hostsURL + 'avatar.jpg '">
+        </ion-avatar>
+        <h2 subitem-title text-wrap>{{userData.buyerUserName}}</h2>
+        <h3 subitem-subtitle text-wrap>个人信息</h3>
+        <button ion-button icon-only item-end clear>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
+      </button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      收货地址
+    </ion-card-header>
+  </ion-card>
+
 </ion-content>

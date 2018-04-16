@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form [formGroup]="loginForm" (ngSubmit)="loginSubmit(loginForm.value)">
+    <ion-item>
+      <ion-label color="primary" floating>手机号</ion-label>
+      <ion-input type="text" formControlName="username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>密码</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+
+    <div padding>
+      <button block ion-button type="submit" [disabled]="!loginForm.valid">登录</button>
+    </div>
+  </form>
+</ion-content>

@@ -1,0 +1,121 @@
+<ion-header no-border>
+  <ion-navbar>
+    <ion-title>shop</ion-title>
+  </ion-navbar>
+  <div class="header-wrap">
+    <header>
+      <div class="top">
+        <div class="up">
+          <div class="img-wrap">
+            <img *ngIf="shopData?.sellerShopLogoURL==''" class="avatar" width="64" height="64" alt="" [src]="hostsURL + 'avatar.jpg'">
+            <img *ngIf="shopData?.sellerShopLogoURL!=''" class="avatar" width="64" height="64" alt="" [src]="hostsURL + shop?.sellerShopLogoURL">
+          </div>
+          <div class="right">
+            <div class="title">
+              <span class="txt">{{shopData?.sellerShopName}}</span>
+            </div>
+            <div class="desc">王镛转送 / 大约1年送达</div>
+          </div>
+        </div>
+        <div class="down">
+          <div class="txt">公告：{{shopData?.sellerShopDescription}}</div>
+        </div>
+      </div>
+      <img class="bg" alt="" src="../../assets/images/bg.jpg">
+      <img *ngIf="shopData?.sellerShopLogoURL==''" class="bg" alt="" [src]="hostsURL + 'avatar.jpg'">
+      <img *ngIf="shopData?.sellerShopLogoURL!=''" class="bg" alt="" [src]="hostsURL + shop?.sellerShopLogoURL">
+    </header>
+  </div>
+
+  <ion-segment mode="md" [(ngModel)]="sgm">
+    <ion-segment-button value="goods">
+      商品
+      <div class="bolder-sm"></div>
+    </ion-segment-button>
+    <ion-segment-button value="rating">
+      评价
+      <div class="bolder-sm"></div>
+    </ion-segment-button>
+    <ion-segment-button value="seller">
+      商家
+      <div class="bolder-sm"></div>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content no-padding overflow-scroll="false">
+
+
+  <div [ngSwitch]="sgm" style="height: 100%;">
+
+    <div *ngSwitchCase="'goods'" style="height: 100%;">
+      <!--左侧商品类型导航-->
+      <div style="float: left;width: 25%;border: 0;height: 100%;overflow-y: scroll;background: #f1f1f1">
+        <ion-list no-lines>
+          <button ion-item *ngFor="let pdClass of shopData?.shopProductClass">
+                  {{pdClass?.shopProductClassName}}
+                </button>
+        </ion-list>
+      </div>
+      <!--右侧商品列表-->
+      <div style="float: left;width: 75%;border: 0;height: 100%;overflow: hidden;">
+        <div style="height: 100%;overflow-y: scroll;">
+          <ion-list no-lines *ngFor="let pdClass of shopData?.shopProductClass">
+            <h4 class="items-title">{{pdClass?.shopProductClassName}}</h4>
+            <ion-item *ngFor="let p of pdClass.product">
+              <div class="img-wrap" item-start>
+                <img class="img" width="57" height="57" alt="" [src]="hostsURL + p?.productPictureURL">
+              </div>
+              <div class="info-wrap">
+                <h3 class="title">{{p.productName}}</h3>
+                <P class="desc">{{p.productDescription}}</P>
+                <p class="feed">
+                  <span class="txt">月售{{p?.productMonthlySales}}份</span>
+                  <span class="txt">{{p?.productVoteUpCount}}赞</span>
+                </p>
+                <div class="price">
+                  <span class="now">
+                  <b class="sign">￥</b>
+                  <span class="num">{{p?.productPrice}}</span>
+                  </span>
+                  <span class="unit">
+                  <b class="sign">/</b>
+                  <span class="num">{{p?.productUnit}}</span>
+                  </span>
+                </div>
+                <div style="position: absolute;right: 10px;bottom: 6px;display: flex;align-items: center;height: 24px;font-size: 14px;overflow: hidden;">
+                  <div *ngIf="p?.inCartNumber > 0" style="display: flex;align-items: center;">
+                    <button ion-button icon-only clear (click)="removeChage(p)">
+                      <ion-icon name="ios-remove-circle-outline"></ion-icon>
+                    </button>
+                    <span style="width: 24px;text-align: center;">{{p?.inCartNumber}}</span>
+                  </div>
+                  <button ion-button icon-only clear (click)="addChange(p)">
+                      <ion-icon name="ios-add-circle"></ion-icon>
+                    </button>
+                </div>
+              </div>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="sgm=='goods'">
+  <div class="carts-box">
+    <div class="left" [ngClass]="{on: onCalcTotal().totalNum}">
+      <div class="cart">
+        <ion-icon name="cart"></ion-icon>
+        <span class="num" *ngIf="onCalcTotal().totalNum">{{onCalcTotal().totalNum}}</span>
+      </div>
+      <div class="price">
+        <span class="money">￥{{onCalcTotal().totalMoney}}</span>
+        <span class="line"></span>
+        <span class="plus">另需配送费￥{{shopData?.sellerShopShippingCharge}}元</span>
+      </div>
+    </div>
+    <div class="right" [ngClass]="{on: onCalcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit}" (click)="toPay()">{{onCalcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit ? '去结算' : onChangeTxt()}}</div>
+  </div>
+</ion-footer>

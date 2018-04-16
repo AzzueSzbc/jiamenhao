@@ -1,0 +1,64 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>提交订单</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <button ion-button block round color="primary" outline>
+          <ion-icon name="add"></ion-icon> 选择收货地址
+        </button>
+      </ion-item>
+      <ion-item>
+        <h2 item-left>立即送出</h2>
+        <p ion-text color="primary">(大约 20 分钟)</p>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-list no-lines>
+        <ion-item *ngFor="let g of cartList">
+          <ion-thumbnail item-start>
+            <img [src]="hostsURL + g?.goodspicture">
+          </ion-thumbnail>
+          <h3>{{g?.goodsName}}</h3>
+          <p>x{{g?.goodsNumber}}</p>
+          <h2 item-end ion-text>￥{{g?.goodsPrice*g?.goodsNumber}}</h2>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <p item-start>配送费</p>
+          <h3 item-end>￥{{shippingCharge}}</h3>
+        </ion-item>
+        <ion-item>
+          <p item-start>包装费</p>
+          <h3 item-end>￥2</h3>
+        </ion-item>
+        <ion-item>
+          <p item-end>小计</p>
+          <h2 ion-text color="danger" item-end>￥ {{paySum}}</h2>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <div class="carts-box">
+    <div class="right">提交订单</div>
+  </div>
+</ion-footer>

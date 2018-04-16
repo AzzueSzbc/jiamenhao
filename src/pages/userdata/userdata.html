@@ -1,0 +1,60 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>我的账号</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-list inset>
+      <button ion-item>
+        头像
+        <ion-avatar item-end >
+          <img [src]="hostsURL + 'avatar.jpg '">
+        </ion-avatar>
+        <button ion-button item-end clear icon-only>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+      <button ion-item >
+        用户名
+        <ion-note item-end>{{userData?.buyerUserName}}</ion-note>
+        <button ion-button item-end clear icon-only>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+      <button ion-item >
+        账号密码
+        <ion-note item-end>修改</ion-note>
+        <button ion-button item-end clear icon-only>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+    </ion-list>
+  </ion-card>
+  <ion-card>
+    <ion-list inset>
+      <button ion-item >
+        <ion-icon name='phone-portrait' item-start></ion-icon>
+        手机
+        <ion-note item-end>{{userData?.buyerAccount}}</ion-note>
+        <button ion-button item-end clear icon-only color="miku">
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+      <button ion-item >
+        <ion-icon name='mail' item-start></ion-icon>
+        邮箱
+        <ion-note item-end>{{userData?.buyerEmail}}</ion-note>
+        <button ion-button item-end clear icon-only color="miku">
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+    </ion-list>
+  </ion-card>
+  <div padding="">
+    <button ion-button outline round block (click)="userLogout()">退出当前用户</button>
+  </div>
+</ion-content>
