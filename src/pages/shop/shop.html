@@ -4,6 +4,8 @@
   </ion-navbar>
   <div class="header-wrap">
     <header>
+      <div  class="top-navbg">
+      </div>
       <div class="top">
         <div class="up">
           <div class="img-wrap">
@@ -14,14 +16,13 @@
             <div class="title">
               <span class="txt">{{shopData?.sellerShopName}}</span>
             </div>
-            <div class="desc">王镛转送 / 大约1年送达</div>
+            <div class="desc">王鳙转送 / 大约1年送达</div>
           </div>
         </div>
         <div class="down">
           <div class="txt">公告：{{shopData?.sellerShopDescription}}</div>
         </div>
       </div>
-      <img class="bg" alt="" src="../../assets/images/bg.jpg">
       <img *ngIf="shopData?.sellerShopLogoURL==''" class="bg" alt="" [src]="hostsURL + 'avatar.jpg'">
       <img *ngIf="shopData?.sellerShopLogoURL!=''" class="bg" alt="" [src]="hostsURL + shop?.sellerShopLogoURL">
     </header>
@@ -45,54 +46,53 @@
 
 <ion-content no-padding overflow-scroll="false">
 
-
   <div [ngSwitch]="sgm" style="height: 100%;">
 
     <div *ngSwitchCase="'goods'" style="height: 100%;">
       <!--左侧商品类型导航-->
-      <div style="float: left;width: 25%;border: 0;height: 100%;overflow-y: scroll;background: #f1f1f1">
+      <div  class="type-list-wrap">
         <ion-list no-lines>
-          <button ion-item *ngFor="let pdClass of shopData?.shopProductClass">
-                  {{pdClass?.shopProductClassName}}
-                </button>
+          <button ion-item *ngFor="let gType of shopData?.shopProductClass">
+            {{gType?.shopProductClassName}}
+          </button>
         </ion-list>
       </div>
       <!--右侧商品列表-->
-      <div style="float: left;width: 75%;border: 0;height: 100%;overflow: hidden;">
-        <div style="height: 100%;overflow-y: scroll;">
-          <ion-list no-lines *ngFor="let pdClass of shopData?.shopProductClass">
-            <h4 class="items-title">{{pdClass?.shopProductClassName}}</h4>
-            <ion-item *ngFor="let p of pdClass.product">
+      <div  class="goods-list-wrap">
+        <div   class="list-scroll">
+          <ion-list no-lines *ngFor="let gType of shopData?.shopProductClass">
+            <h4 class="items-title">{{gType?.shopProductClassName}}</h4>
+            <ion-item *ngFor="let g of gType.product">
               <div class="img-wrap" item-start>
-                <img class="img" width="57" height="57" alt="" [src]="hostsURL + p?.productPictureURL">
+                <img class="img" width="57" height="57" [src]="hostsURL + g?.productPictureURL">
               </div>
               <div class="info-wrap">
-                <h3 class="title">{{p.productName}}</h3>
-                <P class="desc">{{p.productDescription}}</P>
+                <h3 class="title">{{g?.productName}}</h3>
+                <P class="desc">{{g?.productDescription}}</P>
                 <p class="feed">
-                  <span class="txt">月售{{p?.productMonthlySales}}份</span>
-                  <span class="txt">{{p?.productVoteUpCount}}赞</span>
+                  <span class="txt">月售{{g?.productMonthlySales}}份</span>
+                  <span class="txt">{{g?.productVoteUpCount}}赞</span>
                 </p>
                 <div class="price">
                   <span class="now">
                   <b class="sign">￥</b>
-                  <span class="num">{{p?.productPrice}}</span>
+                  <span class="num">{{g?.productPrice}}</span>
                   </span>
                   <span class="unit">
                   <b class="sign">/</b>
-                  <span class="num">{{p?.productUnit}}</span>
+                  <span class="num">{{g?.productUnit}}</span>
                   </span>
                 </div>
-                <div style="position: absolute;right: 10px;bottom: 6px;display: flex;align-items: center;height: 24px;font-size: 14px;overflow: hidden;">
-                  <div *ngIf="p?.inCartNumber > 0" style="display: flex;align-items: center;">
-                    <button ion-button icon-only clear (click)="removeChage(p)">
+                <div  class="btns-wrap">
+                  <div  class="btn-left" *ngIf="g?.inCartNumber > 0">
+                    <button ion-button icon-only clear (click)="onRemoveChage(g)">
                       <ion-icon name="ios-remove-circle-outline"></ion-icon>
                     </button>
-                    <span style="width: 24px;text-align: center;">{{p?.inCartNumber}}</span>
+                    <span  class="num">{{g?.inCartNumber}}</span>
                   </div>
-                  <button ion-button icon-only clear (click)="addChange(p)">
+                  <button ion-button icon-only clear (click)="onAddChange(g)">
                       <ion-icon name="ios-add-circle"></ion-icon>
-                    </button>
+                  </button>
                 </div>
               </div>
             </ion-item>
@@ -101,21 +101,46 @@
       </div>
     </div>
   </div>
+
+
 </ion-content>
 
 <ion-footer *ngIf="sgm=='goods'">
+  <div class="carts-mark" *ngIf="cartFlag">
+    <div class="carts-list">
+      <div class="settings">
+        <span class="txt">购物车</span>
+        <span class="btn" (click)="onDeleteAllCartGoods()">清空</span>
+      </div>
+      <div class="list">
+      <ul>
+        <li class="item bd" *ngFor="let g of cartGoodsList">
+          <div class="left">{{g.goodsName}}</div>
+          <div class="right">
+            <span class="price-wrap">
+              <span class="sign">￥</span>
+              <span class="price">{{g.goodsPrice}}</span>
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </div>
   <div class="carts-box">
-    <div class="left" [ngClass]="{on: onCalcTotal().totalNum}">
+    <div class="left" [ngClass]="{on: calcTotal().totalNum}" (click)="openCartToggle()">
       <div class="cart">
         <ion-icon name="cart"></ion-icon>
-        <span class="num" *ngIf="onCalcTotal().totalNum">{{onCalcTotal().totalNum}}</span>
+        <span class="num" *ngIf="calcTotal().totalNum">{{calcTotal().totalNum}}</span>
       </div>
       <div class="price">
-        <span class="money">￥{{onCalcTotal().totalMoney}}</span>
+        <span class="money">￥{{calcTotal().totalMoney}}</span>
         <span class="line"></span>
         <span class="plus">另需配送费￥{{shopData?.sellerShopShippingCharge}}元</span>
       </div>
     </div>
-    <div class="right" [ngClass]="{on: onCalcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit}" (click)="toPay()">{{onCalcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit ? '去结算' : onChangeTxt()}}</div>
+    <div class="right" [ngClass]="{on: calcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit}" (click)="pushPayPage()">{{calcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit ? '去结算' : changeTxt()}}</div>
   </div>
+
+
 </ion-footer>

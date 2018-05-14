@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, LoadingController, AlertController, ToastController, NavController, NavParams } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Storage } from '@ionic/storage';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import { TabsPage } from '../tabs/tabs';
 
@@ -14,9 +14,8 @@ import { TabsPage } from '../tabs/tabs';
 export class LoginPage {
 
   public hostsURL: string = 'http://144.202.120.126:888/';
-
   usingURL: string = 'buyerNoTokenLogin.php';
-  respData:any;
+  respData: any;
 
   loginForm: FormGroup;
 
@@ -24,7 +23,7 @@ export class LoginPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public formBuilder: FormBuilder,
-    public http: Http,
+    public http: HttpClient,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private storage: Storage
@@ -41,14 +40,11 @@ export class LoginPage {
       var link = this.hostsURL + this.usingURL;
 
       this.http.post(link, myData)
-        .subscribe((res: Response) => {
-
-          this.respData = res.json();
-          console.log(this.respData);
-
+        .subscribe((res) => {
+          this.respData = res;
           if (this.respData.querySuccess) {
             this.storage.set('clientid', this.respData.buyerID);
-            this.storage.set('clientToken', this.respData.buyerToken);
+            this.storage.set('clienttoken', this.respData.buyerToken);
             let toast = this.toastCtrl.create({
               message: '登录成功',
               duration: 1000,
@@ -67,7 +63,7 @@ export class LoginPage {
             alert.present();
           }
 
-        }, error => {
+        }, (err) => {
           console.log("Oooops!");
         });
 

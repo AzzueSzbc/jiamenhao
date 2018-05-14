@@ -1,36 +1,39 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { App, NavParams, NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 
-import { TabsPage } from '../tabs/tabs';
-import { EntrancePage } from '../entrance/entrance';
+import { LoginPage } from '../login/login';
+import { SettingsPage } from '../settings/settings';
+import { UserdataPage } from '../userdata/userdata';
 
-@IonicPage()
 @Component({
-  selector: 'page-userdata',
-  templateUrl: 'userdata.html',
+  selector: 'page-user',
+  templateUrl: 'user.html'
 })
-export class UserdataPage {
+export class UserPage {
 
   hostsURL: string = 'http://144.202.120.126:888/';
   myID: string;
 
   userData: any;
 
+  islogined: boolean;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public userSvc: UserServiceProvider,
-    private storage: Storage,) {
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad UserdataPage');
+    private storage: Storage,
+    private app: App) {
   }
 
   ionViewWillEnter() {
     this.refreshDisplay();
+  }
+
+  ionViewDidEnter() {
+    console.log('ContactPage ionViewDidEnter');
   }
   //更新显示
   refreshDisplay() {
@@ -42,23 +45,27 @@ export class UserdataPage {
           buyerToken: val,
         })
         .subscribe((res) => {                                                   //返回用户数据，进行本地保存
-          if (res.querySuccess) {
-            this.userData = res.queryResult[0];
+          this.islogined = res.querySuccess;
+          if(res.querySuccess==true) {
+          this.userData = res;
+          console.log(this.userData);
           }
         }, (err) => {                                                           //错误处理
           console.log("获得用户数据错误！");
         });
-      } else this.navCtrl.push(EntrancePage);
+      } else this.islogined = false;
     });
   }
-
-  userLogout() {
-
-    this.storage.remove('clientid');
-    this.storage.remove('clienttoken');
-
-    this.navCtrl.setRoot(TabsPage);
-    this.navCtrl.popToRoot();
+  //push设置页面
+  pushSettingsPage() {
+    this.app.getRootNav().push(SettingsPage);
   }
-
+  //push用户个人详细信息页面
+  pushUserdataPage() {
+    this.app.getRootNav().push(UserdataPage);
+  }
+  //push登录页面
+  pushLoginPage() {
+    this.app.getRootNav().push(LoginPage);
+  }
 }

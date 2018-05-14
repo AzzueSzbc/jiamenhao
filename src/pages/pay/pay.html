@@ -10,14 +10,24 @@
 <ion-content padding>
   <ion-card>
     <ion-card-content>
-      <ion-item>
-        <button ion-button block round color="primary" outline>
+      <ion-item *ngIf="isSelectOneAddress==false">
+        <button ion-button block round color="primary" outline (click)="pushChooesAddressPage()">
           <ion-icon name="add"></ion-icon> 选择收货地址
         </button>
       </ion-item>
+      <ion-item *ngIf="isSelectOneAddress==true">
+        <h3>{{addressData?.consigneeAddress}}</h3>
+        <p>{{addressData?.consigneeName}}({{addressData?.consigneeGender}})  {{addressData?.consigneePhoneNumber}}</p>
+        <button ion-button item-end clear icon-only (click)="pushChooesAddressPage()">
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </ion-item>
       <ion-item>
-        <h2 item-left>立即送出</h2>
+        <h2 item-start>立即送出</h2>
         <p ion-text color="primary">(大约 20 分钟)</p>
+        <button ion-button item-end clear icon-only>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
       </ion-item>
     </ion-card-content>
   </ion-card>

@@ -7,7 +7,7 @@
 <ion-content>
   <ion-card *ngIf="islogined==false">
     <ion-card-content>
-      <ion-item no-lines (click)="openLoginPage()">
+      <ion-item no-lines (click)="pushLoginPage()">
         <ion-avatar item-start>
           <img src="../../assets/imgs/uncomfortable.jpg">
         </ion-avatar>
@@ -18,7 +18,7 @@
 
   <ion-card *ngIf="islogined">
     <ion-card-content>
-      <ion-item no-lines (click)="openUserdataPage()">
+      <ion-item no-lines (click)="pushUserdataPage()">
         <ion-avatar item-start>
           <img [src]="hostsURL + 'avatar.jpg '">
         </ion-avatar>

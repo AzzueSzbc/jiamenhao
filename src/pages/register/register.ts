@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, AlertController, NavController, NavParams } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 
 @IonicPage()
@@ -12,25 +12,24 @@ import { Http, Response } from '@angular/http';
 export class RegisterPage {
 
   public hostsURL: string = 'http://144.202.120.126:888/';
-
   usingURL: string = 'buyerRegister.php';
-  myID:     string;
-  respData:any;
+  myID: string;
+  respData: any;
 
   registerForm: FormGroup;
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public formBuilder: FormBuilder,
-              private alertCtrl: AlertController,
-              public http: Http) {
+    public navParams: NavParams,
+    public formBuilder: FormBuilder,
+    private alertCtrl: AlertController,
+    public http: HttpClient) {
 
-                this.registerForm = this.formBuilder.group({
-                  username: ['', Validators.required],
-                  password: ['', Validators.required],
-                  phoneNumber: ['', Validators.required],
-                  email:    ['', Validators.required],
-                });
+    this.registerForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
+      email: ['', Validators.required],
+    });
   }
 
   ionViewDidLoad() {
@@ -39,16 +38,16 @@ export class RegisterPage {
 
   registerSubmit(value: any): void {
     if (this.registerForm.valid) {
-      var myData = JSON.stringify({ buyerUserName: value.username, buyerPasswordSHA: value.password,
-                                    buyerAccount:  value.phoneNumber, buyerEmail: value.email});
+      var myData = JSON.stringify({
+        buyerUserName: value.username, buyerPasswordSHA: value.password,
+        buyerAccount: value.phoneNumber, buyerEmail: value.email
+      });
       var link = this.hostsURL + this.usingURL;
 
       this.http.post(link, myData)
-      .subscribe((res: Response) => {
-
-          this.respData = res.json();
-
-          if (this.respData.querySuccess){
+        .subscribe((res) => {
+          this.respData = res;
+          if (this.respData.querySuccess) {
             this.navCtrl.pop();
           } else {
             let alert = this.alertCtrl.create({
@@ -59,9 +58,9 @@ export class RegisterPage {
             alert.present();
           }
 
-        }, error => {
-        console.log("Oooops!");
-      });
+        }, (err) => {
+          console.log("Oooops!");
+        });
 
     }
     console.log(this.registerForm.value);
