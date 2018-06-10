@@ -14,7 +14,7 @@ import { EntrancePage } from '../entrance/entrance';
 })
 export class UserdataPage {
 
-  hostsURL: string = 'http://144.202.120.126:888/';
+  hostsURL: string = 'http://120.78.220.83:22781/';
   myID: string;
 
   userData: any;

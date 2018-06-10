@@ -37,11 +37,11 @@
       <ion-list no-lines>
         <ion-item *ngFor="let g of cartList">
           <ion-thumbnail item-start>
-            <img [src]="hostsURL + g?.goodspicture">
+            <img [src]="hostsURL + g?.ordersProductPictureURL">
           </ion-thumbnail>
-          <h3>{{g?.goodsName}}</h3>
-          <p>x{{g?.goodsNumber}}</p>
-          <h2 item-end ion-text>￥{{g?.goodsPrice*g?.goodsNumber}}</h2>
+          <h3>{{g?.ordersProductName}}</h3>
+          <p>x{{g?.ordersProductAmount}}</p>
+          <h2 item-end ion-text>￥{{g?.ordersProductPrice*g?.ordersProductAmount}}</h2>
         </ion-item>
       </ion-list>
     </ion-card-content>
@@ -69,6 +69,6 @@
 
 <ion-footer>
   <div class="carts-box">
-    <div class="right">提交订单</div>
+    <div class="right" (click)="submitOrder()">提交订单</div>
   </div>
 </ion-footer>

@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { App, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { OrderServiceProvider } from '../../providers/order-service/order-service'
-import { ChooseAddressPage } from '../choose-address/choose-address';
 
 @IonicPage()
 @Component({
@@ -12,14 +11,18 @@ import { ChooseAddressPage } from '../choose-address/choose-address';
 })
 export class PayPage {
 
-  hostsURL: string = 'http://144.202.120.126:888/';
+  activeNav: any;
+
+  hostsURL: string = 'http://120.78.220.83:22781/';
   myID: string;
   myToken: string;
+  sellerID: string;
 
   cartList: any[];
   orderProduct: any[];
   shippingCharge: any;
   packCharge: number = 2;
+  note: string = "aa";
 
   addressData: any;
   isSelectOneAddress: boolean = false;
@@ -28,17 +31,19 @@ export class PayPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public orderSvc: OrderServiceProvider,
-    private storage: Storage, ) {
+    private storage: Storage,
+    public appCtrl: App) {
 
     this.storage.get('cartlist').then((val) => {
       this.cartList = val;
       this.cartList.forEach((g) => {
-        this.paySum += g.goodsPrice * g.goodsNumber;
+        this.paySum += g.ordersProductPrice * g.ordersProductAmount;
       });
     });
 
     this.shippingCharge = navParams.get('shippingCharge');
-
+    this.sellerID = navParams.get('sellerID');
+    console.log("sellerID", this.sellerID);
   }
 
   ionViewWillEnter() {
@@ -75,21 +80,32 @@ export class PayPage {
   }
 
   pushChooesAddressPage() {
-    this.navCtrl.push(ChooseAddressPage);
+    this.navCtrl.push('ChooseAddressPage');
   }
 
   submitOrder() {
+
     this.orderSvc.submitOrderData({
       buyerID: this.myID,
       buyerToken: this.myToken,
+      sellerID: this.sellerID,
       ordersShippingCharge: this.shippingCharge,
       ordersPackCharge: this.packCharge,
+      ordersNote: this.note,
       consigneeName: this.addressData.consigneeName,
       consigneeGender: this.addressData.consigneeGender,
       consigneePhoneNumber: this.addressData.consigneePhoneNumber,
       consigneeAddress: this.addressData.consigneeAddress,
-      product: this.cartList
-    });
+      ordersProduct: this.cartList
+    })
+      .subscribe((res) => {
+        if (res.querySuccess){
+          this.navCtrl.push('OrderPage');
+        }
+        else console.log("提交订单失败");
+      }, (err) => {
+        console.log("order-server-err");
+      });
 
   }
 

@@ -10,15 +10,10 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { HomePage } from '../pages/home/home';
 import { ShopPage } from '../pages/shop/shop';
-import { PayPage } from '../pages/pay/pay';
-import { ChooseAddressPage } from '../pages/choose-address/choose-address';
-import { AddAddressPage } from '../pages/add-address/add-address';
 
 import { ListPage } from '../pages/list/list';
 
 import { UserPage } from '../pages/user/user';
-import { UserdataPage } from '../pages/userdata/userdata';
-import { SettingsPage } from '../pages/settings/settings';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -38,13 +33,8 @@ import { OrderServiceProvider } from '../providers/order-service/order-service';
     TabsPage,
     HomePage,
     ShopPage,
-    PayPage,
-    ChooseAddressPage,
-    AddAddressPage,
     ListPage,
     UserPage,
-    UserdataPage,
-    SettingsPage,
   ],
   imports: [
     BrowserModule,
@@ -61,13 +51,8 @@ import { OrderServiceProvider } from '../providers/order-service/order-service';
     TabsPage,
     HomePage,
     ShopPage,
-    PayPage,
-    ChooseAddressPage,
-    AddAddressPage,
     ListPage,
     UserPage,
-    UserdataPage,
-    SettingsPage,
   ],
   providers: [
     StatusBar,

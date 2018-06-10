@@ -10,7 +10,7 @@ import { ShopPage } from '../shop/shop';
 })
 export class HomePage {
 
-  hostsURL: string = 'http://144.202.120.126:888/';
+  hostsURL: string = 'http://120.78.220.83:22781/';
 
   allShopData: any;
 
@@ -35,6 +35,7 @@ export class HomePage {
       this.isQuery = res.querySuccess;
       if (res.querySuccess) {
         this.allShopData = res.queryResult;
+        console.log("allShopData",this.allShopData);
       }//登录失败
       else {
         this.isQuery = false;

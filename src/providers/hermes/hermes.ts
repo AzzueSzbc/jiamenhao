@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class HermesProvider {
 
-  public hostsURL: string = 'http://144.202.120.126:888/';
+  public hostsURL: string = 'http://120.78.220.83:22781/';
 
   constructor(public http: HttpClient,
     private alertCtrl: AlertController,

@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class RegisterPage {
 
-  public hostsURL: string = 'http://144.202.120.126:888/';
+  hostsURL: string = 'http://120.78.220.83:22781/';
   usingURL: string = 'buyerRegister.php';
   myID: string;
   respData: any;

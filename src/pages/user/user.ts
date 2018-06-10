@@ -5,8 +5,6 @@ import { Storage } from '@ionic/storage';
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 
 import { LoginPage } from '../login/login';
-import { SettingsPage } from '../settings/settings';
-import { UserdataPage } from '../userdata/userdata';
 
 @Component({
   selector: 'page-user',
@@ -14,7 +12,7 @@ import { UserdataPage } from '../userdata/userdata';
 })
 export class UserPage {
 
-  hostsURL: string = 'http://144.202.120.126:888/';
+  hostsURL: string = 'http://120.78.220.83:22781/';
   myID: string;
 
   userData: any;
@@ -58,11 +56,11 @@ export class UserPage {
   }
   //push设置页面
   pushSettingsPage() {
-    this.app.getRootNav().push(SettingsPage);
+    this.app.getRootNav().push('SettingsPage');
   }
   //push用户个人详细信息页面
   pushUserdataPage() {
-    this.app.getRootNav().push(UserdataPage);
+    this.app.getRootNav().push('UserdataPage');
   }
   //push登录页面
   pushLoginPage() {

@@ -4,8 +4,6 @@ import { IonicPage, AlertController, NavController, NavParams } from 'ionic-angu
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 
-import { AddAddressPage } from '../add-address/add-address';
-
 @IonicPage()
 @Component({
   selector: 'page-choose-address',
@@ -13,7 +11,7 @@ import { AddAddressPage } from '../add-address/add-address';
 })
 export class ChooseAddressPage {
 
-  public hostsURL: string = 'http://144.202.120.126:888/';
+  hostsURL: string = 'http://120.78.220.83:22781/';
   usingURL: string = 'getBuyerShippingAddress.php';
   myID: string;
   myToken: string;
@@ -73,7 +71,7 @@ export class ChooseAddressPage {
   }
 
   pushAddAddress() {
-    this.navCtrl.push(AddAddressPage);
+    this.navCtrl.push('AddAddressPage');
   }
 
 }

@@ -15,7 +15,7 @@ import { EntrancePage } from '../pages/entrance/entrance';
 export class MyApp {
 
   public rootPage: any;
-  public hostsURL: string = 'http://144.202.120.126:888/';
+  public hostsURL: string = 'http://120.78.220.83:22781/';
 
   myID: string;
 

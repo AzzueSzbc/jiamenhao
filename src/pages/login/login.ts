@@ -13,7 +13,7 @@ import { TabsPage } from '../tabs/tabs';
 })
 export class LoginPage {
 
-  public hostsURL: string = 'http://144.202.120.126:888/';
+  hostsURL: string = 'http://120.78.220.83:22781/';
   usingURL: string = 'buyerNoTokenLogin.php';
   respData: any;
 
