@@ -16,8 +16,6 @@ export class MyApp {
 
   public rootPage: any;
 
-  myID: string;
-
   constructor(platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
