@@ -43,6 +43,10 @@
           <p>x{{g?.ordersProductAmount}}</p>
           <h2 item-end ion-text>￥{{g?.ordersProductPrice*g?.ordersProductAmount}}</h2>
         </ion-item>
+        <ion-item>
+          <p item-end>小计</p>
+          <h2 ion-text color="danger" item-end>￥ {{paySum}}</h2>
+        </ion-item>
       </ion-list>
     </ion-card-content>
   </ion-card>
@@ -56,11 +60,11 @@
         </ion-item>
         <ion-item>
           <p item-start>包装费</p>
-          <h3 item-end>￥2</h3>
+          <h3 item-end>￥{{packCharge}}</h3>
         </ion-item>
         <ion-item>
-          <p item-end>小计</p>
-          <h2 ion-text color="danger" item-end>￥ {{paySum}}</h2>
+          <p item-end>实际支付</p>
+          <h2 ion-text color="danger" item-end>￥ {{ActualPayment}}</h2>
         </ion-item>
       </ion-list>
     </ion-card-content>

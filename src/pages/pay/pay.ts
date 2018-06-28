@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { App, NavController, NavParams } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
+import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { OrderServiceProvider } from '../../providers/order-service/order-service'
+import { NativeProvider } from '../../providers/native/native';
+import { OrderProvider } from '../../providers/order/order';
+import { UserProvider } from '../../providers/user/user';
+import { APP_SERVE_URL } from '../../providers/config';
 
 @IonicPage()
 @Component({
@@ -11,18 +13,17 @@ import { OrderServiceProvider } from '../../providers/order-service/order-servic
 })
 export class PayPage {
 
-  activeNav: any;
-
-  hostsURL: string = 'http://120.78.220.83:22781/';
-  myID: string;
-  myToken: string;
+  hostsURL: string = APP_SERVE_URL;
+  buyerID: string;
+  buyerToken: string;
   sellerID: string;
 
   cartList: any[];
   orderProduct: any[];
-  shippingCharge: any;
-  packCharge: number = 2;
+  shippingCharge: number = 0;
+  packCharge: number = 0;
   note: string = "aa";
+  ActualPayment: number;
 
   addressData: any;
   isSelectOneAddress: boolean = false;
@@ -30,20 +31,25 @@ export class PayPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public orderSvc: OrderServiceProvider,
-    private storage: Storage,
-    public appCtrl: App) {
-
-    this.storage.get('cartlist').then((val) => {
-      this.cartList = val;
+    public appCtrl: App,
+    private orderPvd: OrderProvider,
+    private userPvd: UserProvider,
+    private nativePvd: NativeProvider) {
+    this.nativePvd.getStorage('cartlist').then((list) => {
+      this.cartList = list;
+      console.log('cartList', this.cartList);
       this.cartList.forEach((g) => {
         this.paySum += g.ordersProductPrice * g.ordersProductAmount;
       });
+      this.shippingCharge = parseInt(navParams.get('shippingCharge'));
+      console.log('shippingCharge', this.shippingCharge, "paySum", this.paySum, "packCharge", this.packCharge);
+      this.ActualPayment = this.shippingCharge + this.paySum + this.packCharge;
     });
 
-    this.shippingCharge = navParams.get('shippingCharge');
+
     this.sellerID = navParams.get('sellerID');
     console.log("sellerID", this.sellerID);
+    console.log("ActualPayment", this.ActualPayment);
   }
 
   ionViewWillEnter() {
@@ -55,27 +61,34 @@ export class PayPage {
   }
 
   getPreselectionAddress() {
-    this.storage.get('clientid').then((val) => { this.myID = val });
-    this.storage.get('clienttoken').then((val) => { this.myToken = val });
-    this.storage.get('addressid').then((val) => {
-      if (val) {
-        this.orderSvc.getOneShippingAddress({
-          buyerID: this.myID,
-          buyerToken: this.myToken,
-          buyerShippingAddressID: val
-        })
-          .subscribe((res) => {
-            if (res.querySuccess) {
-              this.isSelectOneAddress = true;
-              this.addressData = res.queryResult[0];
-            }
-            else {
-              this.isSelectOneAddress = false;
-            }
-          }, (err) => {
-            console.log("获取地址错误");
-          });
-      }
+    this.nativePvd.getStorage('clientid').then((id) => {
+      this.buyerID = id;
+      this.nativePvd.getStorage('clienttoken').then((token) => {
+        this.buyerToken = token;
+        this.nativePvd.getStorage('addressid').then((address) => {
+          if (address) {
+            this.userPvd.getOneShippingAddress({
+              buyerID: id,
+              buyerToken: token,
+              buyerShippingAddressID: address
+            })
+              .subscribe(
+                (res) => {
+                  if (res == false) {
+                    this.isSelectOneAddress = false;
+                  }
+                  else {
+                    this.isSelectOneAddress = true;
+                    console.log('pay-getPreselectionAddress', res);
+                    this.addressData = res;
+                  }
+                },
+                (err) => {
+                  console.log('pay-getPreselectionAddress-err', err);
+                });
+          }
+        });
+      });
     });
   }
 
@@ -84,10 +97,9 @@ export class PayPage {
   }
 
   submitOrder() {
-
-    this.orderSvc.submitOrderData({
-      buyerID: this.myID,
-      buyerToken: this.myToken,
+    this.orderPvd.submitOrderData({
+      buyerID: this.buyerID,
+      buyerToken: this.buyerToken,
       sellerID: this.sellerID,
       ordersShippingCharge: this.shippingCharge,
       ordersPackCharge: this.packCharge,
@@ -96,17 +108,19 @@ export class PayPage {
       consigneeGender: this.addressData.consigneeGender,
       consigneePhoneNumber: this.addressData.consigneePhoneNumber,
       consigneeAddress: this.addressData.consigneeAddress,
-      ordersProduct: this.cartList
+      ordersActualPayment: this.ActualPayment,
+      ordersProduct: this.cartList,
     })
-      .subscribe((res) => {
-        if (res.querySuccess){
-          this.navCtrl.push('OrderPage');
-        }
-        else console.log("提交订单失败");
-      }, (err) => {
-        console.log("order-server-err");
-      });
-
+      .subscribe(
+        (res) => {
+          if (res == true) {
+            this.navCtrl.push('OrderPage');
+            this.nativePvd.removeStorage('cartlist');
+          }
+        },
+        (err) => {
+          console.log('pay-submitOrder-err', err);
+        });
   }
 
 }

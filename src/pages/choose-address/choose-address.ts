@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, AlertController, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { HttpClient } from '@angular/common/http';
-import { Storage } from '@ionic/storage';
+import { NativeProvider } from '../../providers/native/native';
+import { UserProvider } from '../../providers/user/user';
 
 @IonicPage()
 @Component({
@@ -11,62 +11,45 @@ import { Storage } from '@ionic/storage';
 })
 export class ChooseAddressPage {
 
-  hostsURL: string = 'http://120.78.220.83:22781/';
-  usingURL: string = 'getBuyerShippingAddress.php';
-  myID: string;
-  myToken: string;
-  respData: any;
-
   addressData: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public http: HttpClient,
-    private alertCtrl: AlertController,
-    private storage: Storage, ) {
+    private nativePvd: NativeProvider,
+    private userPvd: UserProvider) {
   }
 
   ionViewWillEnter() {
-    this.storage.get('clientid').then((val) => { this.myID = val });
-    this.storage.get('clienttoken').then((val) => {
-      if (val) {
-        this.myToken = val;
-        this.getUserShippingAddress();
-      }
-    });
+    this.refreshDisplay();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChooseAddressPage');
   }
 
-  getUserShippingAddress() {
-    var link = this.hostsURL + this.usingURL;
-    var myData = JSON.stringify({ buyerID: this.myID, buyerToken: this.myToken });
-    console.log("buyerID:", this.myID, "buyerToken:", this.myToken);
-    this.http.post(link, myData)
-      .subscribe((res) => {
-        console.log(res);
-        this.respData = res;
-        if (this.respData.querySuccess) {
-          this.addressData = this.respData.queryResult;
-          console.log(this.addressData);
-        }
-        else {
-          let alert = this.alertCtrl.create({
-            title: '提示信息',
-            subTitle: '用户身份验证过期，请重新登录',
-            buttons: ['确定']
-          });
-          alert.present();
-        }
-      }, (err) => {
-        console.log("获得用户数据错误！");
+  refreshDisplay() {
+    this.nativePvd.getStorage('clientid').then((id) => {
+      this.nativePvd.getStorage('clienttoken').then((token) => {
+        this.userPvd.getAllShippingAddress({
+          buyerID: id,
+          buyerToken: token
+        })
+          .subscribe(
+            (res) => {
+              if (res) {
+                this.addressData = res;
+              }
+            },
+            (err) => {
+              console.log('get-all-address', err);
+            }
+          )
       });
+    });
   }
 
   selectAddress(id) {
-    this.storage.set("addressid", id);
+    this.nativePvd.setStorage("addressid", id);
     this.navCtrl.pop();
   }
 

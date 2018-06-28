@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { App, ViewController, NavController, NavParams } from 'ionic-angular';
-import { ShopServiceProvider } from '../../providers/shop-service/shop-service';
+import { ShopProvider } from '../../providers/shop/shop';
+import { APP_SERVE_URL } from '../../providers/config';
 
 import { ShopPage } from '../shop/shop';
 
@@ -10,20 +11,17 @@ import { ShopPage } from '../shop/shop';
 })
 export class HomePage {
 
-  hostsURL: string = 'http://120.78.220.83:22781/';
+  hostsURL: string = APP_SERVE_URL;
 
   allShopData: any;
 
   isQuery: boolean;
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public viewCtrl: ViewController,
-              public appCtrl: App,
-              public shopSvc: ShopServiceProvider,
-              ) {
-
-  }
+    public navParams: NavParams,
+    public viewCtrl: ViewController,
+    public appCtrl: App,
+    private shopPvd: ShopProvider) { }
 
   ionViewWillEnter() {
     this.refreshDisplay();
@@ -31,22 +29,25 @@ export class HomePage {
   //页面加载
   refreshDisplay() {
     //获得所有商家店铺数据
-    this.shopSvc.getAllShopData().subscribe((res) => {
-      this.isQuery = res.querySuccess;
-      if (res.querySuccess) {
-        this.allShopData = res.queryResult;
-        console.log("allShopData",this.allShopData);
-      }//登录失败
-      else {
-        this.isQuery = false;
-      }
-    }, (err) => {
-      console.log("我日我求你别错了!");
-    });
+    this.shopPvd.getAllShopData()
+      .subscribe(
+        (res) => {
+          if (res == false) {
+            this.isQuery = false;
+          }
+          else if (res) {
+            this.isQuery = true;
+            this.allShopData = res;
+            console.log("allShopData", this.allShopData);
+          }
+        },
+        (err) => {
+          console.log('home-getallshop-err', err);
+        });
   }
 
   pushOneShop(ID) {
-    this.appCtrl.getRootNav().push(ShopPage, {sellerid: ID,});
+    this.appCtrl.getRootNav().push(ShopPage, { sellerid: ID, });
   }
 
 }

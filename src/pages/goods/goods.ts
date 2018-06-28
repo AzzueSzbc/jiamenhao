@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 
-import { ShopServiceProvider } from '../../providers/shop-service/shop-service';
+import { ShopProvider } from '../../providers/shop/shop';
+import { NativeProvider } from '../../providers/native/native';
+import { APP_SERVE_URL } from '../../providers/config';
 
 @IonicPage()
 @Component({
@@ -11,7 +12,7 @@ import { ShopServiceProvider } from '../../providers/shop-service/shop-service';
 })
 export class GoodsPage {
 
-  hostsURL: string = 'http://120.78.220.83:22781/';
+  hostsURL: string = APP_SERVE_URL;
   sellerID: string;
 
   shopData: any;
@@ -22,9 +23,9 @@ export class GoodsPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public shopSvc: ShopServiceProvider,
-    private storage: Storage,
-    public appCtrl: App) {
+    public appCtrl: App,
+    private nativePvd: NativeProvider,
+    private shopPvd: ShopProvider) {
       this.sellerID = navParams.get('sellerid');
       console.log("sellerID", this.sellerID);
   }
@@ -37,10 +38,15 @@ export class GoodsPage {
 
   //更新显示
   refreshDisplay() {
-    this.shopSvc.getOneShopData(this.sellerID).subscribe((res) => {
-      this.isQuery = res.querySuccess;
-      if (res.querySuccess) {
-        this.shopData = res.queryResult[0];
+    this.shopPvd.getOneShopData(this.sellerID)
+    .subscribe((res) => {
+      if (res==false) {
+        this.isQuery = false;
+      }
+      else if (res) {
+        this.isQuery = true;
+        console.log('goods-res', res);
+        this.shopData = res;
         this.shopData.shopProductClass.forEach((pdClass) => {
           //为每个商品添加在购物车的数量
           //并为未设定商品图片的商品添加预定义图片URL
@@ -57,10 +63,6 @@ export class GoodsPage {
           });
         });
       }
-      else {
-        console.log("querySuccess-false");
-        this.isQuery = false;
-      }
     }, (err) => {
       console.log("我日我求你别错了!");
     });
@@ -68,7 +70,7 @@ export class GoodsPage {
   }
   //同步购物车缓存数据
   syncCartGoodsList() {
-    this.storage.get('cartlist').then((val) => {
+    this.nativePvd.getStorage('cartlist').then((val) => {
       if (val) {
         this.cartGoodsList = val;
       }
@@ -104,7 +106,7 @@ export class GoodsPage {
         ordersProductPictureURL: p.productPictureURL,
       }];
     }
-    this.storage.set('cartlist', this.cartGoodsList);
+    this.nativePvd.setStorage('cartlist', this.cartGoodsList);
     console.log("cartGoodsList:", this.cartGoodsList);
   }
   //右侧商品列表中移除一个商品的购物车数量
@@ -118,7 +120,7 @@ export class GoodsPage {
         this.cartGoodsList.splice(index, 1);
       }
     });
-    this.storage.set('cartlist', this.cartGoodsList);
+    this.nativePvd.setStorage('cartlist', this.cartGoodsList);
     console.log("cartGoodsList:", this.cartGoodsList);
   }
   //计算购物车中商品总数，以及商品总价
@@ -153,7 +155,7 @@ export class GoodsPage {
     //关闭购物车部分显示
     this.cartFlag = !this.cartFlag;
     //同步购物车数据到缓存
-    this.storage.set('cartlist', this.cartGoodsList);
+    this.nativePvd.setStorage('cartlist', this.cartGoodsList);
     //同步购物车数据到用于显示的数组
     this.shopData.shopProductClass.forEach((pdClass) => {
       pdClass.product.forEach((p) => {
@@ -164,7 +166,7 @@ export class GoodsPage {
   //进入提交订单页面
   pushPayPage() {
     if (this.calcTotal().totalMoney >= this.shopData.sellerShopStartShippingLimit) {
-      this.storage.set('cartlist', this.cartGoodsList);
+      this.nativePvd.setStorage('cartlist', this.cartGoodsList);
       this.appCtrl.getRootNav().push('PayPage', {
         sellerID: this.sellerID,
         shippingCharge: this.shopData.sellerShopShippingCharge,

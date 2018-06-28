@@ -9,8 +9,7 @@
       <div class="top">
         <div class="up">
           <div class="img-wrap">
-            <img *ngIf="shopData?.sellerShopLogoURL==''" class="avatar" width="64" height="64" alt="" [src]="hostsURL + 'avatar.jpg'">
-            <img *ngIf="shopData?.sellerShopLogoURL!=''" class="avatar" width="64" height="64" alt="" [src]="hostsURL + shop?.sellerShopLogoURL">
+            <img class="avatar" width="64" height="64" alt="" [src]="hostsURL + shop?.sellerShopLogoURL">
           </div>
           <div class="right">
             <div class="title">
@@ -23,8 +22,7 @@
           <div class="txt">公告：{{shopData?.sellerShopDescription}}</div>
         </div>
       </div>
-      <img *ngIf="shopData?.sellerShopLogoURL==''" class="bg" alt="" [src]="hostsURL + 'avatar.jpg'">
-      <img *ngIf="shopData?.sellerShopLogoURL!=''" class="bg" alt="" [src]="hostsURL + shop?.sellerShopLogoURL">
+      <img class="bg" alt="" [src]="hostsURL + shop?.sellerShopLogoURL">
     </header>
   </div>
 </ion-header>

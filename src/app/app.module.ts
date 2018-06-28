@@ -20,9 +20,11 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpClientModule } from '@angular/common/http';
 import { HermesProvider } from '../providers/hermes/hermes';
-import { ShopServiceProvider } from '../providers/shop-service/shop-service';
-import { UserServiceProvider } from '../providers/user-service/user-service';
-import { OrderServiceProvider } from '../providers/order-service/order-service';
+import { NativeProvider } from '../providers/native/native';
+import { VerifyProvider } from '../providers/verify/verify';
+import { OrderProvider } from '../providers/order/order';
+import { ShopProvider } from '../providers/shop/shop';
+import { UserProvider } from '../providers/user/user';
 
 @NgModule({
   declarations: [
@@ -59,9 +61,11 @@ import { OrderServiceProvider } from '../providers/order-service/order-service';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     HermesProvider,
-    ShopServiceProvider,
-    UserServiceProvider,
-    OrderServiceProvider
+    NativeProvider,
+    VerifyProvider,
+    OrderProvider,
+    ShopProvider,
+    UserProvider
   ]
 })
 export class AppModule {}

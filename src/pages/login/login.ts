@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, AlertController, ToastController, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { Storage } from '@ionic/storage';
-import { HttpClient } from '@angular/common/http';
+
+import { VerifyProvider } from '../../providers/verify/verify';
 
 import { TabsPage } from '../tabs/tabs';
 
@@ -13,21 +13,13 @@ import { TabsPage } from '../tabs/tabs';
 })
 export class LoginPage {
 
-  hostsURL: string = 'http://120.78.220.83:22781/';
-  usingURL: string = 'buyerNoTokenLogin.php';
-  respData: any;
-
   loginForm: FormGroup;
 
   constructor(public loadingCtrl: LoadingController,
     public navCtrl: NavController,
     public navParams: NavParams,
-    public formBuilder: FormBuilder,
-    public http: HttpClient,
-    private toastCtrl: ToastController,
-    private alertCtrl: AlertController,
-    private storage: Storage
-  ) {
+    private formBuilder: FormBuilder,
+    private verifyPvd: VerifyProvider) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -36,46 +28,31 @@ export class LoginPage {
 
   loginSubmit(value: any): void {
     if (this.loginForm.valid) {
-      var myData = JSON.stringify({ buyerAccount: value.username, buyerPasswordSHA: value.password });
-      var link = this.hostsURL + this.usingURL;
-
-      this.http.post(link, myData)
-        .subscribe((res) => {
-          this.respData = res;
-          if (this.respData.querySuccess) {
-            this.storage.set('clientid', this.respData.buyerID);
-            this.storage.set('clienttoken', this.respData.buyerToken);
-            let toast = this.toastCtrl.create({
-              message: '登录成功',
-              duration: 1000,
-              position: 'middle'
-            });
-            toast.present();
-            this.navCtrl.setRoot(TabsPage);
-            this.navCtrl.popToRoot();
-          } else {
-            loading.dismiss();
-            let alert = this.alertCtrl.create({
-              title: '提示信息',
-              subTitle: '账户或密码错误，请重新输入',
-              buttons: ['确定']
-            });
-            alert.present();
-          }
-
-        }, (err) => {
-          console.log("Oooops!");
-        });
+      this.verifyPvd.noTokenLogin({
+        buyerAccount: value.username,
+        buyerPasswordSHA: value.password
+      })
+        .subscribe(
+          (res) => {
+            if (res == true) {
+              this.navCtrl.setRoot(TabsPage);
+              this.navCtrl.popToRoot();
+            }
+            else if (res == false) {
+              loading.dismiss();
+            }
+          },
+          (err) => {
+            console.log("login-provider-err", err);
+          });
 
       let loading = this.loadingCtrl.create({
         content: '急毛啊没做完啊登陆页面都做了好久啊！',
         dismissOnPageChange: true
       });
-
       loading.present();
-
     }
-    console.log(this.loginForm.value);
+    console.log("login-form", this.loginForm.value);
   }
 
 }

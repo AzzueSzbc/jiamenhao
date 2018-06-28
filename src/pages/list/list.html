@@ -1,13 +1,19 @@
-<ion-header no-border>
-  <div class="nav-warp">
+<ion-content>
+  <div class="order-item" *ngFor="let order of listData">
+    <div class="top">
+      <img src="../../assets/images/bg.jpg">
+      <div class="name">{{order?.sellerShopName}}</div>
+      <div class="status">订单已完成</div>
+    </div>
 
+    <div class="mid">
+      <div class="food" *ngFor="let i of order?.ordersProduc">{{i?.ordersProductName}}<span>x{{i?.ordersProductAmount}}</span></div>
+      <div class="cost">总计n个菜，实付<span>￥{{order?.ordersActualPayment}}</span></div>
+    </div>
+
+    <div class="bottom">
+      <div class="again">再来一单</div>
+      <div class="again">评价订单</div>
+    </div>
   </div>
-</ion-header>
-
-<ion-content no-padding>
-
-  <div class="split">
-
-  </div>
-
 </ion-content>

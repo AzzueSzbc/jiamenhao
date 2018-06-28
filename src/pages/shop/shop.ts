@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { ShopServiceProvider } from '../../providers/shop-service/shop-service';
+import { ShopProvider } from '../../providers/shop/shop';
+import { APP_SERVE_URL } from '../../providers/config';
 
 @IonicPage()
 @Component({
@@ -10,7 +11,7 @@ import { ShopServiceProvider } from '../../providers/shop-service/shop-service';
 })
 export class ShopPage {
 
-  hostsURL: string = 'http://120.78.220.83:22781/';
+  hostsURL: string = APP_SERVE_URL;
   sellerID: string;
 
   shopData: any;
@@ -24,7 +25,7 @@ export class ShopPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public shopSvc: ShopServiceProvider,) {
+    private shopPvd: ShopProvider) {
 
     this.sellerID = navParams.get('sellerid');
     this.shopParams = {
@@ -38,18 +39,19 @@ export class ShopPage {
 
   //更新显示
   refreshDisplay() {
-    this.shopSvc.getOneShopData(this.sellerID).subscribe((res) => {
-      this.isQuery = res.querySuccess;
-      if (res.querySuccess) {
-        this.shopData = res.queryResult[0];
-      }
-      else {
-        console.log("querySuccess-false");
-        this.isQuery = false;
-      }
-    }, (err) => {
-      console.log("我日我求你别错了!");
-    });
+    this.shopPvd.getOneShopData(this.sellerID)
+      .subscribe(
+        (res) => {
+          if (res == false) {
+            this.isQuery = false;
+          }
+          else {
+            this.shopData = res;
+          }
+        },
+        (err) => {
+          console.log('shop-getOneShopData-err', err);
+        });
 
   }
 

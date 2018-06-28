@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 
-import { UserServiceProvider } from '../../providers/user-service/user-service';
+import { NativeProvider } from '../../providers/native/native';
+import { UserProvider } from '../../providers/user/user';
+import { APP_SERVE_URL } from '../../providers/config';
 
 import { TabsPage } from '../tabs/tabs';
 import { EntrancePage } from '../entrance/entrance';
@@ -14,16 +15,15 @@ import { EntrancePage } from '../entrance/entrance';
 })
 export class UserdataPage {
 
-  hostsURL: string = 'http://120.78.220.83:22781/';
-  myID: string;
+  hostsURL: string = APP_SERVE_URL;
 
   userData: any;
+  islogined: boolean;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public userSvc: UserServiceProvider,
-    private storage: Storage,) {
-  }
+    private nativePvd: NativeProvider,
+    private userPvd: UserProvider) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad UserdataPage');
@@ -34,28 +34,37 @@ export class UserdataPage {
   }
   //更新显示
   refreshDisplay() {
-    this.storage.get('clientid').then((val) => { this.myID = val });
-    this.storage.get('clienttoken').then((val) => {                             //尝试获得id和token缓存
-      if (val) {                                                                //存在token缓存
-        this.userSvc.getUserBasicData({                                         //post给服务器
-          buyerID: this.myID,
-          buyerToken: val,
-        })
-        .subscribe((res) => {                                                   //返回用户数据，进行本地保存
-          if (res.querySuccess) {
-            this.userData = res.queryResult[0];
-          }
-        }, (err) => {                                                           //错误处理
-          console.log("获得用户数据错误！");
-        });
-      } else this.navCtrl.push(EntrancePage);
+    this.nativePvd.getStorage('clientid').then((id) => {
+      this.nativePvd.getStorage('clienttoken').then((token) => {
+        if (token) {
+          this.userPvd.getUserBasicData({
+            buyerID: id,
+            buyerToken: token,
+          })
+          .subscribe(
+            (res) => {
+              if (res == false) {
+                this.islogined = false;
+              }
+              else {
+                this.islogined = true;
+                this.userData = res;
+              }
+            },
+            (err) => {
+              console.log('userdata-getUserBasicData-err', err);
+            }
+          );
+        }
+        else this.navCtrl.push(EntrancePage);
+      });
     });
   }
 
   userLogout() {
 
-    this.storage.remove('clientid');
-    this.storage.remove('clienttoken');
+    this.nativePvd.removeStorage('clientid');
+    this.nativePvd.removeStorage('clienttoken');
 
     this.navCtrl.setRoot(TabsPage);
     this.navCtrl.popToRoot();
