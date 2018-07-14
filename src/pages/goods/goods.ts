@@ -13,7 +13,6 @@ import { APP_SERVE_URL } from '../../providers/config';
 export class GoodsPage {
 
   hostsURL: string = APP_SERVE_URL;
-  sellerID: string;
 
   shopData: any;
   cartGoodsList: any[];
@@ -25,10 +24,7 @@ export class GoodsPage {
     public navParams: NavParams,
     public appCtrl: App,
     private nativePvd: NativeProvider,
-    private shopPvd: ShopProvider) {
-      this.sellerID = navParams.get('sellerid');
-      console.log("sellerID", this.sellerID);
-  }
+    private shopPvd: ShopProvider) {}
 
   ionViewWillEnter() {
     this.refreshDisplay();
@@ -38,36 +34,38 @@ export class GoodsPage {
 
   //更新显示
   refreshDisplay() {
-    this.shopPvd.getOneShopData(this.sellerID)
-    .subscribe((res) => {
-      if (res==false) {
-        this.isQuery = false;
-      }
-      else if (res) {
-        this.isQuery = true;
-        console.log('goods-res', res);
-        this.shopData = res;
-        this.shopData.shopProductClass.forEach((pdClass) => {
-          //为每个商品添加在购物车的数量
-          //并为未设定商品图片的商品添加预定义图片URL
-          pdClass.product.forEach((p) => {
-            p['inCartNumber'] = 0;
-            if (!p.productPictureURL) p['productPictureURL'] = 'foodimg.jpeg';
-            if (this.cartGoodsList) {
-              this.cartGoodsList.forEach((g) => {
-                if (p.productName == g.ordersProductName) {
-                  p.inCartNumber = g.ordersProductAmount;
+    this.shopPvd.getOneShopData(this.navParams.get('sellerid'))
+      .subscribe(
+        (res) => {
+          if (res == false) {
+            this.isQuery = false;
+          }
+          else if (res) {
+            this.isQuery = true;
+            console.log('goods-res', res);
+            this.shopData = res;
+            this.shopData.shopProductClass.forEach((pdClass) => {
+              //为每个商品添加在购物车的数量
+              //并为未设定商品图片的商品添加预定义图片URL
+              pdClass.product.forEach((p) => {
+                p['inCartNumber'] = 0;
+                if (!p.productPictureURL) p['productPictureURL'] = 'foodimg.jpeg';
+                if (this.cartGoodsList) {
+                  this.cartGoodsList.forEach((g) => {
+                    if (p.productName == g.ordersProductName) {
+                      p.inCartNumber = g.ordersProductAmount;
+                    }
+                  });
                 }
               });
-            }
-          });
+            });
+          }
+        },
+        (err) => {
+          console.log('goods-getOneShopData-err', err);
         });
-      }
-    }, (err) => {
-      console.log("我日我求你别错了!");
-    });
-
   }
+
   //同步购物车缓存数据
   syncCartGoodsList() {
     this.nativePvd.getStorage('cartlist').then((val) => {
@@ -160,15 +158,15 @@ export class GoodsPage {
     this.shopData.shopProductClass.forEach((pdClass) => {
       pdClass.product.forEach((p) => {
         p['inCartNumber'] = 0;
-          });
       });
+    });
   }
   //进入提交订单页面
   pushPayPage() {
     if (this.calcTotal().totalMoney >= this.shopData.sellerShopStartShippingLimit) {
       this.nativePvd.setStorage('cartlist', this.cartGoodsList);
       this.appCtrl.getRootNav().push('PayPage', {
-        sellerID: this.sellerID,
+        sellerID: this.navParams.get('sellerid'),
         shippingCharge: this.shopData.sellerShopShippingCharge,
       });
     }

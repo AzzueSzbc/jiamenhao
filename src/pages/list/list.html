@@ -1,19 +1,36 @@
+<ion-header>
+  <ion-navbar no-border-bottom>
+    <ion-title>
+      订单
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
 <ion-content>
-  <div class="order-item" *ngFor="let order of listData">
-    <div class="top">
-      <img src="../../assets/images/bg.jpg">
-      <div class="name">{{order?.sellerShopName}}</div>
-      <div class="status">订单已完成</div>
-    </div>
 
-    <div class="mid">
-      <div class="food" *ngFor="let i of order?.ordersProduc">{{i?.ordersProductName}}<span>x{{i?.ordersProductAmount}}</span></div>
-      <div class="cost">总计n个菜，实付<span>￥{{order?.ordersActualPayment}}</span></div>
-    </div>
+  <ion-card *ngIf="islogined==true && isValidData==false">
+    <ion-card-content>
+      <h2>还没有订单</h2>
+    </ion-card-content>
+  </ion-card>
 
-    <div class="bottom">
-      <div class="again">再来一单</div>
-      <div class="again">评价订单</div>
+  <div *ngIf="islogined==true && isValidData==true">
+    <div class="order-item" *ngFor="let order of listData">
+      <div class="top">
+        <img src="../../assets/images/bg.jpg">
+        <div class="name">{{order?.sellerShopName}}</div>
+        <div class="status">订单已完成</div>
+      </div>
+
+      <div class="mid">
+        <div class="food" *ngFor="let i of order?.ordersProduc">{{i?.ordersProductName}}<span>x{{i?.ordersProductAmount}}</span></div>
+        <div class="cost">总计n个菜，实付<span>￥{{order?.ordersActualPayment}}</span></div>
+      </div>
+
+      <div class="bottom">
+        <div class="again">再来一单</div>
+        <div class="again">评价订单</div>
+      </div>
     </div>
   </div>
 </ion-content>

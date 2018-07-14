@@ -20,7 +20,10 @@
     </ion-item>
 
     <div padding>
-      <button block ion-button type="submit" [disabled]="!loginForm.valid">登录</button>
+      <button block ion-button round type="submit" [disabled]="!loginForm.valid">登录</button>
+    </div>
+    <div padding>
+      <button block ion-button round outline (click)="pushRegisterPage()">注册</button>
     </div>
   </form>
 </ion-content>

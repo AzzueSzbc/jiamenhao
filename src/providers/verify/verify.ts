@@ -18,8 +18,7 @@ export class VerifyProvider {
       map((data) => {
         if (data.querySuccess==true) {
           this.nativePvd.setStorage('clienttoken', data.buyerToken);
-        }
-        else if (data.querySuccess==false) {
+        } else if (data.querySuccess==false) {
           this.hermes.presentAlert('提示信息', '身份验证过期，请重新登录', '确定');
         }
         return data.querySuccess;
@@ -33,8 +32,7 @@ export class VerifyProvider {
       map((data) => {
         if (data.querySuccess == true) {
           this.hermes.presentToast('注册成功', 2000, 'bottom');
-        }
-        else if (data.querySuccess == false) {
+        } else if (data.querySuccess == false) {
           this.hermes.presentAlert('提示信息', '账户注册失败，请检查并重新填写', '确定');
         }
         return data.querySuccess;
@@ -50,8 +48,7 @@ export class VerifyProvider {
           this.nativePvd.setStorage('clientid', data.buyerID);
           this.nativePvd.setStorage('clienttoken', data.buyerToken);
           this.hermes.presentToast('登陆成功', 2000, 'bottom');
-        }
-        else if (data.querySuccess == false) {
+        } else if (data.querySuccess == false) {
           this.hermes.presentAlert('提示信息', '账户或密码错误，请重新输入', '确定');
         }
         return data.querySuccess;

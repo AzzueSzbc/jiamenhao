@@ -16,11 +16,12 @@ export class ListPage {
   listData: any;
 
   islogined: boolean;
+  isValidData: boolean = false;
 
   constructor(public navCtrl: NavController,
     public appCtrl: App,
     private nativePvd: NativeProvider,
-    private orderPvd: OrderProvider) {}
+    private orderPvd: OrderProvider) { }
 
   ionViewWillEnter() {
     this.refreshDisplay();
@@ -34,24 +35,33 @@ export class ListPage {
             buyerID: id,
             buyerToken: token,
           })
-          .subscribe(
-            (res) => {
-              if (res == false) {
-                this.islogined = false;
+            .subscribe(
+              (res) => {
+                console.log('list-getAllOrder', res);
+                if (res == false) {
+                  this.islogined = false;
+                  console.log('islogined', this.islogined);
+                } else if (res == null) {
+                  this.islogined = true;
+                  this.isValidData = false;
+                  console.log('length=0', res.length, this.islogined ,this.isValidData);
+                } else if (res) {
+                  this.islogined = true;
+                  this.isValidData = true;
+                  this.listData = res;
+                }
+              },
+              (err) => {
+                console.log('list-getAllOrder-err', err);
               }
-              else {
-                this.islogined = true;
-                this.listData = res;
-              }
-            },
-            (err) => {
-              console.log('list-getAllOrder-err', err);
-            }
-          );
-        }
-        else this.islogined = false;
+            );
+        } else this.islogined = false;
       });
     });
+  }
+
+  openLoginPage() {
+    this.navCtrl.push('LoginPage');
   }
 
 }

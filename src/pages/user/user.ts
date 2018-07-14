@@ -4,8 +4,7 @@ import { App, NavParams, NavController } from 'ionic-angular';
 import { NativeProvider } from '../../providers/native/native';
 import { UserProvider } from '../../providers/user/user';
 import { APP_SERVE_URL } from '../../providers/config';
-
-import { LoginPage } from '../login/login';
+import { Events } from 'ionic-angular';
 
 @Component({
   selector: 'page-user',
@@ -22,7 +21,15 @@ export class UserPage {
     public navParams: NavParams,
     private userPvd: UserProvider,
     private nativePvd: NativeProvider,
-    private app: App) {}
+    private app: App,
+    private events: Events) {
+      this.events.subscribe('user:logout', () => {
+        this.islogined = false;
+      });
+      this.events.subscribe('user:login', () => {
+        this.refreshDisplay();
+      });
+    }
 
   ionViewWillEnter() {
     this.refreshDisplay();
@@ -69,6 +76,6 @@ export class UserPage {
   }
   //push登录页面
   pushLoginPage() {
-    this.app.getRootNav().push(LoginPage);
+    this.app.getRootNav().push('LoginPage');
   }
 }

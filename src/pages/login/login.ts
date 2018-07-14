@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController, NavParams, Events } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { VerifyProvider } from '../../providers/verify/verify';
-
-import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -18,6 +16,7 @@ export class LoginPage {
   constructor(public loadingCtrl: LoadingController,
     public navCtrl: NavController,
     public navParams: NavParams,
+    public events: Events,
     private formBuilder: FormBuilder,
     private verifyPvd: VerifyProvider) {
     this.loginForm = this.formBuilder.group({
@@ -35,8 +34,8 @@ export class LoginPage {
         .subscribe(
           (res) => {
             if (res == true) {
-              this.navCtrl.setRoot(TabsPage);
-              this.navCtrl.popToRoot();
+              this.events.publish('user:login');
+              this.navCtrl.pop();
             }
             else if (res == false) {
               loading.dismiss();
@@ -45,7 +44,6 @@ export class LoginPage {
           (err) => {
             console.log("login-provider-err", err);
           });
-
       let loading = this.loadingCtrl.create({
         content: '急毛啊没做完啊登陆页面都做了好久啊！',
         dismissOnPageChange: true
@@ -53,6 +51,10 @@ export class LoginPage {
       loading.present();
     }
     console.log("login-form", this.loginForm.value);
+  }
+
+  pushRegisterPage() {
+    this.navCtrl.push('RegisterPage');
   }
 
 }

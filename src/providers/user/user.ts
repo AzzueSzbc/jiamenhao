@@ -15,9 +15,10 @@ export class UserProvider {
       map((data) => {
         if (data.querySuccess == false) {
           this.hermes.presentAlert('提示信息', '用户身份验证过期，请重新登录', '确定');
-          return data.querySuccess;
+          return 1;
+        } else {
+          return data.queryResult[0];
         }
-        else return data.queryResult;
       })
     );
   }
@@ -28,8 +29,9 @@ export class UserProvider {
         if (data.querySuccess == false) {
           this.hermes.presentAlert('提示信息', '用户身份验证过期，请重新登录', '确定');
           return data.querySuccess;
+        } else {
+          return data.queryResult[0];
         }
-        else return data.queryResult[0];
       })
     );
   }
@@ -40,8 +42,9 @@ export class UserProvider {
         if (data.querySuccess == false) {
           this.hermes.presentAlert('提示信息', '用户身份验证过期，请重新登录', '确定');
           return data.querySuccess;
+        } else {
+          return data.queryResult;
         }
-        else return data.queryResult;
       })
     );
   }

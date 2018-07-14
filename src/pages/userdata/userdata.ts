@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 
 import { NativeProvider } from '../../providers/native/native';
 import { UserProvider } from '../../providers/user/user';
 import { APP_SERVE_URL } from '../../providers/config';
 
 import { TabsPage } from '../tabs/tabs';
-import { EntrancePage } from '../entrance/entrance';
 
 @IonicPage()
 @Component({
@@ -22,6 +21,7 @@ export class UserdataPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    public events: Events,
     private nativePvd: NativeProvider,
     private userPvd: UserProvider) {}
 
@@ -56,18 +56,15 @@ export class UserdataPage {
             }
           );
         }
-        else this.navCtrl.push(EntrancePage);
       });
     });
   }
 
   userLogout() {
-
     this.nativePvd.removeStorage('clientid');
     this.nativePvd.removeStorage('clienttoken');
-
-    this.navCtrl.setRoot(TabsPage);
-    this.navCtrl.popToRoot();
+    this.events.publish('user:logout');
+    this.navCtrl.pop();
   }
 
 }

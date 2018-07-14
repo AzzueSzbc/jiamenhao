@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -7,18 +7,18 @@ import { NativeProvider } from '../providers/native/native';
 import { VerifyProvider } from '../providers/verify/verify';
 
 import { TabsPage } from '../pages/tabs/tabs';
-import { EntrancePage } from '../pages/entrance/entrance';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
 
-  public rootPage: any;
+  rootPage: any = TabsPage;
 
   constructor(platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
+    public events: Events,
     private nativePvd: NativeProvider,
     private verifyPvd: VerifyProvider,
   ) {
@@ -33,20 +33,24 @@ export class MyApp {
             this.verifyPvd.tokenLogin({
               buyerID: id,
               buyerToken: token
-            }).subscribe(
-              (res) => {
-                //login success
-                if (res == true) this.rootPage = TabsPage;
-                //login failed
-                else if (res == false) this.rootPage = EntrancePage;
-              },
-              (err) => {
-                console.log(err);
-              });
+            })
+              .subscribe(
+                (res) => {
+                  console.log('app-res', res);
+                  //login success
+                  if (res == true) {
+                    this.events.publish('user:login');
+                  } else if (res == false) { //login failed
+                    this.events.publish('user:logout');
+                  }
+                },
+                (err) => {
+                  console.log(err);
+                });
+          } else {
+            this.events.publish('user:logout');
           }
-          //no token in storage
-          else this.rootPage = EntrancePage;
-        })
+        });
       });
     });
   }
