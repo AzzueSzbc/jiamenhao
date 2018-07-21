@@ -44,7 +44,6 @@ export class ListPage {
                 } else if (res == null) {
                   this.islogined = true;
                   this.isValidData = false;
-                  console.log('length=0', res.length, this.islogined ,this.isValidData);
                 } else if (res) {
                   this.islogined = true;
                   this.isValidData = true;

@@ -11,12 +11,14 @@ export class OrderProvider {
   }
 
   public submitOrderData(post) {
-    return this.hermes.hermesQueryNoData("addNewOrder.php", post).pipe(
+    return this.hermes.hermesQuery("addNewOrder.php", post).pipe(
       map((data) => {
         if (data.querySuccess == false){
           this.hermes.presentAlert('提示信息', '提交订单失败，请检查填写并重试', '确定')
+          return data.querySuccess;
+        } else if (data.queryResult) {
+          return data.queryResult;
         }
-        return data.querySuccess;
       })
     );
   }
@@ -36,6 +38,36 @@ export class OrderProvider {
           }
         }
       })
+    );
+  }
+
+  public getOneOrder(post) {
+    return this.hermes.hermesQuery('getOneOrder_buyer.php', post).pipe(
+      map(
+        (data) => {
+          if (data.querySuccess == false) {
+            this.hermes.presentAlert('提示信息', '评价失败，请检查并重新填写', '确定');
+            return data.querySuccess;
+          } else if (data.queryResult == null || data.queryResult == false) {
+            return null;
+          } else if (data.queryResult) {
+            return data.queryResult;
+          }
+        }
+      )
+    )
+  }
+
+  public commentsOrder(post) {
+    return this.hermes.hermesQueryNoData('buyerCommentsOrder.php', post).pipe(
+      map(
+        (data) => {
+          if (data.querySuccess == false) {
+            this.hermes.presentAlert('提示信息', '评价失败，请检查并重新填写', '确定');
+          }
+          return data.querySuccess;
+        }
+      )
     );
   }
 }

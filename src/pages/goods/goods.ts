@@ -14,8 +14,9 @@ export class GoodsPage {
 
   hostsURL: string = APP_SERVE_URL;
 
+  sellerID: string;
   shopData: any;
-  cartGoodsList: any[];
+  cartGoodsList: any[] = [];
 
   cartFlag = false;
   isQuery: boolean;
@@ -24,7 +25,10 @@ export class GoodsPage {
     public navParams: NavParams,
     public appCtrl: App,
     private nativePvd: NativeProvider,
-    private shopPvd: ShopProvider) {}
+    private shopPvd: ShopProvider) {
+      this.sellerID = navParams.get('sellerid');
+      console.log('sellerID', this.sellerID);
+    }
 
   ionViewWillEnter() {
     this.refreshDisplay();
@@ -68,7 +72,7 @@ export class GoodsPage {
 
   //同步购物车缓存数据
   syncCartGoodsList() {
-    this.nativePvd.getStorage('cartlist').then((val) => {
+    this.nativePvd.getStorage('cartlist:' + this.sellerID).then((val) => {
       if (val) {
         this.cartGoodsList = val;
       }
@@ -104,8 +108,8 @@ export class GoodsPage {
         ordersProductPictureURL: p.productPictureURL,
       }];
     }
-    this.nativePvd.setStorage('cartlist', this.cartGoodsList);
-    console.log("cartGoodsList:", this.cartGoodsList);
+    this.nativePvd.setStorage('cartlist:' + this.sellerID, this.cartGoodsList);
+    console.log('cartList:' + this.sellerID + ':', this.cartGoodsList);
   }
   //右侧商品列表中移除一个商品的购物车数量
   onRemoveChage(p) {
@@ -118,8 +122,8 @@ export class GoodsPage {
         this.cartGoodsList.splice(index, 1);
       }
     });
-    this.nativePvd.setStorage('cartlist', this.cartGoodsList);
-    console.log("cartGoodsList:", this.cartGoodsList);
+    this.nativePvd.setStorage('cartlist:' + this.sellerID, this.cartGoodsList);
+    console.log('cartList:' + this.sellerID + ':', this.cartGoodsList);
   }
   //计算购物车中商品总数，以及商品总价
   calcTotal() {
@@ -153,7 +157,7 @@ export class GoodsPage {
     //关闭购物车部分显示
     this.cartFlag = !this.cartFlag;
     //同步购物车数据到缓存
-    this.nativePvd.setStorage('cartlist', this.cartGoodsList);
+    this.nativePvd.setStorage('cartlist:' + this.sellerID, this.cartGoodsList);
     //同步购物车数据到用于显示的数组
     this.shopData.shopProductClass.forEach((pdClass) => {
       pdClass.product.forEach((p) => {
@@ -164,10 +168,10 @@ export class GoodsPage {
   //进入提交订单页面
   pushPayPage() {
     if (this.calcTotal().totalMoney >= this.shopData.sellerShopStartShippingLimit) {
-      this.nativePvd.setStorage('cartlist', this.cartGoodsList);
+      this.nativePvd.setStorage('cartlist:' + this.sellerID, this.cartGoodsList);
       this.appCtrl.getRootNav().push('PayPage', {
-        sellerID: this.navParams.get('sellerid'),
-        shippingCharge: this.shopData.sellerShopShippingCharge,
+        sellerid: this.sellerID,
+        shippingcharge: this.shopData.sellerShopShippingCharge,
       });
     }
   }

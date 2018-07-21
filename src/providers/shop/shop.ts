@@ -18,7 +18,9 @@ export class ShopProvider {
         if (data.querySuccess == false) {
           this.hermes.presentAlert('提示信息', '获取信息失败，请稍后重试', '确定');
           return data.querySuccess;
-        } else {
+        } else if (data.queryResult == false || data.queryResult == null) {
+          return null;
+        } else if (data.queryResult) {
           return data.queryResult;
         }
       })
@@ -33,11 +35,32 @@ export class ShopProvider {
         if (data.querySuccess == false) {
           this.hermes.presentAlert('提示信息', '获取信息失败，请稍后重试', '确定');
           return data.querySuccess;
-        } else {
+        } else if (data.queryResult == false || data.queryResult == null) {
+          return null;
+        } else if (data.queryResult) {
           return data.queryResult[0];
         }
       })
     );
+  }
+
+  public getAllSellerComment(id) {
+    return this.hermes.hermesQuery('getAllSellerComment.php', {
+      sellerID: id
+    }).pipe(
+      map(
+        (data) => {
+          if (data.querySuccess == false) {
+            this.hermes.presentAlert('提示信息', '获取信息失败，请稍后重试', '确定');
+            return data.querySuccess;
+          } else if (data.queryResult == false || data.queryResult == null) {
+            return null;
+          } else if (data.queryResult) {
+            return data.queryResult;
+          }
+        }
+      )
+    )
   }
 
 }

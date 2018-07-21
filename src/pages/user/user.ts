@@ -15,7 +15,7 @@ export class UserPage {
   hostsURL: string = APP_SERVE_URL;
 
   userData: any;
-  islogined: boolean;
+  islogined: boolean = false;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,

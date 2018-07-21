@@ -30,9 +30,9 @@
 <ion-content no-padding overflow-scroll="false">
 
   <ion-tabs selectedIndex="0" tabs-only tabsPlacement="top" no-border>
-    <ion-tab [root]="goodsRoot" tabTitle="商品" [rootParams]="shopParams"></ion-tab>
-    <ion-tab [root]="ratingRoot" [tabTitle]="ratings"></ion-tab>
-    <ion-tab [root]="sellerRoot" tabTitle="商家"></ion-tab>
+    <ion-tab [root]="goodsRoot" tabTitle="商品" [rootParams]="sellerParams"></ion-tab>
+    <ion-tab [root]="ratingRoot" [tabTitle]="ratings" [rootParams]="sellerParams"></ion-tab>
+    <ion-tab [root]="sellerRoot" tabTitle="商家" [rootParams]="shopParams"></ion-tab>
   </ion-tabs>
 
 </ion-content>

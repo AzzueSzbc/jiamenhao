@@ -35,29 +35,27 @@ export class PayPage {
     private orderPvd: OrderProvider,
     private userPvd: UserProvider,
     private nativePvd: NativeProvider) {
-    this.nativePvd.getStorage('cartlist').then((list) => {
+    this.sellerID = navParams.get('sellerid');
+    console.log("sellerID", this.sellerID);
+    this.nativePvd.getStorage('cartlist:' + this.sellerID).then((list) => {
       this.cartList = list;
-      console.log('cartList', this.cartList);
+      console.log('cartlist:' + this.sellerID + ':', this.cartList);
       this.cartList.forEach((g) => {
         this.paySum += g.ordersProductPrice * g.ordersProductAmount;
       });
-      this.shippingCharge = parseInt(navParams.get('shippingCharge'));
+      this.shippingCharge = parseInt(navParams.get('shippingcharge'));
       console.log('shippingCharge', this.shippingCharge, "paySum", this.paySum, "packCharge", this.packCharge);
       this.ActualPayment = this.shippingCharge + this.paySum + this.packCharge;
+      console.log("ActualPayment", this.ActualPayment);
     });
-
-
-    this.sellerID = navParams.get('sellerID');
-    console.log("sellerID", this.sellerID);
-    console.log("ActualPayment", this.ActualPayment);
-  }
-
-  ionViewWillEnter() {
-    this.getPreselectionAddress();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PayPage');
+  }
+
+  ionViewWillEnter() {
+    this.getPreselectionAddress();
   }
 
   getPreselectionAddress() {
@@ -74,6 +72,7 @@ export class PayPage {
             })
               .subscribe(
                 (res) => {
+                  console.log('pay-getPreselectionAddress-res', res);
                   if (res == false) {
                     this.isSelectOneAddress = false;
                   }
@@ -97,6 +96,20 @@ export class PayPage {
   }
 
   submitOrder() {
+    console.log('post', {
+      buyerID: this.buyerID,
+      buyerToken: this.buyerToken,
+      sellerID: this.sellerID,
+      ordersShippingCharge: this.shippingCharge,
+      ordersPackCharge: this.packCharge,
+      ordersNote: this.note,
+      consigneeName: this.addressData.consigneeName,
+      consigneeGender: this.addressData.consigneeGender,
+      consigneePhoneNumber: this.addressData.consigneePhoneNumber,
+      consigneeAddress: this.addressData.consigneeAddress,
+      ordersActualPayment: this.ActualPayment,
+      ordersProduct: this.cartList,
+    });
     this.orderPvd.submitOrderData({
       buyerID: this.buyerID,
       buyerToken: this.buyerToken,
@@ -113,9 +126,11 @@ export class PayPage {
     })
       .subscribe(
         (res) => {
-          if (res == true) {
-            this.navCtrl.push('OrderPage');
-            this.nativePvd.removeStorage('cartlist');
+          if (res != false) {
+            this.navCtrl.push('OrderPage', {
+              orderid: res.ordersID
+            });
+            this.nativePvd.removeStorage('cartlist:'+this.sellerID);
           }
         },
         (err) => {
