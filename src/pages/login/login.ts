@@ -34,7 +34,6 @@ export class LoginPage {
         .subscribe(
           (res) => {
             if (res == true) {
-              this.events.publish('user:login');
               this.navCtrl.pop();
             }
             else if (res == false) {

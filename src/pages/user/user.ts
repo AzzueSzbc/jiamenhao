@@ -29,6 +29,27 @@ export class UserPage {
       this.events.subscribe('user:login', () => {
         this.refreshDisplay();
       });
+      this.events.subscribe('user:notokenlgoin', (username, token) => {
+        this.userPvd.getUserBasicData({
+          buyerID: username,
+          buyerToken: token
+        })
+        .subscribe(
+          (res) => {
+            console.log('events-notokenlogin-res', res);
+            if (res == false) {
+              this.islogined = false;
+            }
+            else if (res) {
+              this.islogined = true;
+              this.userData = res;
+            }
+          },
+          (err) => {
+            console.log('events-err', err);
+          }
+        )
+      })
     }
 
   ionViewWillEnter() {
@@ -49,10 +70,11 @@ export class UserPage {
           })
           .subscribe(
             (res) => {
+              console.log('refreshDisplay-res', res);
               if (res == false) {
                 this.islogined = false;
               }
-              else {
+              else if (res) {
                 this.islogined = true;
                 this.userData = res;
               }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { Events } from 'ionic-angular';
 import { NativeProvider } from '../native/native';
 import { HermesProvider } from '../hermes/hermes';
 import { map } from 'rxjs/operators';
@@ -8,7 +8,8 @@ import { map } from 'rxjs/operators';
 export class VerifyProvider {
 
   constructor(private hermes: HermesProvider,
-    private nativePvd: NativeProvider,) {
+    private nativePvd: NativeProvider,
+    public events: Events) {
     console.log('Hello VerifyProvider Provider');
   }
 
@@ -47,6 +48,7 @@ export class VerifyProvider {
         if (data.querySuccess == true) {
           this.nativePvd.setStorage('clientid', data.buyerID);
           this.nativePvd.setStorage('clienttoken', data.buyerToken);
+          this.events.publish('user:notokenlgoin', data.buyerID, data.buyerToken);
           this.hermes.presentToast('登陆成功', 2000, 'bottom');
         } else if (data.querySuccess == false) {
           this.hermes.presentAlert('提示信息', '账户或密码错误，请重新输入', '确定');

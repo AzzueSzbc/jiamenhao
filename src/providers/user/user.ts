@@ -15,8 +15,10 @@ export class UserProvider {
       map((data) => {
         if (data.querySuccess == false) {
           this.hermes.presentAlert('提示信息', '用户身份验证过期，请重新登录', '确定');
-          return 1;
-        } else {
+          return data.querySuccess;
+        } else if (data.queryResult == false || data.queryResult == null){
+          return null;
+        } else if (data.queryResult) {
           return data.queryResult[0];
         }
       })
