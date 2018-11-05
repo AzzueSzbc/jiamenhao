@@ -1,21 +1,31 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>家门好</ion-title>
-  </ion-navbar>
+<ion-header no-border>
+  <div class="header-container">
+    <div class="address-icon-container">
+      <ion-icon name="pin"></ion-icon>
+    </div>
+    <div class="address-txt-container">
+      {{location}}
+    </div>
+    <!--<div class="searchbar-container">
+      <div class="searchbar">
+        <div class="searchbar-icon">
+          <ion-icon name="ios-search"></ion-icon>
+        </div>
+        <div class="searchbar-txt">
+          搜索
+        </div>
+      </div>
+    </div>-->
+  </div>
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let shop of allShopData">
-    <ion-card-content padding>
-        <ion-item (click)="pushOneShop(shop.sellerID)">
-          <ion-thumbnail item-left>
-            <img *ngIf="shop?.sellerShopLogoURL==''" [src]="hostsURL + 'avatar.jpg'">
-            <img *ngIf="shop?.sellerShopLogoURL!=''" [src]="hostsURL + shop?.sellerShopLogoURL">
-          </ion-thumbnail>
-          <h1>{{shop?.sellerShopName}}</h1>
-        <p>起送 ￥ {{shop?.sellerShopStartShippingLimit}} / 配送 ￥ {{shop?.sellerShopShippingCharge}}</p>
-        <p item-end>月售 : {{shop?.sellerShopMonthlySales}}</p>
-        </ion-item>
-    </ion-card-content>
-  </ion-card>
+  <super-tabs scrollTabs="true" toolbarBackground="white" no-shadow *ngIf="status=='存在相关数据'">
+    <super-tab 
+      [root]="class.page"
+      [title]="class.shopProductClassName"
+      [rootParams]="{'commodity': class.product}"
+      *ngFor="let class of shopCommodityClass">
+    </super-tab>
+  </super-tabs>
 </ion-content>

@@ -1,4 +1,158 @@
 <ion-header no-border>
+  <div class="header-container">
+    <div class="header-title">我的</div>
+  </div>
+</ion-header>
+
+<ion-content>
+  <!--用户未登录时显示-->
+  <div class="content-container" *ngIf="isLogined==false">
+    <div class="user-not-log-in-container">
+      <div class="user-log-in-button" (click)="pushLoginPage()">
+        登录
+      </div>
+    </div>
+    <!--
+    <div class="property-container">
+      <div class="columns-container">
+        <div class="txt">
+          <div class="red-envelope">
+            红包
+          </div>
+        </div>
+        <div class="value">
+          <div class="red-envelope">
+            0
+          </div>
+        </div>
+      </div>
+      <div class="columns-container">
+        <div class="txt">
+          <div class="coupon">
+            代金卷
+          </div>
+        </div>
+        <div class="value">
+          <div class="coupon">
+            0
+          </div>
+        </div>
+      </div>
+      <div class="columns-container">
+        <div class="txt">
+          <div class="point">
+            积分
+          </div>
+        </div>
+        <div class="value">
+          <div class="point">
+            0
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+  </div>
+
+  <!--用户已登录时显示-->
+  <div class="content-container" *ngIf="isLogined==true">
+    <div class="user-avatar-container">
+      <div class="user-avatar">
+        <img [src]="pictureWarehouseURL + userData?.buyerAvatarURL">
+      </div>
+      </div>
+      <div class="user-name-container">
+        {{userData?.buyerUserName}}
+      </div>
+      <div class="user-information-container" (click)="pushUserdataPage()">详细信息</div>
+
+      <!--<div class="property-container">
+        <div class="columns-container" (click)="pushRedEnvelopePage()">
+          <div class="txt">
+            <div class="red-envelope">
+              红包
+            </div>
+          </div>
+          <div class="value">
+            <div class="red-envelope">
+              0
+            </div>
+          </div>
+        </div>
+        <div class="columns-container" (click)="onUseRedEnvelope()">
+          <div class="txt">
+            <div class="coupon">
+              代金卷
+            </div>
+          </div>
+          <div class="value">
+            <div class="coupon">
+              0
+            </div>
+          </div>
+        </div>
+        <div class="columns-container">
+          <div class="txt">
+            <div class="point">
+              积分
+            </div>
+          </div>
+          <div class="value">
+            <div class="point">
+              0
+            </div>
+          </div>
+        </div>
+      </div>-->
+    </div>
+
+    <ion-list no-lines>
+      <button ion-item>
+        收货地址
+        <button ion-button item-end clear icon-only>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+      <button ion-item >
+        我的足迹
+        <button ion-button item-end clear icon-only>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+      <button ion-item >
+        我的收藏
+        <button ion-button item-end clear icon-only>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+      <button ion-item >
+        我的评论
+        <button ion-button item-end clear icon-only color="miku">
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+    </ion-list>
+
+    <div class="dividing-line"></div>
+    <ion-list no-lines>
+      <button ion-item>
+        客服热线
+        <button ion-button item-end clear icon-only>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+      <button ion-item >
+        投诉建议
+        <button ion-button item-end clear icon-only>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </button>
+      </button>
+    </ion-list>
+
+</ion-content>
+
+<!--
+<ion-header no-border>
   <div class="nav-warp">
 
   </div>
@@ -31,10 +185,5 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      收货地址
-    </ion-card-header>
-  </ion-card>
-
 </ion-content>
+-->

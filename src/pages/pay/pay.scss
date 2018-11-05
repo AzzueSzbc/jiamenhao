@@ -1,21 +1,301 @@
 page-pay {
-  .carts-box {
+
+  @import '../../assets/scss/color.scss';
+
+  .top-blank {
+    width: 100%;
+    height: 20px;
+    background-color: $primary;
+  }
+
+  .header-container {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    background-color: $primary;
+
+    .header-icon-row {
+      position: absolute;
+      width: 100%;
+      height: 34px;
+      margin-top: 10px;
+      display: flex;
+      .arrow-round-back-icon {
+        flex: 1;
+        margin-left: 20px;
+        font-size: 24px;
+        color: $white;
+      }
+    }
+  }
+
+  .content-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding-bottom: 11px;
+    background: $primary;
+
+    .select-address-container {
+      position: relative;
+      width: 100%;
+      height: auto;
+      padding: 4px 20px 0px 20px;
+      .deliver-to-txt {
+        font-size: 17px;
+        color: #E4EAEB;
+      }
+      .select-address-button {
+        position: relative;
+        margin: 21px 4px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 21px;
+        background-color: $primary;
+        border: 1px solid $white;
+        .select-address-txt {
+          font-size: 16px;
+          font-weight: 600;
+          color: $white;
+        }
+      }
+      .default-select-address-container {
+        .address-txt {
+          margin-top: 8px;
+          font-size: 21px;
+          color: $white;
+        }
+        .contact-name {
+          margin-top: 8px;
+          font-size: 17px;
+          color: $white;
+        }
+        .contact-phone {
+          margin-left: 10px;
+          font-size: 17px;
+          color: $white;
+        }
+      }
+    }
+
+
+
+    .deliver-and-payment-card {
+      position: relative;
+      height: 108px;
+      margin: 16px 20px;
+      border-radius: 12px;
+      background: $white;
+      .row-container {
+        width: 100%;
+        height: 50%;
+        display: flex;
+        align-items: center;
+        .row {
+          width: 100%;
+          height: auto;
+          display: flex;
+          .row-left {
+            flex: 1;
+            margin-left: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            color: $dark;
+          }
+          .row-right {
+            flex: none;
+            margin-right: 16px;
+            font-size: 16px;
+            color: $primary;
+          }
+        }
+      }
+    }
+
+    .order-list-card {
+      position: relative;
+      height: auto;
+      margin: 16px 20px;
+      padding-top: 11px;
+      border-radius: 12px;
+      background: $white;
+      .shop-name {
+        width: 100%;
+        margin: 0px 18px 11px 18px;
+        font-size: 16px;
+        font-weight: 600;
+        color: $dark;
+      }
+      .diviling-line {
+        height: 1px;
+        margin: 11px 18px 0px 18px;
+        background-color: $light-line;
+      }
+
+      .commodity-container {
+        margin: 11px 18px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        .commodity-img {
+          flex: 1;
+          width: 56px;
+          height: 56px;
+        }
+        .commodity-img img {
+          width: 56px;
+          height: 56px;
+          border-radius: 12px;
+          object-fit: cover;
+        }
+        .commodity-name {
+          flex: 1;
+          margin-left: 18px;
+          font-size: 16px;
+          color: $dark;
+        }
+        .commodity-number {
+          flex: 1;
+          margin-left: 18px;
+          font-size: 16px;
+          color: $dark;
+        }
+        .commodity-total-price {
+          flex: none;
+          margin-left: 26px;
+          font-size: 16px;
+          color: $dark;
+        }
+      }
+
+      .item-container {
+        margin: 11px 18px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        .item-title {
+          flex: 1;
+          font-size: 16px;
+          color: $dark;
+        }
+        .item-content {
+          flex: none;
+          font-size: 16px;
+          color: $dark;
+        }
+      }
+
+      .red-envelope-container {
+        margin: 11px 18px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        .red-envelope-title {
+          flex: 1;
+          font-size: 16px;
+          font-weight: 600;
+          color: $dark;
+        }
+        .no-red-envelope {
+          flex: none;
+          font-size: 14px;
+          color: $light;
+        }
+        .use-red-envelope {
+          flex: none;
+          font-size: 16px;
+          color: $bright;
+        }
+      }
+
+      .total-price-container {
+        height: 54px;
+        margin: 0px 18px;
+        display: flex;
+        align-items: center;
+        .total-price-row {
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          .total-price-title {
+            flex: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: $dark;
+          }
+          .total-price {
+            flex: none;
+            margin-left: 39px;
+            font-size: 16px;
+            color: $bright;
+          }
+        }
+      }
+    }
+
+    .order-note-card {
+      position: relative;
+      height: auto;
+      margin: 16px 20px;
+      padding: 20px;
+      border-radius: 12px;
+      background: $white;
+      .order-note-first-row {
+        display: flex;
+        .order-note-title {
+          flex: 1;
+          font-size: 18px;
+          font-weight: 600;
+          color: $dark;
+        }
+        .order-note-edit-txt {
+          flex: none;
+          font-size: 14px;
+          color: $light;
+        }
+      }
+      .order-note {
+        margin-top: 16px;
+        margin-left: 4px;
+        font-size: 16px;
+        color: $light;
+      }
+    }
+  }
+
+
+
+  .order-confirm-container {
     position: relative;
     display: flex;
-    height: 48px;
-    background: #141d27;
-    .right {
-      display: flex;
-      right: 0;
-      justify-content: center;
-      align-items: center;
-      flex: 0 0 105px;
-      width: 105px;
+    height: 60px;
+    .order-confirm-container-left {
+      flex: 6.5;
       height: 100%;
-      font-size: 12px;
-      font-weight: bold;
-      color: #fff;
-      background: linear-gradient(60deg, #96deda 0%, #50c9c3 100%);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      background-color: $primary;
+      .total-price {
+        flex: none;
+        margin-right: 30px;
+        font-size: 20px;
+        color: $white;
+      }
+    }
+    .confirm-payment-button {
+      flex: 3.5;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: $bright;
+      .confirm-payment {
+        font-size: 18px;
+        color: $white;
+      }
     }
   }
 

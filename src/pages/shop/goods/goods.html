@@ -1,0 +1,84 @@
+<ion-content no-padding overflow-scroll="false">
+  <!--左侧商品类型导航-->
+  <div class="commodity-class-list-container">
+    <div class="commodity-class-name-container" *ngFor="let className of classNames">
+      <div class="commodity-class-name" [ngClass]="{'commodity-class-name-choose': className==chooseClassName}" (click)="onChooseClass(className)">
+        {{className}}
+      </div>
+    </div>
+  </div>
+
+  <div class="commodity-list-container">
+    <div class="list-scroll">
+      <div *ngFor="let class of shopData?.shopProductClass">
+          <div *ngIf="class?.shopProductClassName == chooseClassName||chooseClassName == '全部0'">
+            <div class="commodity-class-name">
+              {{class?.shopProductClassName}}
+            </div>
+            <div class="commodity-container" *ngFor="let g of class.product">
+              <div class="commodity-img-container">
+                <img [src]="pictureWarehouseURL + g?.productPictureURL"  class="img">
+                </div>
+                <div class="commodity-center-container">
+                  <div class="commodity-title">
+                    {{g?.productName}}
+                  </div>
+                  <div class="commodity-sales">
+                    <span>月售 {{g?.productMonthlySales}}</span>
+                    <span  class="commodity-favorable">赞 {{g?.productVoteUpCount}}</span>
+                  </div>
+                </div>
+                <div class="commodity-end-container">
+                  <div class="commodity-price">
+                    ￥{{g?.productPrice / 100}}
+                  </div>
+                </div>
+                <div class="commodity-button">
+                  <ion-icon name="ios-remove-circle-outline" color="primary" *ngIf="g?.inCartNumber > 0" (click)="onRemoveChage(g)"></ion-icon>
+                  <span class="commodity-select" *ngIf="g?.inCartNumber > 0">{{g?.inCartNumber}}</span>
+                  <ion-icon name="ios-add-circle" color="primary" (click)="onAddChange(g)"></ion-icon>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</ion-content>
+
+<ion-footer no-border>
+  <div class="carts-mark" *ngIf="cartFlag">
+    <div class="carts-list">
+      <div class="settings">
+        <span class="txt">购物车</span>
+        <span class="btn" (click)="onDeleteAllCartGoods()">清空</span>
+      </div>
+      <div class="list">
+        <ul>
+          <li class="item bd" *ngFor="let gl of cartGoodsList">
+            <div class="left">{{gl.ordersProductName}}</div>
+            <div class="right">
+              <span class="price-wrap">
+              <span class="sign">￥</span>
+              <span class="price">{{gl.ordersProductPrice / 100}}</span>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="carts-box">
+    <div class="left" [ngClass]="{on: calcTotal().totalNum}" (click)="openCartToggle()">
+      <div class="cart">
+        <ion-icon name="cart"></ion-icon>
+        <span class="num" *ngIf="calcTotal().totalNum">{{calcTotal().totalNum}}</span>
+      </div>
+      <div class="price">
+        <span class="money">￥{{calcTotal().totalMoney / 100}}</span>
+        <span class="line"></span>
+        <span class="plus">另需配送费￥{{shopData?.sellerShopShippingCharge / 100}}元</span>
+      </div>
+    </div>
+    <div class="right" [ngClass]="{on: calcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit}" (click)="pushPayPage()">{{calcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit ? '去结算' : changeTxt()}}</div>
+  </div>
+</ion-footer>

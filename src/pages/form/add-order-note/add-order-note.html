@@ -1,0 +1,33 @@
+<ion-header no-border>
+
+  <div class="header-container">
+    <div class="close-icon-container" (click)="dismiss()">
+      <ion-icon name="close"></ion-icon>
+    </div>
+    <div class="note-txt-container">
+      备注
+    </div>
+    <div class="note-complete-txt-container" (click)="complete()">
+      完成
+    </div>
+  </div>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="content-container">
+
+          <form [formGroup]="noteForm">
+            <div class="note-box">
+              <textarea class="note" rows="4" cols="10" placeholder="口味，包装，用餐人数等" formControlName="note"> </textarea>
+              <div class="word-count-row">
+                <div class="word-count">
+                  {{noteForm.value.note.length}} 字
+                </div>
+              </div>
+            </div>
+          </form>
+
+  </div>
+</ion-content>

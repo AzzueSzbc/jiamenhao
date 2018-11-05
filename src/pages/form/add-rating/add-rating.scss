@@ -1,0 +1,312 @@
+page-add-rating {
+  @import '../../../assets/scss/color.scss';
+
+  .top-blank {
+    width: 100%;
+    height: 20px;
+    background-color: #EFEFEF;
+  }
+
+  .header-container {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    padding: 12px 20px;
+    align-items: center;
+    background-color: #EFEFEF;
+
+    .close-icon-container {
+      flex: none;
+      margin-top: 4px;
+      margin-right: 18px;
+      font-size: 22px;
+      font-weight: bold;
+      color: $dark;
+    }
+
+    .rating-txt-container {
+      flex: 1;
+      font-size: 21px;
+      font-weight: 500;
+      color: $dark;
+    }
+  }
+
+  .content-container {
+    width: 100%;
+    height: auto;
+    padding: 10px 16px;
+    background-color: #EFEFEF;
+
+    .card-dividing-line-container {
+      width: 100%;
+      height: auto;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+
+      .card-dividing-line {
+        height: 1px;
+        width: 40px;
+        background-color: $primary;
+      }
+    }
+
+    .rider-rating-card {
+      width: 100%;
+      height: auto;
+      padding: 15px;
+      background-color: $white;
+      border-radius: 6px;
+
+      .rating-title {
+        width: 100%;
+        display: flex;
+
+        .avatar {
+          width: 40px;
+          height: 40px;
+          margin-left: 3px;
+          flex: none;
+          overflow: hidden;
+          border-radius: 50%;
+        }
+
+        .avatar img {
+          width: 40px;
+          height: 40px;
+          object-fit: cover;
+        }
+
+        .rider-information-container {
+          flex: 1;
+          margin-left: 21px;
+
+          .rider-name {
+            font-size: 16px;
+            color: $dark;
+          }
+
+          .rider-delivery-time {
+            margin-top: 6px;
+            font-size: 10px;
+            color: $dark;
+          }
+        }
+      }
+
+      .rider-rating-container {
+        width: 100%;
+        height: auto;
+        margin-top: 10px;
+        display: flex;
+
+        .button-container {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+
+          .satisfied-button {
+            width: 106px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid $light;
+            border-radius: 14px;
+            &.select {
+              border: 0;
+              background-color: $primary;
+            }
+
+            .satisfied-txt {
+              font-size: 15px;
+              color: $dark;
+            }
+          }
+        }
+      }
+    }
+
+    .order-rating-card {
+      width: 100%;
+      height: auto;
+      margin-top: 10px;
+      padding: 15px;
+      background-color: $white;
+      border-radius: 6px;
+
+      .rating-title {
+        width: 100%;
+        display: flex;
+
+        .avatar {
+          width: 40px;
+          height: 40px;
+          margin-left: 3px;
+          flex: none;
+          overflow: hidden;
+          border-radius: 50%;
+        }
+
+        .avatar img {
+          width: 40px;
+          height: 40px;
+          object-fit: cover;
+        }
+
+        .shop-name-container {
+          flex: 1;
+          margin-left: 21px;
+          display: flex;
+          align-items: center;
+
+          .shop-name {
+            font-size: 16px;
+            color: $dark;
+          }
+        }
+      }
+
+      .rating-star-txt {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .star-container {
+        width: 100%;
+        height: auto;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .star-row {
+          display: flex;
+
+          .star-size {
+            flex: 1;
+            margin-right: 6px;
+            margin-left: 6px;
+            font-size: 32px;
+          }
+
+          .star-color-excellent {
+            color: #FF9900;
+          }
+
+          .star-color-good {
+            color: #F7BA2A;
+          }
+
+          .star-color-poor {
+            color: #99A9BF;
+          }
+        }
+      }
+
+      .comment-box {
+        height: 110px;
+        margin-top: 10px;
+        margin-left: 6px;
+        margin-right: 6px;
+        padding: 4px;
+        background-color: #f5f5f5;
+        border: 1px solid $light;
+        .comments {
+          /*自动适应父布局宽度*/
+          width: 100%;
+          /*在ie中解决断行问题(防止自动变为在一行显示，主要解决ie兼容问题，ie8中当设宽度为100%时，文本域类容超过一行时，当我们双击文本内容就会自动变为一行显示，所以只能用ie的专有断行属性“word-break或word-wrap”控制其断行)*/
+          overflow: auto;
+          word-break: break-all;
+          background-color: #f5f5f5;
+          border-color: #f5f5f5;
+          box-shadow: none;
+          color: #7a7a7a;
+          resize: none;
+        }
+        .word-count-row {
+          display: flex;
+          justify-content: flex-end;
+          .word-count {
+            margin-right: 10px;
+            font-size: 10px;
+            color: #7a7a7a;
+          }
+        }
+      }
+
+      .upload-image-container {
+        margin-left: 6px;
+        margin-right: 6px;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        .upload-image-icon-box {
+          flex: none;
+          width: 60px;
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid $light;
+          background-color: #f5f5f5;
+          .upload-image-icon {
+            font-size: 30px;
+            color: $light;
+          }
+        }
+        .upload-image-txt {
+          margin-left: 24px;
+          flex: 1;
+          font-size: 16px;
+          color: $dark;
+        }
+      }
+
+      .commodity-like-row {
+        margin-top: 10px;
+        display: flex;
+        .commodity-name {
+          flex: 1;
+          margin-left: 6px;
+          font-size: 10px;
+          color: $dark;
+        }
+        .icon {
+          flex: none;
+          margin-right: 6px;
+          font-size: 10px;
+          color: $dark;
+        }
+        .txt {
+          flex: none;
+          margin-right: 6px;
+          font-size: 10px;
+          color: $dark;
+        }
+      }
+
+    }
+
+  }
+
+  .submit-rating-button {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $light;
+    .submit-rating-txt {
+      font-size: 20px;
+      color: $dark;
+    }
+    &.can {
+      background-color: $primary;
+    }
+  }
+
+
+}

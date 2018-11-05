@@ -1,0 +1,186 @@
+<ion-header no-border>
+  <div class="header-container">
+    <div class="address-icon-container">
+      <ion-icon name="pin"></ion-icon>
+    </div>
+    <div class="address-txt-container">
+      {{location}}
+    </div>
+    <!--<div class="searchbar-container">
+      <div class="searchbar">
+        <div class="searchbar-icon">
+          <ion-icon name="ios-search"></ion-icon>
+        </div>
+        <div class="searchbar-txt">
+          搜索
+        </div>
+      </div>
+    </div>-->
+  </div>
+</ion-header>
+
+<ion-content>
+
+  <!--下拉刷新-->
+  <ion-refresher (ionRefresh)="doRefresh($event)" (ionPull)="doPulling($event)">
+    <ion-refresher-content
+      pullingText="下拉刷新"
+      refreshingText="加载中...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!--页面加载中时显示-->
+  <div class="Loading" *ngIf="status=='加载中'">
+    努力加载中...
+  </div>
+
+  <!--网络异常时显示-->
+  <div class="no-network" *ngIf="status=='没有网络'">
+    网络不给力，请检查网络
+  </div>
+
+  <!--网络正常时显示-->
+  <div *ngIf="status!='加载中' && status!='没有网络' && status!='未知错误'">
+    <!--轮播图-->
+    <div class="advertising-slides-container">
+      <div class="advertising-slides">
+        <ion-slides autoplay="3000" loop="true" pager="true">
+          <ion-slide>
+            <img [src]="pictureWarehouseURL + 'slide1.jpg'"  class="img">
+          </ion-slide>
+          <ion-slide>
+            <img [src]="pictureWarehouseURL + 'slide2.jpg'"  class="img">
+          </ion-slide>
+          <ion-slide>
+            <img [src]="pictureWarehouseURL + 'slide3.jpg'"  class="img">
+          </ion-slide>
+        </ion-slides>
+      </div>
+    </div>
+
+    <!-- 店铺分类图标显示-->
+    <div class="dividing-blank"></div>
+    <!--第一行-->
+    <div class="shop-class-container">
+      <div class="one-shop-class-container">
+        <div class="shop-class-img">
+            <img [src]="pictureWarehouseURL + '生鲜.jpeg'">
+        </div>
+        <div class="shop-class-name">
+          生鲜
+        </div>
+      </div>
+      <div class="one-shop-class-container">
+        <div class="shop-class-img">
+            <img [src]="pictureWarehouseURL + '快餐.jpeg'">
+        </div>
+        <div class="shop-class-name">
+          快餐
+        </div>
+      </div>
+      <div class="one-shop-class-container">
+        <div class="shop-class-img">
+            <img [src]="pictureWarehouseURL + '小吃.jpeg'">
+        </div>
+        <div class="shop-class-name">
+          小吃
+        </div>
+      </div>
+      <div class="one-shop-class-container">
+        <div class="shop-class-img">
+            <img [src]="pictureWarehouseURL + '饮品.jpeg'">
+        </div>
+        <div class="shop-class-name">
+          饮品
+        </div>
+      </div>
+    </div>
+    <!--第二行-->
+    <div class="shop-class-container">
+      <div class="one-shop-class-container">
+        <div class="shop-class-img">
+            <img [src]="pictureWarehouseURL + '粥粉面.jpeg'">
+        </div>
+        <div class="shop-class-name">
+          粥粉面
+        </div>
+      </div>
+      <div class="one-shop-class-container">
+        <div class="shop-class-img">
+            <img [src]="pictureWarehouseURL + '西餐.jpeg'">
+        </div>
+        <div class="shop-class-name">
+          西餐
+        </div>
+      </div>
+      <div class="one-shop-class-container">
+        <div class="shop-class-img">
+            <img [src]="pictureWarehouseURL + '甜点.jpeg'">
+        </div>
+        <div class="shop-class-name">
+          甜点
+        </div>
+      </div>
+      <div class="one-shop-class-container">
+        <div class="shop-class-img">
+            <img [src]="pictureWarehouseURL + '日用品.jpeg'">
+        </div>
+        <div class="shop-class-name">
+          日用品
+        </div>
+      </div>
+    </div>
+
+    <!--店铺列表-->
+    <div class="shop-list-container">
+      <!--标题-->
+      <div class="title">
+        附近商家
+      </div>
+      <!--排序方式-->
+      <div class="sort">
+        综合排序
+      </div>
+      <!--店铺-->
+      <div class="shop-container" *ngFor="let shop of shops" (click)="pushOneShop(shop.sellerID)">
+        <div class="shop-img-container">
+          <img [src]="pictureWarehouseURL + shop?.sellerShopLogoURL"  class="shop-img">
+        </div>
+        <div class="shop-information-container">
+          <div class="shop-information-container-first-row">
+            <div class="shop-name">
+              {{shop?.sellerShopName}}
+            </div>
+          </div>
+          <div class="shop-information-container-second-row">
+            <div class="shop-star">
+              <ion-icon name="star" color="yellow"></ion-icon>
+              <ion-icon name="star" color="yellow"></ion-icon>
+              <ion-icon name="star" color="yellow"></ion-icon>
+              <ion-icon name="star" color="yellow"></ion-icon>
+              <ion-icon name="star-half" color="yellow"></ion-icon>
+            </div>
+            <div class="shop-score">
+              4.5
+            </div>
+            <div class="shop-monthly-sales">
+              月售 {{shop?.sellerShopMonthlySales}}
+            </div>
+          </div>
+          <div class="shop-cost">
+            <span class="starting-price">起送 ￥{{shop?.sellerShopStartShippingLimit}}</span>
+            <span class="delivery-price">配送 ￥{{shop?.sellerShopShippingCharge}}</span>
+          </div>
+          <div class="shop-offer-container">
+            <div class="shop-offer">
+              特价优惠
+            </div>
+            <div class="shop-offer">
+              节日促销
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

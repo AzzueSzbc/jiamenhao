@@ -67,4 +67,8 @@ export class UserdataPage {
     this.navCtrl.pop();
   }
 
+  dismiss() {
+    this.navCtrl.pop();
+  }
+
 }

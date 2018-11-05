@@ -1,38 +1,54 @@
 <ion-header no-border>
-  <ion-navbar>
-    <ion-title>shop</ion-title>
-  </ion-navbar>
-  <div class="header-wrap">
-    <header>
-      <div  class="top-navbg">
+  <div class="header-container">
+
+
+    <img class="header-background" [src]="pictureWarehouseURL + shop?.sellerShopLogoURL">
+
+
+    <div class="top-blank"></div>
+    <div class="header-icon-row">
+      <div class="arrow-round-back-icon" (click)="pagePop()">
+        <ion-icon name="ios-arrow-back-outline"></ion-icon>
       </div>
-      <div class="top">
-        <div class="up">
-          <div class="img-wrap">
-            <img class="avatar" width="64" height="64" alt="" [src]="hostsURL + shop?.sellerShopLogoURL">
-          </div>
-          <div class="right">
-            <div class="title">
-              <span class="txt">{{shopData?.sellerShopName}}</span>
-            </div>
-            <div class="desc">王鳙转送 / 大约1年送达</div>
-          </div>
+      <div class="right-icon">
+        <ion-icon name="search"></ion-icon>
+      </div>
+      <div class="right-icon">
+        <ion-icon name="heart-outline"></ion-icon>
+      </div>
+      <div class="right-icon">
+        <ion-icon name="ios-arrow-down"></ion-icon>
+      </div>
+    </div>
+
+    <div class="header-shop-container">
+      <div class="shop-img-container">
+        <img [src]="pictureWarehouseURL + shop?.sellerShopLogoURL">
+      </div>
+      <div class="shop-information-container">
+        <div class="shop-name">
+          {{shop?.sellerShopName}}
         </div>
-        <div class="down">
-          <div class="txt">公告：{{shopData?.sellerShopDescription}}</div>
+        <div class="shop-bulletin">
+          {{shop?.sellerShopDescription}}
+        </div>
+        <div class="shop-business-hours">
+          营业时间:{{shop?.shopMorningOpenTime}}~{{shop?.shopAfterNoonCloseTime}}
+        </div>
+        <div class="shop-offer-container">
+          <div class="shop-offer">特价优惠</div>
         </div>
       </div>
-      <img class="bg" alt="" [src]="hostsURL + shop?.sellerShopLogoURL">
-    </header>
+    </div>
+
   </div>
+
 </ion-header>
 
-<ion-content no-padding overflow-scroll="false">
-
-  <ion-tabs selectedIndex="0" tabs-only tabsPlacement="top" no-border>
-    <ion-tab [root]="goodsRoot" tabTitle="商品" [rootParams]="sellerParams"></ion-tab>
-    <ion-tab [root]="ratingRoot" [tabTitle]="ratings" [rootParams]="sellerParams"></ion-tab>
-    <ion-tab [root]="sellerRoot" tabTitle="商家" [rootParams]="shopParams"></ion-tab>
-  </ion-tabs>
-
+<ion-content>
+  <super-tabs toolbarBackground="white" no-shadow>
+    <super-tab [root]="goodsRoot" title="点菜" [rootParams]="sellerParams"></super-tab>
+    <super-tab [root]="ratingRoot" title="评论" [rootParams]="sellerParams"></super-tab>
+    <super-tab [root]="sellerRoot" title="商家" [rootParams]="sellerParams"></super-tab>
+  </super-tabs>
 </ion-content>

@@ -1,0 +1,96 @@
+page-choose-red-envelope {
+  @import '../../../assets/scss/color.scss';
+
+  .top-blank {
+    width: 100%;
+    height: 20px;
+    background-color: $primary;
+  }
+
+  .header-container {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    padding: 12px 20px;
+    align-items: center;
+    background-color: $primary;
+
+    .close-icon-container {
+      flex: none;
+      margin-top: 4px;
+      margin-right: 18px;
+      font-size: 22px;
+      font-weight: bold;
+      color: $white;
+    }
+
+    .rating-txt-container {
+      flex: 1;
+      font-size: 21px;
+      font-weight: 500;
+      color: $white;
+    }
+  }
+
+  .content-container {
+    width: 100%;
+    height: 100%;
+    padding: 1px 16px;
+    background-color: #EFEFEF;
+
+  .red-envelope-container {
+    height: 100px;
+    display: flex;
+    margin-top: 16px;
+    border-radius: 6px;
+    .red-envelope-name-container {
+      flex: none;
+      width: 35%;
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px 0px 0px 6px;
+      //border:
+      background-color: $white;
+      font-size: 20px;
+      color: #F23030;
+    }
+    .unusable {
+      color: #6D7080;
+    }
+    .red-envelope-content-container {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 0px 6px 6px 0px;
+      background-color: $white;
+      .red-envelope-name {
+        font-size: 16px;
+        color: $dark;
+      }
+      .red-envelope-content {
+        margin-top: 6px;
+        font-size: 16px;
+        color: #F23030;
+      }
+      .unusable {
+        color: #6D7080;
+      }
+      .red-envelope-expiry-date{
+        margin-top: 2px;
+        font-size: 10px;
+        color: $light;
+      }
+    }
+
+  }
+
+  .unusable-reason {
+    margin-left: 4px;
+    margin-top: 4px;
+    font-size: 10px;
+    color: #F23030;
+  }
+
+}
+}

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 
 import { HomePage } from '../home/home';
+import { CartPage } from '../cart/cart';
+import { DeliverPage } from '../deliver/deliver';
 import { ListPage } from '../list/list';
 import { UserPage } from '../user/user';
 
@@ -10,8 +12,10 @@ import { UserPage } from '../user/user';
 export class TabsPage {
 
   tab1Root = HomePage;
-  tab2Root = ListPage;
-  tab3Root = UserPage;
+  tab2Root = CartPage;
+  tab3Root = DeliverPage;
+  tab4Root = ListPage;
+  tab5Root = UserPage;
 
   constructor() {}
 

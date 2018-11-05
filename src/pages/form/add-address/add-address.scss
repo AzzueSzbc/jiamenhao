@@ -1,0 +1,34 @@
+page-add-address {
+  @import '../../../assets/scss/color.scss';
+
+  .top-blank {
+    width: 100%;
+    height: 20px;
+    background-color: $primary;
+  }
+
+  .header-container {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    padding: 12px 20px;
+    align-items: center;
+    background-color: $primary;
+
+    .close-icon-container {
+      flex: none;
+      margin-top: 4px;
+      margin-right: 18px;
+      font-size: 22px;
+      font-weight: bold;
+      color: $white;
+    }
+
+    .rating-txt-container {
+      flex: 1;
+      font-size: 21px;
+      font-weight: 500;
+      color: $white;
+    }
+  }
+}

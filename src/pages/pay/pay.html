@@ -1,78 +1,156 @@
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>提交订单</ion-title>
-  </ion-navbar>
+<ion-header no-border>
+  <div  class="header-container">
+    <div class="header-icon-row">
+      <div class="arrow-round-back-icon" (click)="pagePop()">
+        <ion-icon name="ios-arrow-back"></ion-icon>
+      </div>
+    </div>
+  </div>
 
 </ion-header>
 
 
-<ion-content padding>
-  <ion-card>
-    <ion-card-content>
-      <ion-item *ngIf="isSelectOneAddress==false">
-        <button ion-button block round color="primary" outline (click)="pushChooesAddressPage()">
-          <ion-icon name="add"></ion-icon> 选择收货地址
-        </button>
-      </ion-item>
-      <ion-item *ngIf="isSelectOneAddress==true">
-        <h3>{{addressData?.consigneeAddress}}</h3>
-        <p>{{addressData?.consigneeName}}({{addressData?.consigneeGender}})  {{addressData?.consigneePhoneNumber}}</p>
-        <button ion-button item-end clear icon-only (click)="pushChooesAddressPage()">
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
-      </ion-item>
-      <ion-item>
-        <h2 item-start>立即送出</h2>
-        <p ion-text color="primary">(大约 20 分钟)</p>
-        <button ion-button item-end clear icon-only>
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+<ion-content>
 
-  <ion-card>
-    <ion-card-content>
-      <ion-list no-lines>
-        <ion-item *ngFor="let g of cartList">
-          <ion-thumbnail item-start>
-            <img [src]="hostsURL + g?.ordersProductPictureURL">
-          </ion-thumbnail>
-          <h3>{{g?.ordersProductName}}</h3>
-          <p>x{{g?.ordersProductAmount}}</p>
-          <h2 item-end ion-text>￥{{g?.ordersProductPrice*g?.ordersProductAmount}}</h2>
-        </ion-item>
-        <ion-item>
-          <p item-end>小计</p>
-          <h2 ion-text color="danger" item-end>￥ {{paySum}}</h2>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+  <div class="content-container">
 
-  <ion-card>
-    <ion-card-content>
-      <ion-list>
-        <ion-item>
-          <p item-start>配送费</p>
-          <h3 item-end>￥{{shippingCharge}}</h3>
-        </ion-item>
-        <ion-item>
-          <p item-start>包装费</p>
-          <h3 item-end>￥{{packCharge}}</h3>
-        </ion-item>
-        <ion-item>
-          <p item-end>实际支付</p>
-          <h2 ion-text color="danger" item-end>￥ {{ActualPayment}}</h2>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+    <div class="select-address-container">
+      <div class="deliver-to-txt">
+        订单配送至
+      </div>
+      <div class="default-select-address-container" *ngIf="isSelectOneAddress==true" (click)="pushChooseAddressPage()">
+        <div class="address-txt">
+          {{order?.addressData?.consigneeAddress}}
+        </div>
+        <div class="contact-name">
+          {{order?.addressData?.consigneeName}}({{order?.addressData?.consigneeGender}})
+          <span class="contact-phone">{{order?.addressData?.consigneePhoneNumber}}</span>
+        </div>
+      </div>
+      <div class="select-address-button"  *ngIf="isSelectOneAddress==false" (click)="pushChooseAddressPage()">
+        <div class="select-address-txt">
+          选择收货地址
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="deliver-and-payment-card">
+      <div class="row-container">
+        <div class="row">
+          <div class="row-left">
+            送达时间
+          </div>
+          <div class="row-right">
+            尽快送达
+          </div>
+        </div>
+      </div>
+      <div class="row-container">
+        <div class="row">
+          <div class="row-left">
+            支付方式
+          </div>
+          <div class="row-right">
+            支付宝
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-list-card">
+      <div class="shop-name">
+        家门好
+      </div>
+      <div class="diviling-line"></div>
+      <div *ngFor="let g of order.orderProduct">
+        <div class="commodity-container">
+          <div class="commodity-img">
+            <img [src]="pictureWarehouseURL + g?.ordersProductPictureURL">
+          </div>
+          <div class="commodity-name">
+            {{g?.ordersProductName}}
+          </div>
+          <div class="commodity-number">
+            x{{g?.ordersProductAmount}}
+          </div>
+          <div class="commodity-total-price">
+            ￥{{(g?.ordersProductPrice*g?.ordersProductAmount) / 100}}
+          </div>
+        </div>
+        <div class="diviling-line"></div>
+      </div>
+      <div class="item-container">
+        <div class="item-title">
+          包装费
+        </div>
+        <div class="item-content">
+          ￥{{order.packCharge / 100}}
+        </div>
+      </div>
+      <div class="diviling-line"></div>
+      <div class="item-container">
+        <div class="item-title">
+          配送费
+        </div>
+        <div class="item-content">
+          ￥{{order.shippingCharge / 100}}
+        </div>
+      </div>
+      <div class="diviling-line"></div>
+      <div class="red-envelope-container">
+        <div class="red-envelope-title">
+          红包
+        </div>
+        <div class="no-red-envelope" (click)="pushChooseRedEnvelopePage()" *ngIf="order.useRedEnvelope == false">
+          点击选择要使用的红包
+        </div>
+        <div class="use-red-envelope" *ngIf="order.useRedEnvelope == true">
+          - ￥ {{order.redEnvelope?.moneySubtractionAmount / 100}}
+        </div>
+      </div>
+      <div class="diviling-line"></div>
+      <div class="total-price-container">
+        <div class="total-price-row">
+          <div class="total-price-title">
+            总计
+          </div>
+          <div class="total-price">
+            ￥ {{order.ActualPayment / 100}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-note-card" (click)="PushAddOrderNotePage()">
+      <div class="order-note-first-row">
+        <div class="order-note-title">
+          订单备注
+        </div>
+        <div class="order-note-edit-txt">
+          点击填写订单备注
+        </div>
+      </div>
+      <div class="order-note">
+        {{order.note}}
+      </div>
+    </div>
+
+  </div>
 </ion-content>
 
-<ion-footer>
-  <div class="carts-box">
-    <div class="right" (click)="submitOrder()">提交订单</div>
+<ion-footer no-shadow no-border>
+  <div class="order-confirm-container">
+    <div class="order-confirm-container-left">
+      <div class="total-price">
+        总计 ￥{{order.ActualPayment / 100}}
+      </div>
+    </div>
+    <div class="confirm-payment-button" (click)="submitOrder()">
+      <div class="confirm-payment">
+        确认支付
+      </div>
+    </div>
   </div>
 </ion-footer>

@@ -1,13 +1,18 @@
-<ion-header>
+<ion-header no-border>
 
-  <ion-navbar>
-    <ion-title>我的账号</ion-title>
-  </ion-navbar>
+  <div class="header-container">
+    <div class="close-icon-container" (click)="dismiss()">
+      <ion-icon name="ios-arrow-back"></ion-icon>
+    </div>
+    <div class="rating-txt-container">
+      详细信息
+    </div>
+  </div>
 
 </ion-header>
 
 <ion-content padding>
-  <ion-card>
+
     <ion-list inset>
       <button ion-item>
         头像
@@ -32,10 +37,6 @@
           <ion-icon name="ios-arrow-forward"></ion-icon>
         </button>
       </button>
-    </ion-list>
-  </ion-card>
-  <ion-card>
-    <ion-list inset>
       <button ion-item >
         <ion-icon name='phone-portrait' item-start></ion-icon>
         手机
@@ -44,17 +45,9 @@
           <ion-icon name="ios-arrow-forward"></ion-icon>
         </button>
       </button>
-      <button ion-item >
-        <ion-icon name='mail' item-start></ion-icon>
-        邮箱
-        <ion-note item-end>{{userData?.buyerEmail}}</ion-note>
-        <button ion-button item-end clear icon-only color="miku">
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
-      </button>
     </ion-list>
-  </ion-card>
-  <div padding="">
+
+  <div padding>
     <button ion-button outline round block (click)="userLogout()">退出当前用户</button>
   </div>
 </ion-content>

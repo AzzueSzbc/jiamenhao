@@ -1,0 +1,33 @@
+<ion-content>
+  <div class="content-container">
+    <div class="rate-container" *ngFor="let rate of validRate">
+      <div class="buyer-avatar-container">
+        <div class="buyer-avatar">
+          <img [src]="pictureWarehouseURL + rate?.buyerAvatarURL">
+        </div>
+      </div>
+      <div class="rate-content-container">
+        <div class="rate-first-row-container">
+          <div class="rate-buyer-name">
+            {{rate?.buyerUserName}}
+          </div>
+          <div class="rate-time">
+            {{rate?.ordersComment.ordersCommentTime}}
+          </div>
+        </div>
+        <div class="rate-second-row-container">
+          <div class="rate-star-txt">评分</div>
+          <div class="rate-star" [ngClass]="{
+            'rate-star-color-have': (star <= rate?.ordersComment.ordersCommentRate),
+            'rate-star-color-not': (star > rate?.ordersComment.ordersCommentRate)}" *ngFor="let star of [1,2,3,4,5]">
+            <ion-icon name="star"></ion-icon>
+          </div>
+        </div>
+        <div class="rate-txt">
+          {{rate?.ordersComment.ordersCommentContent}}
+        </div>
+      </div>
+    </div>
+    <div class="dividing-line"></div>
+  </div>
+</ion-content>

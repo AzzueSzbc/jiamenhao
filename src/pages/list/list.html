@@ -1,36 +1,108 @@
-<ion-header>
-  <ion-navbar no-border-bottom>
-    <ion-title>
+<ion-header no-border>
+  <div class="header-container">
+    <div class="header-title">
       订单
-    </ion-title>
-  </ion-navbar>
+    </div>
+  </div>
 </ion-header>
 
 <ion-content>
 
-  <ion-card *ngIf="islogined==true && isValidData==false">
-    <ion-card-content>
-      <h2>还没有订单</h2>
-    </ion-card-content>
-  </ion-card>
+  <!--下拉刷新-->
+  <ion-refresher (ionRefresh)="doRefresh($event)" (ionPull)="doPulling($event)">
+    <ion-refresher-content
+      pullingText="下拉刷新"
+      refreshingText="加载中...">
+    </ion-refresher-content>
+  </ion-refresher>
 
-  <div *ngIf="islogined==true && isValidData==true">
-    <div class="order-item" *ngFor="let order of listData">
-      <div class="top">
-        <img src="../../assets/images/bg.jpg">
-        <div class="name">{{order?.sellerShopName}}</div>
-        <div class="status">订单已完成</div>
-      </div>
-
-      <div class="mid">
-        <div class="food" *ngFor="let i of order?.ordersProduc">{{i?.ordersProductName}}<span>x{{i?.ordersProductAmount}}</span></div>
-        <div class="cost">总计n个菜，实付<span>￥{{order?.ordersActualPayment}}</span></div>
-      </div>
-
-      <div class="bottom">
-        <div class="again">再来一单</div>
-        <div class="again">评价订单</div>
-      </div>
+  <!--页面加载中时显示-->
+  <div class="loading" *ngIf="status=='加载中'">
+    <div class="loading-txt">
+      努力加载中...
     </div>
   </div>
+
+  <!--网络异常时显示-->
+  <div class="no-network" *ngIf="status=='没有网络'">
+    <div class="no-network-txt">
+      网络不给力，请检查网络
+    </div>
+  </div>
+
+  <!--网络正常时显示-->
+    <!--用户未登录时显示-->
+    <!--isLogined:false-->
+    <div class="not-log-in-content-container" *ngIf="status=='用户未登录'" (click)="pushLoginPage()">
+      <div class="not-log-in-container">
+        <div class="not-log-in-txt-container">
+          <div class="not-log-in-txt">
+            请登录查看订单
+          </div>
+        </div>
+        <div class="log-in-button-container">
+          <div class="log-in-button">
+            登录
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--用户登录，用户账号内还没有订单时显示-->
+    <!--isLogined:true-->
+    <!--isValidData:false-->
+    <div class="no-order-container" *ngIf="status=='没有相关数据'">
+      <div class="no-order-txt">
+        还没有订单哦~快去下单吧
+      </div>
+    </div>
+
+    <!--用户登录，而且账号内有订单时显示-->
+    <!--isLogined:true-->
+    <!--isValidData:true-->
+    <div *ngIf="status=='存在相关数据'">
+      <div class="order-container" >
+        <div class="order-card" *ngFor="let order of listData">
+          <div class="order-card-img-container">
+            <img [src]="pictureWarehouseURL + order?.sellerShopLogoURL">
+          </div>
+            <div class="order-card-information-container">
+              <div class="order-card-information-container-first-row">
+                <div class="order-card-shop-name">
+                  {{order?.sellerShopName}}
+                </div>
+                <div class="order-card-order-status" (click)="pushOrderPage(order)">
+                  {{order?.ordersStatus}}
+                </div>
+              </div>
+              <div class="order-card-information-container-second-row" (click)="pushOrderPage(order)">
+                <div class="order-card-commodity-name">
+                  {{order?.ordersProduct.ordersProductName}}
+                  <span class="order-card-commodity-statistics">
+                    等商品
+                  </span>
+                </div>
+                <div class="order-card-total-price">￥ {{order?.ordersActualPayment / 100}}</div>
+              </div>
+              <div class="order-card-information-container-third-row">
+                <!--<div class="order-card-once-again-button" (click)="onOnceAgain()">
+                  再来一单
+                </div>-->
+                <div class="order-card-cancel-order-button" *ngIf="order?.ordersStatus!='订单已完成' && order?.ordersStatus!='订单已评价'" (click)="onCancelOrder()">
+                  取消订单
+                </div>
+                <div class="order-card-rating-button" *ngIf="order?.ordersStatus=='等待支付'" (click)="pushOrderPage(order)">
+                  去支付
+                </div>
+                <div class="order-card-rating-button" *ngIf="order?.ordersStatus!='订单已完成' && order?.ordersStatus!='等待支付' && order?.ordersStatus!='订单已评价'" (click)="onUrgeOrder()">
+                  催单
+                </div>
+                <div class="order-card-rating-button" *ngIf="order?.ordersStatus=='订单已完成'" (click)="pushAddRatingPage(order)">
+                  评价
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
 </ion-content>

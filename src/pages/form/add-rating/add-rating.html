@@ -1,0 +1,135 @@
+<ion-header no-border>
+
+  <div class="header-container">
+    <div class="close-icon-container" (click)="dismiss()">
+      <ion-icon name="close"></ion-icon>
+    </div>
+    <div class="rating-txt-container">
+      评价
+    </div>
+  </div>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="content-container">
+
+    <div class="rider-rating-card">
+      <div class="rating-title">
+        <!--<div class="avatar">
+          <img src="../../../assets/imgs/avatar.jpg">
+        </div>-->
+        <div class="rider-information-container">
+          <div class="rider-name">
+            {{rider?.riderUserName}}
+          </div>
+          <div class="rider-delivery-time">
+            家门好专送
+          </div>
+        </div>
+      </div>
+        <div class="card-dividing-line-container">
+          <div class="card-dividing-line"></div>
+        </div>
+        <div class="rider-rating-container">
+          <div class="button-container">
+            <div class="satisfied-button" [ngClass]="{'select': ratingRiderAttitude==0}" (click)="changeAttitude(0)">
+              <div class="satisfied-txt">
+                不满意
+              </div>
+            </div>
+          </div>
+          <div class="button-container">
+            <div class="satisfied-button" [ngClass]="{'select': ratingRiderAttitude==1}" (click)="changeAttitude(1)">
+              <div class="satisfied-txt">
+                满意
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+      <div class="order-rating-card">
+        <div class="rating-title">
+          <!--<div class="avatar">
+            <img src="../../../assets/imgs/avatar.jpg">
+        </div>-->
+            <div class="shop-name-container">
+              <div class="shop-name">
+                {{shopRatingForm?.sellerShopName}}
+              </div>
+            </div>
+          </div>
+
+          <div class="card-dividing-line-container">
+            <div class="card-dividing-line"></div>
+          </div>
+
+          <div class="rating-star-txt" *ngIf="star==1">极差</div>
+          <div class="rating-star-txt" *ngIf="star==2">唔有感差</div>
+          <div class="rating-star-txt" *ngIf="star==3">一般</div>
+          <div class="rating-star-txt" *ngIf="star==4">满意</div>
+          <div class="rating-star-txt" *ngIf="star==5">完美</div>
+
+          <div class="star-container">
+            <div class="star-row">
+              <span  class="star-size" [ngClass]="{
+                'star-color-excellent': star==5,
+                'star-color-good': star==4,
+                'star-color-poor': star<=3}" *ngFor="let s of [1,2,3,4,5]">
+                <ion-icon [name]="s <= star? 'star':'star-outline'" (click)="changeStar(s)"></ion-icon>
+              </span>
+            </div>
+          </div>
+
+          <form [formGroup]="ratingForm">
+            <div class="comment-box">
+              <textarea class="comments" rows="4" cols="10" formControlName="comment"> </textarea>
+              <div class="word-count-row">
+                <div class="word-count">
+                  {{ratingForm.value.comment.length}} 字
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="upload-image-container">
+            <div class="upload-image-icon-box">
+              <div class="upload-image-icon">
+                <ion-icon name="camera"></ion-icon>
+              </div>
+
+            </div>
+            <div class="upload-image-txt">
+              请上传评论相关图片
+            </div>
+          </div>
+
+          <div class="card-dividing-line-container">
+            <div class="card-dividing-line"></div>
+          </div>
+
+          <div class="commodity-like-row" *ngFor="let commodity of shopRatingForm?.ordersProduct">
+            <div class="commodity-name">{{commodity?.ordersProductName}}</div>
+            <div class="icon">
+              <ion-icon name="ios-thumbs-up-outline"></ion-icon>
+            </div>
+            <div class="txt">赞</div>
+            <div class="icon">
+              <ion-icon name="ios-thumbs-down-outline"></ion-icon>
+            </div>
+            <div class="txt">踩</div>
+          </div>
+
+        </div>
+
+  </div>
+
+  <div class="submit-rating-button" [ngClass]="{'can': haveRiderAttitude && star && ratingForm.value.comment.length}" (click)="submitRating()">
+    <div class="submit-rating-txt">
+      提交评论
+    </div>
+  </div>
+
+</ion-content>

@@ -1,0 +1,50 @@
+<ion-header no-border>
+
+  <ion-navbar color="primary">
+    <ion-title>红包</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <div class="content-container">
+    <div class="red-envelope-container">
+      <div class="red-envelope-name-container">
+        新用户红包
+      </div>
+      <div class="red-envelope-content-container">
+        <div class="red-envelope-name">
+          新用户红包
+        </div>
+        <div class="red-envelope-content">
+          满 10 减 6
+        </div>
+        <div class="red-envelope-expiry-date">
+          到期时间：2018年10月25日
+        </div>
+      </div>
+    </div>
+    <div class="red-envelope-container">
+      <div class="red-envelope-name-container" [ngClass]="{'red-envelope-name-container-unusable': 1}">
+        新用户红包
+      </div>
+      <div class="red-envelope-content-container">
+        <div class="red-envelope-name"  class="red-envelope-name-unusable" *ngIf="1">
+          新用户红包<span  class="red-envelope-content-unusable">（不可用）</span>
+        </div>
+        <div class="red-envelope-content" [ngClass]="{'red-envelope-content-unusable': 1}">
+          满 10 减 6
+        </div>
+        <div class="red-envelope-expiry-date">
+          到期时间：2018年10月25日
+        </div>
+      </div>
+    </div>
+    <div class="unusable-reason">
+      该红包不能用于该笔订单
+    </div>
+    <div class="unusable-reason">
+      不可用原因：超过使用期限；商品金额不满足使用要求
+    </div>
+  </div>
+</ion-content>

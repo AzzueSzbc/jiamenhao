@@ -1,0 +1,77 @@
+page-rating {
+
+  @import '../../../assets/scss/color.scss';
+
+  .content-container {
+    width: 100%;
+    .rate-container {
+      padding: 16px;
+      display: flex;
+      .buyer-avatar-container {
+        flex: none;
+        .buyer-avatar {
+          width: 40px;
+          height: 40px;
+          overflow: hidden;
+          border-radius: 50%;
+        }
+        .buyer-avatar img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+      .rate-content-container {
+        flex: 1;
+        margin-left: 10px;
+        .rate-first-row-container {
+          display: flex;
+          font-size: 10px;
+          .rate-buyer-name {
+            flex: 1;
+            font-size: 16px;
+            color: $dark;
+          }
+          .rate-time {
+            flex: none;
+            font-size: 10px;
+            color: $light;
+          }
+        }
+        .rate-second-row-container {
+          display: flex;
+          .rate-star-txt {
+            margin-right: 6px;
+            flex: none;
+            font-size: 12px;
+            color: $light;
+          }
+          .rate-star {
+            flex: none;
+            font-size: 12px;
+            margin-right: 1px;
+            margin-left: 1px;
+          }
+          .rate-star-color-have {
+            color: #F7BA2A;
+          }
+          .rate-star-color-not {
+            color: #B9C1CC;
+          }
+        }
+        .rate-txt {
+          margin-top: 4px;
+          font-size: 12px;
+          color: $dark;
+        }
+      }
+    }
+
+    .dividing-line {
+      margin: 0px 16px;
+      height: 1px;
+      background-color: $light-line;
+    }
+  }
+}

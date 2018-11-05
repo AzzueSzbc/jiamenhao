@@ -1,29 +1,37 @@
-<ion-header>
+<ion-header no-border>
 
-  <ion-navbar>
-    <ion-title>Login</ion-title>
-  </ion-navbar>
+  <div class="header-container">
+    <div class="close-icon-container" (click)="dismiss()">
+      <ion-icon name="ios-arrow-back"></ion-icon>
+    </div>
+    <div class="rating-txt-container">
+      登录
+    </div>
+  </div>
 
 </ion-header>
 
 
 <ion-content padding>
-  <form [formGroup]="loginForm" (ngSubmit)="loginSubmit(loginForm.value)">
+  <form [formGroup]="loginForm">
     <ion-item>
-      <ion-label color="primary" floating>手机号</ion-label>
-      <ion-input type="text" formControlName="username"></ion-input>
+      <ion-label color="primary">手机号</ion-label>
+      <ion-input type="tel" placeholder="请输入手机号" formControlName="account"></ion-input>
+
     </ion-item>
 
-    <ion-item>
-      <ion-label color="primary" floating>密码</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label color="primary">验证码</ion-label>
+        <ion-input type="tel" placeholder="请输入验证码" formControlName="securityCode"></ion-input>
+        <button item-end ion-button mode="ios" round [disabled]="!securityCode.disable || f.account.errors" (click)="getCode()">{{securityCode.securityCodeTips}}</button>
+      </ion-item>
 
     <div padding>
-      <button block ion-button round type="submit" [disabled]="!loginForm.valid">登录</button>
-    </div>
-    <div padding>
-      <button block ion-button round outline (click)="pushRegisterPage()">注册</button>
+      <button block ion-button mode="ios" [disabled]="!loginForm.valid" (click)="loginSubmit()">登录</button>
     </div>
   </form>
+  <div padding>
+    <p>没有账号？注册一个</p>
+    <button block ion-button mode="ios" (click)="pushRegisterPage()">注册</button>
+  </div>
 </ion-content>

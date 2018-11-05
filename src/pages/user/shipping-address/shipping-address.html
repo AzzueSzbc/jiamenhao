@@ -1,0 +1,29 @@
+<ion-header no-border>
+
+  <div class="header-container">
+    <div class="close-icon-container" (click)="dismiss()">
+      <ion-icon name="ios-arrow-back"></ion-icon>
+    </div>
+    <div class="rating-txt-container">
+      我的收货地址
+    </div>
+  </div>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list *ngFor="let address of address">
+    <ion-item>
+      <h3>{{address?.consigneeAddress}}</h3>
+      <p>{{address?.consigneeName}} {{address?.consigneeGender}} {{address?.consigneePhoneNumber}}</p>
+      <button ion-button item-end clear icon-only (click)="ModifyShippingAddress(address?.buyerShippingAddressID)">
+        <ion-icon name="ios-create-outline"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+  <ion-item>
+    <button ion-button block outline round color="primary" (click)="pushAddAddress()">
+      <ion-icon name="add">新增收货地址</ion-icon>
+    </button>
+  </ion-item>
+</ion-content>

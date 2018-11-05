@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Events } from 'ionic-angular';
+
 import { NativeProvider } from '../native/native';
 import { HermesProvider } from '../hermes/hermes';
 import { map } from 'rxjs/operators';
@@ -8,8 +8,7 @@ import { map } from 'rxjs/operators';
 export class VerifyProvider {
 
   constructor(private hermes: HermesProvider,
-    private nativePvd: NativeProvider,
-    public events: Events) {
+    private nativePvd: NativeProvider,) {
     console.log('Hello VerifyProvider Provider');
   }
 
@@ -19,24 +18,71 @@ export class VerifyProvider {
       map((data) => {
         if (data.querySuccess==true) {
           this.nativePvd.setStorage('clienttoken', data.buyerToken);
+          return true;
         } else if (data.querySuccess==false) {
-          this.hermes.presentAlert('提示信息', '身份验证过期，请重新登录', '确定');
+          this.nativePvd.presentSimpleAlert('身份验证过期，请重新登录');
+          return false;
         }
-        return data.querySuccess;
+      })
+    );
+  }
+
+  //get register security code
+  getRegisterSecurityCode(post) {
+    return this.hermes.hermes('getRegisterSecurityCode_buyer.php', post).pipe(
+      map((data) => {
+        if (data.queryStatus.querySuccess == false) {
+          this.nativePvd.presentSimpleAlert('查询失败，请稍后重试');
+          return false;
+        } else if (data.queryStatus.querySuccess ==true) {
+          if (data.queryStatus.accountStatus == "已注册") {
+            this.nativePvd.presentSimpleAlert('该手机号已被注册请直接登录');
+            return false;
+          } else {
+            return true;
+          }
+        }
       })
     );
   }
 
   //user register
   public register(post) {
-    return this.hermes.hermesQueryNoData('buyerRegister.php', post).pipe(
+    return this.hermes.hermes('buyerRegister.php', post).pipe(
       map((data) => {
-        if (data.querySuccess == true) {
-          this.hermes.presentToast('注册成功', 2000, 'bottom');
-        } else if (data.querySuccess == false) {
-          this.hermes.presentAlert('提示信息', '账户注册失败，请检查并重新填写', '确定');
+        console.log('VerifyProvider-register-res:', data);
+        if (data.queryStatus.querySuccess == true) {
+          if (data.queryStatus.hasPassedSecurityCodeVerify == true) {
+            this.nativePvd.setStorage('clientid', data.queryResult.buyerID);
+            this.nativePvd.setStorage('clienttoken', data.queryResult.buyerToken);
+            this.nativePvd.presentSimpleToast('注册成功');
+            return true;
+          } else if (data.queryStatus.hasPassedSecurityCodeVerify == false) {
+            this.nativePvd.presentSimpleAlert('验证码错误，请重新输入');
+            return false;
+          }
+        } else if (data.queryStatus.querySuccess == false) {
+          this.nativePvd.presentSimpleAlert('发生了一些问题，不是我们的错QAQ');
+          return false;
         }
-        return data.querySuccess;
+      })
+    );
+  }
+
+  getLoginSecurityCode(post) {
+    return this.hermes.hermes('getLoginSecurityCode_buyer.php', post).pipe(
+      map((data) => {
+        if (data.queryStatus.querySuccess == false) {
+          this.nativePvd.presentSimpleAlert('查询失败，请稍后重试');
+          return false;
+        } else if (data.queryStatus.querySuccess ==true) {
+          if (data.queryStatus.accountStatus == "尚未注册") {
+            this.nativePvd.presentSimpleAlert('该手机号尚未注册请先注册账号');
+            return false;
+          } else {
+            return true;
+          }
+        }
       })
     );
   }
@@ -45,18 +91,17 @@ export class VerifyProvider {
   public noTokenLogin(post) {
     return this.hermes.hermes('buyerNoTokenLogin.php', post).pipe(
       map((data) => {
+        console.log("noTokenLogin-respondata:", data);
         if (data.querySuccess == true) {
           this.nativePvd.setStorage('clientid', data.buyerID);
           this.nativePvd.setStorage('clienttoken', data.buyerToken);
-          this.events.publish('user:notokenlgoin', data.buyerID, data.buyerToken);
-          this.hermes.presentToast('登陆成功', 2000, 'bottom');
+          this.nativePvd.presentSimpleToast('登陆成功');
         } else if (data.querySuccess == false) {
-          this.hermes.presentAlert('提示信息', '账户或密码错误，请重新输入', '确定');
+          this.nativePvd.presentSimpleAlert('验证码输入错误，或该手机号未注册家门好');
         }
         return data.querySuccess;
       })
     );
   }
-
 
 }

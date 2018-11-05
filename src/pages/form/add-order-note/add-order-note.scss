@@ -1,0 +1,81 @@
+page-add-order-note {
+
+  @import '../../../assets/scss/color.scss';
+
+  .top-blank {
+    width: 100%;
+    height: 20px;
+    background-color: #EFEFEF;
+  }
+
+  .header-container {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    padding: 12px 20px;
+    align-items: center;
+    background-color: #EFEFEF;
+
+    .close-icon-container {
+      flex: none;
+      margin-top: 4px;
+      margin-right: 18px;
+      font-size: 22px;
+      font-weight: bold;
+      color: $dark;
+    }
+
+    .note-txt-container {
+      flex: 1;
+      font-size: 21px;
+      font-weight: 500;
+      color: $dark;
+    }
+
+    .note-complete-txt-container {
+      flex: none;
+      font-size: 21px;
+      font-weight: 500;
+      color: $dark;
+    }
+  }
+
+  .content-container {
+    width: 100%;
+    height: 100%;
+    padding: 10px 16px;
+    background-color: #EFEFEF;
+    .note-box {
+      height: 110px;
+      margin-top: 10px;
+      margin-left: 6px;
+      margin-right: 6px;
+      padding: 4px;
+      background-color: #f5f5f5;
+      border: 1px solid $light;
+      .note {
+        /*自动适应父布局宽度*/
+        width: 100%;
+        /*在ie中解决断行问题(防止自动变为在一行显示，主要解决ie兼容问题，ie8中当设宽度为100%时，文本域类容超过一行时，当我们双击文本内容就会自动变为一行显示，所以只能用ie的专有断行属性“word-break或word-wrap”控制其断行)*/
+        overflow: auto;
+        word-break: break-all;
+        background-color: #f5f5f5;
+        border-color: #f5f5f5;
+        box-shadow: none;
+        color: #7a7a7a;
+        resize: none;
+      }
+      .word-count-row {
+        display: flex;
+        justify-content: flex-end;
+        .word-count {
+          margin-right: 10px;
+          font-size: 10px;
+          color: #7a7a7a;
+        }
+      }
+    }
+  }
+
+
+}

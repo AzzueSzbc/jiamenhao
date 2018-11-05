@@ -1,8 +1,8 @@
 {
   "name": "jiamenhao",
-  "app_id": "",
-  "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "ionic-angular",
+  "app_id": "e6f04463"
 }

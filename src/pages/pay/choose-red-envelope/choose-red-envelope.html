@@ -1,0 +1,58 @@
+<ion-header no-border>
+
+  <div class="header-container">
+    <div class="close-icon-container" (click)="dismiss()">
+      <ion-icon name="close"></ion-icon>
+    </div>
+    <div class="rating-txt-container">
+      选择红包
+    </div>
+  </div>
+
+</ion-header>
+
+<ion-content>
+  <div class="content-container">
+    <div class="red-envelope-container" *ngFor="let coupon of usableCoupons" (click)="chooseRedEnvelope(coupon)">
+      <div class="red-envelope-name-container">
+        新用户红包
+      </div>
+      <div class="red-envelope-content-container">
+        <div class="red-envelope-name">
+          新用户红包
+        </div>
+        <div class="red-envelope-content">
+          满 {{coupon?.minMoneyLimit / 100}} 减 {{coupon?.moneySubtractionAmount / 100}}
+        </div>
+        <div class="red-envelope-expiry-date">
+          到期时间：{{coupon?.displayExpiryDate}}
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let coupon of unusableCoupons">
+      <div class="red-envelope-container">
+        <div class="red-envelope-name-container" [ngClass]="{'unusable': 1}">
+          新用户红包
+        </div>
+        <div class="red-envelope-content-container">
+          <div class="red-envelope-name"  [ngClass]="{'unusable': 1}">
+            新用户红包<span  class="unusable">（不可用）</span>
+          </div>
+          <div class="red-envelope-content" [ngClass]="{'unusable': 1}">
+            满 {{coupon?.minMoneyLimit / 100}} 减 {{coupon?.moneySubtractionAmount / 100}}
+          </div>
+          <div class="red-envelope-expiry-date">
+            到期时间：{{coupon?.displayExpiryDate}}
+          </div>
+        </div>
+      </div>
+      <div class="unusable-reason">
+        该红包不能用于该笔订单
+      </div>
+      <div class="unusable-reason">
+        不可用原因：<span *ngFor="let reason of coupon?.unusableReason"> {{reason}} </span>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

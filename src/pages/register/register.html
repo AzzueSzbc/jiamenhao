@@ -1,40 +1,33 @@
-<ion-header>
+<ion-header no-border>
 
-  <ion-navbar>
-    <ion-title>注册</ion-title>
-  </ion-navbar>
+  <div class="header-container">
+    <div class="close-icon-container" (click)="dismiss()">
+      <ion-icon name="ios-arrow-back"></ion-icon>
+    </div>
+    <div class="rating-txt-container">
+      注册
+    </div>
+  </div>
 
 </ion-header>
 
 
 <ion-content padding>
-  <h1>感谢选择家门好</h1>
+  <form [formGroup]="registerForm">
+    <ion-item>
+      <ion-label color="primary">手机号</ion-label>
+      <ion-input type="tel" placeholder="请输入注册手机号" formControlName="account"></ion-input>
 
-  <div>
-    <form [formGroup]="registerForm" (ngSubmit)="registerSubmit(registerForm.value)">
-      <ion-item>
-        <ion-label color="primary">用户名</ion-label>
-        <ion-input type="text" formControlName="username"></ion-input>
-      </ion-item>
+    </ion-item>
 
       <ion-item>
-        <ion-label color="primary">密码</ion-label>
-        <ion-input type="password" formControlName="password"></ion-input>
+        <ion-label color="primary">验证码</ion-label>
+        <ion-input type="tel" placeholder="请输入验证码" formControlName="securityCode"></ion-input>
+        <button item-end ion-button mode="ios" round [disabled]="!securityCode.disable || f.account.errors" (click)="getCode()">{{securityCode.securityCodeTips}}</button>
       </ion-item>
 
-      <ion-item>
-        <ion-label color="primary">手机</ion-label>
-        <ion-input type="text" formControlName="phoneNumber"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label color="primary">邮箱</ion-label>
-        <ion-input type="email" formControlName="email"></ion-input>
-      </ion-item>
-
-      <div padding>
-        <button block ion-button type="submit" [disabled]="!registerForm.valid">注册</button>
-      </div>
-    </form>
-  </div>
+    <div padding>
+      <button block ion-button mode="ios" [disabled]="!registerForm.valid" (click)="registerSubmit(registerForm.value)">注册</button>
+    </div>
+  </form>
 </ion-content>

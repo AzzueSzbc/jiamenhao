@@ -1,12 +1,142 @@
-<ion-header>
+<ion-header no-border>
 
-  <ion-navbar>
-    <ion-title>order</ion-title>
-  </ion-navbar>
+  <div class="header-container">
+    <div class="close-icon-container" (click)="pagePop()">
+      <ion-icon name="ios-arrow-back"></ion-icon>
+    </div>
+    <div class="rating-txt-container">
+      {{orderData?.ordersStatus}}
+    </div>
+  </div>
 
 </ion-header>
 
 
-<ion-content padding>
-  <p>订单提交成功</p>
+<ion-content>
+
+  <div #map_container  class="map_container" *ngIf="orderData?.ordersStatus!='订单已完成'&&orderData?.ordersStatus!='订单已评价'"></div>
+  <div class="gary-background" *ngIf="orderData?.ordersStatus!='订单已完成'&&orderData?.ordersStatus!='订单已评价'"></div>
+  <div class="order-process-card" *ngIf="orderData?.ordersStatus!='订单已完成'&&orderData?.ordersStatus!='订单已评价'">
+    <div class="row-container">
+      <div class="row">
+        <div class="row-left">
+          订单正在进行
+        </div>
+      </div>
+      <div class="row">
+        <div class="cancel-order-button">
+          取消订单
+        </div>
+        <div class="rating-button" *ngIf="orderData?.ordersStatus=='等待支付'">
+          去支付
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="content-container">
+    <div class="processing-order-process-card" *ngIf="orderData?.ordersStatus=='订单已完成'&&orderData?.ordersStatus=='订单已评价'">
+      <div class="row-container">
+        <div class="row">
+          <div class="row-left">
+            感谢您选择家门好，期待再次光临
+          </div>
+        </div>
+        <div class="row">
+          <div class="rating-button" *ngIf="orderData?.ordersStatus=='订单已完成'">
+            评价
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="deliver-and-payment-card">
+      <div class="row-container">
+        <div class="row">
+          <div class="row-left">
+            送达时间
+          </div>
+          <div class="row-right">
+            尽快送达
+          </div>
+        </div>
+      </div>
+      <div class="row-container">
+        <div class="row">
+          <div class="row-left">
+            支付方式
+          </div>
+          <div class="row-right">
+            支付宝
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-list-card">
+      <div class="shop-name">
+        家门好
+      </div>
+      <div class="diviling-line"></div>
+      <div *ngFor="let commodity of orderData?.ordersProduct">
+        <div class="commodity-container">
+          <div class="commodity-img">
+            <img [src]="pictureWarehouseURL + commodity?.ordersProductPictureURL">
+          </div>
+          <div class="commodity-name">
+            {{commodity?.ordersProductName}}
+          </div>
+          <div class="commodity-number">
+            *{{commodity?.ordersProductAmount}}
+          </div>
+          <div class="commodity-total-price">
+            ￥{{commodity?.ordersProductPrice / 100}}
+          </div>
+        </div>
+        <div class="diviling-line"></div>
+      </div>
+      <div class="item-container">
+        <div class="item-title">
+          包装费
+        </div>
+        <div class="item-content">
+          ￥{{orderData?.ordersPackCharge / 100}}
+        </div>
+      </div>
+      <div class="diviling-line"></div>
+      <div class="item-container">
+        <div class="item-title">
+          配送费
+        </div>
+        <div class="item-content">
+          ￥{{orderData?.ordersShippingCharge / 100}}
+        </div>
+      </div>
+      <div class="diviling-line"></div>
+
+      <!--<div class="diviling-line"></div>-->
+      <div class="total-price-container">
+        <div class="total-price-row">
+          <div class="total-price-title">
+            总计
+          </div>
+          <div class="total-price">
+            ￥ {{orderData?.ordersActualPayment / 100}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-note-card" *ngIf="orderData?.ordersNote">
+      <div class="order-note-title">
+        订单备注
+      </div>
+      <div class="order-note">
+        {{orderData?.ordersNote}}
+      </div>
+    </div>
+
+  </div>
 </ion-content>
