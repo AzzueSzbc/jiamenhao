@@ -39,7 +39,7 @@ export class RatingPage {
     this.validRate = [];
     let rates: any[] = [];
     //console.log("sellerID:", this.navParams.get('sellerid'));
-    this.shopPvd.getAllSellerComment(this.navParams.get('sellerid'))
+    this.shopPvd.getAllSellerComment(this.navParams.get('sellerID'))
       .subscribe(
         (res) => {
           console.log('RatingPage AllSellerComment res:', res);
@@ -47,14 +47,14 @@ export class RatingPage {
             rates = res;
             //保存有评论的数据
             rates.forEach((rate) => {
-              if (rate.ordersComment != null) {
+              if (rate.sellerOrderComment != null) {
                 this.validRate.push(rate);
                 this.haveRate = true;
               }
             });
             //添加date键，保存时间字符串转换后的Date对象
             this.validRate.forEach((rate) => {
-              rate['date'] = this.parseTimeString(rate.ordersComment.ordersCommentTime);
+              rate['date'] = this.parseTimeString(rate.sellerOrderComment.commentTime);
             });
             //将评论数据按照时间排序
             this.validRate.sort(this.compare('date'));

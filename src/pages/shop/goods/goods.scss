@@ -17,7 +17,7 @@ page-goods {
       justify-content: center;
 
       .commodity-class-name {
-        font-size: 16px;
+        font-size: 14px;
         color: $dark;
       }
       .commodity-class-name-choose {
@@ -75,9 +75,15 @@ page-goods {
           margin-left: 10px;
 
           .commodity-title {
-            font-size: 17px;
+            font-size: 14px;
             margin-top: 2px;
             color: #2A2E43;
+            .commodity-unit {
+              margin-left: 2px;
+              font-size: 10px;
+              margin-top: 10px;
+              color: #7B7E8E;
+            }
           }
 
           .commodity-description {

@@ -23,10 +23,15 @@ import { SuperTabsModule } from 'ionic2-super-tabs';
 
 import { HermesProvider } from '../providers/hermes/hermes';
 import { NativeProvider } from '../providers/native/native';
+import { StorageProvider } from '../providers/storage/storage';
 import { VerifyProvider } from '../providers/verify/verify';
 import { OrderProvider } from '../providers/order/order';
 import { ShopProvider } from '../providers/shop/shop';
 import { UserProvider } from '../providers/user/user';
+import { ShippingAddressProvider } from '../providers/user/buyer-shipping-address';
+import { BuyerAccountManagementProvider } from '../providers/user/buyer-account-management';
+import { CouponProvider } from '../providers/user/buyer-coupon';
+import { WechatProvider } from '../providers/wechat/wechat';
 
 @NgModule({
   declarations: [
@@ -70,7 +75,12 @@ import { UserProvider } from '../providers/user/user';
     VerifyProvider,
     OrderProvider,
     ShopProvider,
-    UserProvider
+    UserProvider,
+    StorageProvider,
+    ShippingAddressProvider,
+    BuyerAccountManagementProvider,
+    CouponProvider,
+    WechatProvider
   ]
 })
 export class AppModule {}

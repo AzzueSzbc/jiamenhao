@@ -24,80 +24,89 @@
   </div>
 
   <!--网络异常时显示-->
-  <div class="no-network" *ngIf="status=='没有网络'">
-    <div class="no-network-txt">
-      网络不给力，请检查网络
+  <div class="error-content-container" *ngIf="status=='没有网络'">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          网络不给力，请检查网络
+        </div>
+      </div>
+      <div class="deal-button-container">
+        <div class="deal-button" (click)="afresh()">
+          重新加载
+        </div>
+      </div>
     </div>
   </div>
 
   <!--网络正常时显示-->
-    <!--用户未登录时显示-->
-    <!--isLogined:false-->
-    <div class="not-log-in-content-container" *ngIf="status=='用户未登录'" (click)="pushLoginPage()">
-      <div class="not-log-in-container">
-        <div class="not-log-in-txt-container">
-          <div class="not-log-in-txt">
-            请登录查看订单
-          </div>
+  <!--用户未登录时显示-->
+  <div class="error-content-container" *ngIf="status=='用户未登录'">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          请登录查看订单
         </div>
-        <div class="log-in-button-container">
-          <div class="log-in-button">
-            登录
-          </div>
+      </div>
+      <div class="deal-button-container">
+        <div class="deal-button" (click)="pushLoginPage()">
+          登录
         </div>
       </div>
     </div>
-
-    <!--用户登录，用户账号内还没有订单时显示-->
-    <!--isLogined:true-->
-    <!--isValidData:false-->
-    <div class="no-order-container" *ngIf="status=='没有相关数据'">
-      <div class="no-order-txt">
-        还没有订单哦~快去下单吧
+  </div>
+  <!--用户登录，用户账号内还没有订单时显示-->
+  <div class="error-content-container" *ngIf="status=='没有相关数据'">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          还没有订单哦~快去下单吧
+        </div>
       </div>
     </div>
+  </div>
 
     <!--用户登录，而且账号内有订单时显示-->
     <!--isLogined:true-->
     <!--isValidData:true-->
     <div *ngIf="status=='存在相关数据'">
       <div class="order-container" >
-        <div class="order-card" *ngFor="let order of listData">
+        <div class="order-card" *ngFor="let order of orders">
           <div class="order-card-img-container">
-            <img [src]="pictureWarehouseURL + order?.sellerShopLogoURL">
+            <img [src]="pictureWarehouseURL + order?.shopLogoURL">
           </div>
             <div class="order-card-information-container">
               <div class="order-card-information-container-first-row">
                 <div class="order-card-shop-name">
-                  {{order?.sellerShopName}}
+                  {{order?.shopName}}
                 </div>
                 <div class="order-card-order-status" (click)="pushOrderPage(order)">
-                  {{order?.ordersStatus}}
+                  {{order?.status}}
                 </div>
               </div>
               <div class="order-card-information-container-second-row" (click)="pushOrderPage(order)">
                 <div class="order-card-commodity-name">
-                  {{order?.ordersProduct.ordersProductName}}
+                  {{order?.purchaseOrderProduct[0]?.productNameHistory}}
                   <span class="order-card-commodity-statistics">
                     等商品
                   </span>
                 </div>
-                <div class="order-card-total-price">￥ {{order?.ordersActualPayment / 100}}</div>
+                <div class="order-card-total-price">￥ {{order?.actualPayment / 100}}</div>
               </div>
               <div class="order-card-information-container-third-row">
                 <!--<div class="order-card-once-again-button" (click)="onOnceAgain()">
                   再来一单
                 </div>-->
-                <div class="order-card-cancel-order-button" *ngIf="order?.ordersStatus!='订单已完成' && order?.ordersStatus!='订单已评价'" (click)="onCancelOrder()">
+                <div class="order-card-cancel-order-button" *ngIf="order?.status!='订单已完成' && order?.status!='订单已评价'" (click)="onCancelOrder()">
                   取消订单
                 </div>
-                <div class="order-card-rating-button" *ngIf="order?.ordersStatus=='等待支付'" (click)="pushOrderPage(order)">
+                <div class="order-card-rating-button" *ngIf="order?.status=='等待支付'" (click)="pushOrderPage(order)">
                   去支付
                 </div>
-                <div class="order-card-rating-button" *ngIf="order?.ordersStatus!='订单已完成' && order?.ordersStatus!='等待支付' && order?.ordersStatus!='订单已评价'" (click)="onUrgeOrder()">
+                <div class="order-card-rating-button" *ngIf="order?.status!='订单已完成' && order?.status!='等待支付' && order?.status!='订单已评价'" (click)="onUrgeOrder()">
                   催单
                 </div>
-                <div class="order-card-rating-button" *ngIf="order?.ordersStatus=='订单已完成'" (click)="pushAddRatingPage(order)">
+                <div class="order-card-rating-button" *ngIf="order?.status=='订单已完成'" (click)="pushAddRatingPage(order)">
                   评价
                 </div>
               </div>

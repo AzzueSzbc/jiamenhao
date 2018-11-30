@@ -68,12 +68,13 @@ export class LoginPage {
       alert.present();
       return;
     } else {
-      this.verifyPvd.getLoginSecurityCode({
-        buyerAccount: this.loginForm.value.account
-      })
-      .subscribe((res) => {
-        console.log(res);
-      })
+      this.verifyPvd.getSecurityCode(this.loginForm.value.account).subscribe(
+        (res) => {
+          console.log(res);
+        }, (err) => {
+          console.log(err);
+        }
+      );
     }
     //发送验证码成功后开始倒计时
     this.securityCode.disable = false;
@@ -81,12 +82,8 @@ export class LoginPage {
   }
 
   loginSubmit(): void {
-    let post = {
-      buyerAccount: this.loginForm.value.account,
-      buyerSecurityCode:  this.loginForm.value.securityCode,
-    };
     if (this.loginForm.valid) {
-      this.verifyPvd.noTokenLogin(post)
+      this.verifyPvd.beginUsing(this.loginForm.value.account, this.loginForm.value.securityCode)
         .subscribe(
           (res) => {
             if (res == true) {

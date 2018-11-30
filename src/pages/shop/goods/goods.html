@@ -10,27 +10,28 @@
 
   <div class="commodity-list-container">
     <div class="list-scroll">
-      <div *ngFor="let class of shopData?.shopProductClass">
-          <div *ngIf="class?.shopProductClassName == chooseClassName||chooseClassName == '全部0'">
+      <div *ngFor="let class of commodityClass">
+          <div *ngIf="class?.shopProductClassName == chooseClassName||chooseClassName == '全部'">
             <div class="commodity-class-name">
               {{class?.shopProductClassName}}
             </div>
             <div class="commodity-container" *ngFor="let g of class.product">
               <div class="commodity-img-container">
-                <img [src]="pictureWarehouseURL + g?.productPictureURL"  class="img">
+                <img [src]="pictureWarehouseURL + g?.pictureURL"  class="img">
                 </div>
                 <div class="commodity-center-container">
                   <div class="commodity-title">
-                    {{g?.productName}}
+                    {{g?.name}}
+                    <span class="commodity-unit">/ {{g?.unit}}</span>
                   </div>
                   <div class="commodity-sales">
-                    <span>月售 {{g?.productMonthlySales}}</span>
+                    <span>月售 {{g?.monthlySales}}</span>
                     <span  class="commodity-favorable">赞 {{g?.productVoteUpCount}}</span>
                   </div>
                 </div>
                 <div class="commodity-end-container">
                   <div class="commodity-price">
-                    ￥{{g?.productPrice / 100}}
+                    ￥{{g?.price / 100}}
                   </div>
                 </div>
                 <div class="commodity-button">
@@ -54,12 +55,12 @@
       </div>
       <div class="list">
         <ul>
-          <li class="item bd" *ngFor="let gl of cartGoodsList">
-            <div class="left">{{gl.ordersProductName}}</div>
+          <li class="item bd" *ngFor="let c of cart">
+            <div class="left">{{c.name}}</div>
             <div class="right">
               <span class="price-wrap">
               <span class="sign">￥</span>
-              <span class="price">{{gl.ordersProductPrice / 100}}</span>
+              <span class="price">{{c.price / 100}}</span>
               </span>
             </div>
           </li>
@@ -76,9 +77,9 @@
       <div class="price">
         <span class="money">￥{{calcTotal().totalMoney / 100}}</span>
         <span class="line"></span>
-        <span class="plus">另需配送费￥{{shopData?.sellerShopShippingCharge / 100}}元</span>
+        <span class="plus">另需配送费￥{{shippingCharge / 100}}元</span>
       </div>
     </div>
-    <div class="right" [ngClass]="{on: calcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit}" (click)="pushPayPage()">{{calcTotal().totalMoney >= shopData?.sellerShopStartShippingLimit ? '去结算' : changeTxt()}}</div>
+    <div class="right" [ngClass]="{on: calcTotal().totalMoney >= startShippingLimit}" (click)="pushPayPage()">{{calcTotal().totalMoney >= startShippingLimit ? '去结算' : changeTxt()}}</div>
   </div>
 </ion-footer>

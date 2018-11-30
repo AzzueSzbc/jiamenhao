@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { NativeProvider } from '../../../providers/native/native';
+import { StorageProvider } from '../../../providers/storage/storage';
 import { UserProvider } from '../../../providers/user/user';
 
 @IonicPage()
@@ -12,7 +13,7 @@ import { UserProvider } from '../../../providers/user/user';
 })
 export class AddAddressPage {
 
-  myID: string;
+  myID: number;
   myToken: string;
 
   addressForm: FormGroup;
@@ -23,7 +24,8 @@ export class AddAddressPage {
     public navParams: NavParams,
     public formBuilder: FormBuilder,
     private userPvd: UserProvider,
-    private nativePvd: NativeProvider) {
+    private nativePvd: NativeProvider,
+    private storagePvd: StorageProvider) {
 
     this.addressForm = this.formBuilder.group({
       consigneeAddress: ['', Validators.required],
@@ -34,8 +36,10 @@ export class AddAddressPage {
   }
 
   ionViewWillEnter() {
-    this.nativePvd.getStorage('clientid').then((id) => { this.myID = id });
-    this.nativePvd.getStorage('clienttoken').then((token) => { this.myToken = token });
+    this.storagePvd.getStorageAccount().then((buyer) => {
+      this.myID = buyer.userID;
+      this.myToken = buyer.token;
+    });
   }
 
   ionViewDidLoad() {
@@ -44,14 +48,14 @@ export class AddAddressPage {
 
   addressSubmit(value: any): void {
     if (this.addressForm.valid && this.myID && this.myToken) {
-      this.userPvd.addNewShippingAddress({
-        buyerID: this.myID,
-        buyerToken: this.myToken,
-        consigneeAddress: value.consigneeAddress,
-        consigneeName: value.consigneeName,
-        consigneeGender: value.consigneeGender,
-        consigneePhoneNumber: value.consigneePhoneNumber,
-      })
+      this.userPvd.addNewShippingAddress(
+        this.myID,
+        this.myToken,
+        value.consigneeAddress,
+        value.consigneeName,
+        value.consigneeGender,
+        value.consigneePhoneNumber,
+      )
         .subscribe(
           (res) => {
             if (res == true) {

@@ -22,4 +22,8 @@ export class CustomerServicePage {
     console.log('ionViewDidLoad CustomerServicePage');
   }
 
+  dismiss() {
+    this.navCtrl.pop();
+  }
+
 }

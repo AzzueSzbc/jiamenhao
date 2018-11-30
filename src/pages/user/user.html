@@ -58,15 +58,15 @@
   <div class="content-container" *ngIf="isLogined==true">
     <div class="user-avatar-container">
       <div class="user-avatar">
-        <img [src]="pictureWarehouseURL + userData?.buyerAvatarURL">
+        <img [src]="pictureWarehouseURL + userData?.avatarURL">
       </div>
-      </div>
-      <div class="user-name-container">
-        {{userData?.buyerUserName}}
-      </div>
-      <div class="user-information-container" (click)="pushUserdataPage()">详细信息</div>
+    </div>
+    <div class="user-name-container">
+      {{userData?.userName}}
+    </div>
+    <div class="user-information-container" (click)="pushUserdataPage()">详细信息</div>
 
-      <!--<div class="property-container">
+    <!--<div class="property-container">
         <div class="columns-container" (click)="pushRedEnvelopePage()">
           <div class="txt">
             <div class="red-envelope">
@@ -104,50 +104,60 @@
           </div>
         </div>
       </div>-->
-    </div>
+  </div>
 
-    <ion-list no-lines>
-      <button ion-item>
-        收货地址
-        <button ion-button item-end clear icon-only>
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
+  <ion-list no-lines>
+    <button ion-item (click)="pushShippingAddress()">
+      收货地址
+      <button ion-button item-end clear icon-only>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
       </button>
-      <button ion-item >
-        我的足迹
-        <button ion-button item-end clear icon-only>
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
+    </button>
+    <button ion-item (click)="pushMyFootprintPage()">
+      我的足迹
+      <button ion-button item-end clear icon-only>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
       </button>
-      <button ion-item >
-        我的收藏
-        <button ion-button item-end clear icon-only>
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
+    </button>
+    <button ion-item (click)="pushMyCollectionPage()">
+      我的收藏
+      <button ion-button item-end clear icon-only>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
       </button>
-      <button ion-item >
-        我的评论
-        <button ion-button item-end clear icon-only color="miku">
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
-      </button>
-    </ion-list>
+    </button>
+  </ion-list>
 
-    <div class="dividing-line"></div>
-    <ion-list no-lines>
-      <button ion-item>
-        客服热线
-        <button ion-button item-end clear icon-only>
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
+  <div class="dividing-line"></div>
+  <ion-list no-lines>
+    <button ion-item (click)="pushMyInvitationPage()">
+      我的邀请
+      <button ion-button item-end clear icon-only>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
       </button>
-      <button ion-item >
-        投诉建议
-        <button ion-button item-end clear icon-only>
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
+    </button>
+  </ion-list>
+
+  <div class="dividing-line"></div>
+  <ion-list no-lines>
+    <button ion-item (click)="pushCustomerServicePage()">
+      客服热线
+      <button ion-button item-end clear icon-only>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
       </button>
-    </ion-list>
+    </button>
+    <button ion-item (click)="pushAboutPage()">
+      关于家门好
+      <button ion-button item-end clear icon-only>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
+      </button>
+    </button>
+    <!--<button ion-item (click)="wechatTest()">
+      投诉建议
+      <button ion-button item-end clear icon-only>
+        <ion-icon name="ios-arrow-forward"></ion-icon>
+      </button>
+    </button>-->
+  </ion-list>
 
 </ion-content>
 

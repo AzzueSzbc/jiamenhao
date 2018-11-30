@@ -1,18 +1,62 @@
-<!--
-  Generated template for the CartPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>cart</ion-title>
-  </ion-navbar>
-
+<ion-header no-border>
+  <div class="header-container">
+    <div class="header-title">
+      购物车
+    </div>
+  </div>
 </ion-header>
 
+<ion-content>
 
-<ion-content padding>
+  <!--下拉刷新-->
+  <!--<ion-refresher (ionRefresh)="doRefresh($event)" (ionPull)="doPulling($event)">
+    <ion-refresher-content
+      pullingText="下拉刷新"
+      refreshingText="加载中...">
+    </ion-refresher-content>
+  </ion-refresher>-->
 
+  <div class="content-container" *ngIf="status!='未知错误' && status!='加载中'">
+    <div *ngFor="let cart of carts">
+      <div class="order-list-card" *ngIf="cart?.commodites.length!=0">
+        <div class="shop-name">
+          {{cart?.shopName}}
+        </div>
+        <div class="diviling-line"></div>
+        <div *ngFor="let c of cart.commodites">
+          <div class="commodity-container">
+            <div class="commodity-img">
+              <img [src]="pictureWarehouseURL + c?.pictureURL">
+            </div>
+            <div class="commodity-name">
+              {{c?.name}}
+            </div>
+            <div class="commodity-number">
+              x{{c?.productAmount}}
+            </div>
+            <div class="commodity-total-price">
+              ￥{{(c?.price*c?.productAmount) / 100}}
+            </div>
+          </div>
+          <div class="diviling-line"></div>
+        </div>
+        <div class="total-price-container">
+          <div class="total-price-row">
+            <div class="total-price">
+              ￥ {{cart?.totalPrice / 100}}
+            </div>
+            <div class="to-pay-button"  [ngClass]="{
+              'can': cart.totalPrice >= cart.startShippingLimit,
+              'no':  cart.totalPrice < cart.startShippingLimit}" (click)="pushPayPage(cart)">
+              {{(cart?.totalPrice) >= (cart?.startShippingLimit) ? '去结算' : changeTxt(cart)}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <!--<button ion-button (click)="emptyShoppingCart()">清空购物车</button>-->
 </ion-content>

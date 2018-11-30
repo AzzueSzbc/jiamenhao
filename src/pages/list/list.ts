@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { App, NavController, Events, ModalController } from 'ionic-angular';
 import { tap } from 'rxjs/operators';
 import { StatusBar } from '@ionic-native/status-bar';
-import { Network } from '@ionic-native/network';
+
 import { OrderProvider } from '../../providers/order/order';
 import { NativeProvider } from '../../providers/native/native';
+import { StorageProvider } from '../../providers/storage/storage';
 import { PICTURE_WAREHOUSE_URL } from '../../providers/config';
 import { STATUS_BAR_COLOR_LIGHT } from '../../providers/config';
 
@@ -16,7 +17,7 @@ export class ListPage {
 
   pictureWarehouseURL: string = PICTURE_WAREHOUSE_URL;
 
-  listData: any;
+  orders: any;
 
   //页面状态，状态描述分别为：
   //没有网络
@@ -25,37 +26,30 @@ export class ListPage {
   //没有相关数据
   //存在相关数据
   //未知错误
-  status: string = "没有网络";
+  status: string = "加载中";
 
   constructor(public navCtrl: NavController,
     public appCtrl: App,
     public modalCtrl: ModalController,
     public statusBar: StatusBar,
     private events: Events,
-    private network: Network,
     private nativePvd: NativeProvider,
+    private storagePvd: StorageProvider,
     private orderPvd: OrderProvider) {
     this.events.subscribe('user:logout', () => {
       this.status = "用户未登录"
       console.log("events user:logout");
     });
     this.events.subscribe('user:login', () => {
-      //确认用户是否联网
-      this.nativePvd.detectNetwork(() => {
-        //已联网
-        this.status = "加载中";
-        //加载页面
-        this.refreshDisplay().then((res) => {
-          console.log("ionViewWillEnter refreshDisplay res:", res);
-        });
-      }, () => {
-        //没有网络
-        this.status = "没有网络";
-      });
+      this.afresh();
     });
   }
 
   ionViewWillEnter() {
+    this.afresh();
+  }
+
+  afresh() {
     //确认用户是否联网
     this.nativePvd.detectNetwork(() => {
       //已联网
@@ -72,41 +66,39 @@ export class ListPage {
 
   //更新显示
   refreshDisplay(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.nativePvd.getStorage('clientid').then((id) => {
-        this.nativePvd.getStorage('clienttoken').then((token) => {
-          if (token) {
-            this.orderPvd.getAllOrder({
-              buyerID: id,
-              buyerToken: token,
+    return new Promise((resolve) => {
+      this.storagePvd.getStorageAccount().then((buyer) => {
+        if (buyer) {
+          this.orderPvd.getAllOrder({
+            userID: buyer.userID,
+            token: buyer.token,
+          })
+            .subscribe((res) => {
+              console.log("ListPage-refreshDisplay-getAllOrder-res", res);
+              if (res == false) { //请求失败进行提醒,主要是因为用户未登录
+                this.status = "用户未登录";
+                //this.detectNetworkError("请登录");  //检测网络
+              } else if (res == null || res == []) {
+                this.status = "没有相关数据";
+              } else if (res) {
+                this.status = "存在相关数据";
+                this.orders = res;
+                console.log(this.orders.sort(this.compare('purchaseOrderID')));
+              } else this.status = "未知错误";
+              resolve(res);
+            },
+            (err) => {
+              this.status = "未知错误";
+              //网络检测
+              this.detectNetworkError("加载失败，请稍后重试");
+              //console.log('list-getAllOrder-err', err);
+              resolve(err);
             })
-              .subscribe((res) => {
-                console.log("ListPage-refreshDisplay-getAllOrder-res", res);
-                if (res == false) { //请求失败进行提醒,主要是因为用户未登录
-                  this.detectNetworkError();  //检测网络
-                  this.status = "用户未登录";
-                } else if (res == null || res == []) {
-                  this.status = "没有相关数据";
-                } else if (res) {
-                  this.status = "存在相关数据";
-                  this.listData = res;
-                  console.log(this.listData.sort(this.compare('ordersID')));
-                } else this.status = "未知错误";
-                resolve(res);
-              },
-              (err) => {
-                this.status = "未知错误";
-                //网络检测
-                this.detectNetworkError();
-                //console.log('list-getAllOrder-err', err);
-                reject(err);
-              })
-          } else {
-            //没有token未登录
-            this.status = "用户未登录";
-            reject(false);
-          }
-        });
+        } else {
+          //没有token未登录
+          this.status = "用户未登录";
+          resolve(false);
+        }
       });
     });
 
@@ -143,9 +135,9 @@ export class ListPage {
   }
 
   //网络错误处理
-  detectNetworkError() {
+  detectNetworkError(message: string) {
     this.nativePvd.detectNetwork(() =>{
-      this.nativePvd.presentSimpleToast("加载失败，请稍后重试");
+      this.nativePvd.presentSimpleToast(message);
     }, () => {
       this.status = "没有网络";
     });
@@ -158,14 +150,14 @@ export class ListPage {
   pushAddRatingPage(order) {
     //this.navCtrl.push('AddOrderNotePage');
     let addRatingPage = this.modalCtrl.create('AddRatingPage', {
-      orderid: order.ordersID
+      orderID: order.purchaseOrderID
     });
     addRatingPage.present();
   }
 
   pushOrderPage(order) {
     this.appCtrl.getRootNav().push('OrderPage', {
-      orderid: order.ordersID
+      orderID: order.purchaseOrderID
     });
   }
 

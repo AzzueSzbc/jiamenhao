@@ -140,7 +140,7 @@ page-pay {
         display: flex;
         align-items: center;
         .commodity-img {
-          flex: 1;
+          flex: none;
           width: 56px;
           height: 56px;
         }
@@ -151,20 +151,21 @@ page-pay {
           object-fit: cover;
         }
         .commodity-name {
-          flex: 1;
+          flex: 3;
           margin-left: 18px;
           font-size: 16px;
           color: $dark;
         }
         .commodity-number {
           flex: 1;
-          margin-left: 18px;
           font-size: 16px;
           color: $dark;
         }
         .commodity-total-price {
-          flex: none;
-          margin-left: 26px;
+          display: flex;
+          justify-content: flex-end;
+          margin-right: 2px;
+          flex: 1;
           font-size: 16px;
           color: $dark;
         }

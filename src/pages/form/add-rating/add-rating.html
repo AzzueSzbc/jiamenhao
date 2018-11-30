@@ -57,7 +57,7 @@
         </div>-->
             <div class="shop-name-container">
               <div class="shop-name">
-                {{shopRatingForm?.sellerShopName}}
+                {{shopRatingForm?.shopName}}
               </div>
             </div>
           </div>
@@ -110,8 +110,8 @@
             <div class="card-dividing-line"></div>
           </div>
 
-          <div class="commodity-like-row" *ngFor="let commodity of shopRatingForm?.ordersProduct">
-            <div class="commodity-name">{{commodity?.ordersProductName}}</div>
+          <div class="commodity-like-row" *ngFor="let commodity of shopRatingForm?.product">
+            <div class="commodity-name">{{commodity?.name}}</div>
             <div class="icon">
               <ion-icon name="ios-thumbs-up-outline"></ion-icon>
             </div>

@@ -17,7 +17,7 @@
       <button ion-item>
         头像
         <ion-avatar item-end >
-          <img [src]="hostsURL + 'avatar.jpg '">
+          <img [src]="pictureWarehouseURL + userData?.avatarURL">
         </ion-avatar>
         <button ion-button item-end clear icon-only>
           <ion-icon name="ios-arrow-forward"></ion-icon>
@@ -26,13 +26,6 @@
       <button ion-item >
         用户名
         <ion-note item-end>{{userData?.buyerUserName}}</ion-note>
-        <button ion-button item-end clear icon-only>
-          <ion-icon name="ios-arrow-forward"></ion-icon>
-        </button>
-      </button>
-      <button ion-item >
-        账号密码
-        <ion-note item-end>修改</ion-note>
         <button ion-button item-end clear icon-only>
           <ion-icon name="ios-arrow-forward"></ion-icon>
         </button>

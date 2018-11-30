@@ -5,7 +5,7 @@
       <ion-icon name="ios-arrow-back"></ion-icon>
     </div>
     <div class="rating-txt-container">
-      {{orderData?.ordersStatus}}
+      {{order?.status}}
     </div>
   </div>
 
@@ -14,40 +14,91 @@
 
 <ion-content>
 
-  <div #map_container  class="map_container" *ngIf="orderData?.ordersStatus!='订单已完成'&&orderData?.ordersStatus!='订单已评价'"></div>
-  <div class="gary-background" *ngIf="orderData?.ordersStatus!='订单已完成'&&orderData?.ordersStatus!='订单已评价'"></div>
-  <div class="order-process-card" *ngIf="orderData?.ordersStatus!='订单已完成'&&orderData?.ordersStatus!='订单已评价'">
-    <div class="row-container">
-      <div class="row">
-        <div class="row-left">
-          订单正在进行
+  <!--页面加载中时显示-->
+  <div class="loading" *ngIf="status=='加载中'">
+    <div class="loading-txt">
+      努力加载中...
+    </div>
+  </div>
+
+  <!--网络异常时显示-->
+  <div class="error-content-container" *ngIf="status=='没有网络'" (click)="afresh()">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          网络不给力，请检查网络
         </div>
       </div>
-      <div class="row">
-        <div class="cancel-order-button">
-          取消订单
+      <div class="deal-button-container">
+        <div class="deal-button">
+          重新加载
         </div>
-        <div class="rating-button" *ngIf="orderData?.ordersStatus=='等待支付'">
-          去支付
+      </div>
+    </div>
+  </div>
+
+  <!--网络正常时显示-->
+  <!--用户未登录时显示-->
+  <div class="error-content-container" *ngIf="status=='用户未登录'" (click)="pushLoginPage()">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          身份验证过期，请重新登录
         </div>
+      </div>
+      <div class="deal-button-container">
+        <div class="deal-button">
+          登录
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--没有相关数据时显示-->
+  <div class="error-content-container" *ngIf="status=='没有相关数据'" (click)="afresh()">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          加载数据失败,请尝试重新加载
+        </div>
+      </div>
+      <div class="deal-button-container">
+        <div class="deal-button">
+          重新加载
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div #map_container class="map_container" *ngIf="status=='存在相关数据' && order?.status!='订单已完成'&&order?.status!='订单已评价'"></div>
+  <div class="gary-background" *ngIf="status=='存在相关数据' && order?.status!='订单已完成'&&order?.status!='订单已评价'"></div>
+  <div class="order-process-card" *ngIf="status=='存在相关数据' && order?.status!='订单已完成'&&order?.status!='订单已评价'">
+    <div class="row-container">
+      <div class="row-left">
+        订单正在进行
+      </div>
+    </div>
+    <div class="row-container">
+      <div class="cancel-order-button" (click)="onCancelOrder()">
+        取消订单
+      </div>
+      <div class="rating-button" *ngIf="order?.status=='等待支付'" (click)="onPayOrder()">
+        去支付
       </div>
     </div>
   </div>
 
 
 
-  <div class="content-container">
-    <div class="processing-order-process-card" *ngIf="orderData?.ordersStatus=='订单已完成'&&orderData?.ordersStatus=='订单已评价'">
+  <div class="content-container" *ngIf="status=='存在相关数据'">
+    <div class="processing-order-process-card" *ngIf="order?.status=='订单已完成'&&order?.status=='订单已评价'">
       <div class="row-container">
-        <div class="row">
-          <div class="row-left">
-            感谢您选择家门好，期待再次光临
-          </div>
+        <div class="row-left">
+          感谢您选择家门好，期待再次光临
         </div>
-        <div class="row">
-          <div class="rating-button" *ngIf="orderData?.ordersStatus=='订单已完成'">
-            评价
-          </div>
+      </div>
+      <div class="row-container">
+        <div class="rating-button" *ngIf="order?.status=='订单已完成'" (click)="onRateOrder()">
+          评价
         </div>
       </div>
     </div>
@@ -77,22 +128,22 @@
 
     <div class="order-list-card">
       <div class="shop-name">
-        家门好
+        {{order?.seller.shopName}}
       </div>
       <div class="diviling-line"></div>
-      <div *ngFor="let commodity of orderData?.ordersProduct">
+      <div *ngFor="let commodity of order?.purchaseOrderProduct">
         <div class="commodity-container">
           <div class="commodity-img">
-            <img [src]="pictureWarehouseURL + commodity?.ordersProductPictureURL">
+            <img [src]="pictureWarehouseURL + commodity?.productPictureURLHistory">
           </div>
           <div class="commodity-name">
-            {{commodity?.ordersProductName}}
+            {{commodity?.productNameHistory}}
           </div>
           <div class="commodity-number">
-            *{{commodity?.ordersProductAmount}}
+            *{{commodity?.productAmount}}
           </div>
           <div class="commodity-total-price">
-            ￥{{commodity?.ordersProductPrice / 100}}
+            ￥{{commodity?.productPriceHistory / 100}}
           </div>
         </div>
         <div class="diviling-line"></div>
@@ -102,7 +153,7 @@
           包装费
         </div>
         <div class="item-content">
-          ￥{{orderData?.ordersPackCharge / 100}}
+          ￥{{order?.packageCharge / 100}}
         </div>
       </div>
       <div class="diviling-line"></div>
@@ -111,7 +162,7 @@
           配送费
         </div>
         <div class="item-content">
-          ￥{{orderData?.ordersShippingCharge / 100}}
+          ￥{{order?.shippingCharge / 100}}
         </div>
       </div>
       <div class="diviling-line"></div>
@@ -123,18 +174,18 @@
             总计
           </div>
           <div class="total-price">
-            ￥ {{orderData?.ordersActualPayment / 100}}
+            ￥ {{order?.actualPayment / 100}}
           </div>
         </div>
       </div>
     </div>
 
-    <div class="order-note-card" *ngIf="orderData?.ordersNote">
+    <div class="order-note-card" *ngIf="order?.note">
       <div class="order-note-title">
         订单备注
       </div>
       <div class="order-note">
-        {{orderData?.ordersNote}}
+        {{order?.note}}
       </div>
     </div>
 

@@ -1,18 +1,21 @@
-<!--
-  Generated template for the CustomerServicePage page.
+<ion-header no-border>
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>customer-service</ion-title>
-  </ion-navbar>
+  <div class="header-container">
+    <div class="close-icon-container" (click)="dismiss()">
+      <ion-icon name="ios-arrow-back"></ion-icon>
+    </div>
+    <div class="rating-txt-container">
+      客服热线
+    </div>
+  </div>
 
 </ion-header>
 
-
-<ion-content padding>
-
+<ion-content>
+  <!--页面加载中时显示-->
+  <div class="loading">
+    <div class="loading-txt">
+      客服热线：13878559083
+    </div>
+  </div>
 </ion-content>

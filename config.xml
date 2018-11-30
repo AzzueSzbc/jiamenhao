@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.jiamenhao.client" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.jiamenhao.client" version="0.1.11" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>家门好</name>
     <description>生鲜配送</description>
     <author email="hi@jiamenhao.com" href="http://jiamenhao.com/">Half Crusade</author>
@@ -11,6 +11,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <preference name="loadUrlTimeoutValue" value="60000" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
@@ -92,6 +93,16 @@
         <variable name="ANDROID_KEY" value="GEYQbiKv3BEGP5ahBLrik8lsFwSjd3Tj" />
         <variable name="IOS_KEY" value="&lt;API_KEY_IOS&gt;" />
         <variable name="IOS_LOCATION_DESC" value="请点击'好'以允许访问。" />
+    </plugin>
+    <plugin name="cordova-hot-code-push-plugin" spec="^1.5.3" />
+    <plugin name="cordova-hot-code-push-local-dev-addon" spec="^0.4.2" />
+    <chcp>
+        <native-interface version="11" />
+        <config-file url="https://app.jiaenhao.com/buyer/www/chcp.json" />
+        <content src="index.html" />
+    </chcp>
+    <plugin name="cordova-plugin-wechat-v3" spec="^1.0.6">
+        <variable name="WECHATAPPID" value="wxbc42fec301741ed2" />
     </plugin>
     <engine name="android" spec="7.0.0" />
 </widget>

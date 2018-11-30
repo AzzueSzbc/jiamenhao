@@ -11,19 +11,62 @@
 
 </ion-header>
 
-<ion-content padding>
-  <ion-list *ngFor="let address of address">
+<ion-content>
+  <!--页面加载中时显示-->
+  <div class="loading" *ngIf="status=='加载中'">
+    <div class="loading-txt">
+      努力加载中...
+    </div>
+  </div>
+
+  <!--网络异常时显示-->
+  <div class="error-content-container" *ngIf="status=='没有网络'">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          网络不给力，请检查网络
+        </div>
+      </div>
+      <div class="deal-button-container">
+        <div class="deal-button" (click)="afresh()">
+          重新加载
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--网络正常时显示-->
+  <!--用户未登录时显示-->
+  <div class="error-content-container" *ngIf="status=='用户未登录'">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          请登录查看收货地址
+        </div>
+      </div>
+      <div class="deal-button-container">
+        <div class="deal-button" (click)="pushLoginPage()">
+          登录
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--用户登录时显示-->
+  <div *ngIf="status=='没有相关数据' || status=='存在相关数据'">
+    <ion-list *ngFor="let address of address">
+      <ion-item>
+        <h3>{{address?.consigneeAddress}}</h3>
+        <p>{{address?.consigneeName}} {{address?.consigneeGender}} {{address?.consigneePhoneNumber}}</p>
+        <button ion-button item-end clear icon-only (click)="ModifyShippingAddress(address?.buyerShippingAddressID)">
+          <ion-icon name="ios-create-outline"></ion-icon>
+        </button>
+      </ion-item>
+    </ion-list>
     <ion-item>
-      <h3>{{address?.consigneeAddress}}</h3>
-      <p>{{address?.consigneeName}} {{address?.consigneeGender}} {{address?.consigneePhoneNumber}}</p>
-      <button ion-button item-end clear icon-only (click)="ModifyShippingAddress(address?.buyerShippingAddressID)">
-        <ion-icon name="ios-create-outline"></ion-icon>
+      <button ion-button block outline round color="primary" (click)="pushAddAddress()">
+        <ion-icon name="add">新增收货地址</ion-icon>
       </button>
     </ion-item>
-  </ion-list>
-  <ion-item>
-    <button ion-button block outline round color="primary" (click)="pushAddAddress()">
-      <ion-icon name="add">新增收货地址</ion-icon>
-    </button>
-  </ion-item>
+  </div>
 </ion-content>

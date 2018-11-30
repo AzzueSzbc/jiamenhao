@@ -1,3 +1,124 @@
 page-cart {
 
+  @import '../../assets/scss/color.scss';
+
+  .header-container {
+    width: 100%;
+    display: flex;
+    padding: 12px 20px;
+    align-items: center;
+    background-color: $primary;
+    .header-title {
+      font-size: 21px;
+      font-weight: 600;
+      color: $white;
+    }
+  }
+
+  .content-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 1px;
+    background: $light-background;
+
+    .order-list-card {
+      position: relative;
+      height: auto;
+      margin: 16px 12px;
+      padding-top: 11px;
+      border-radius: 6px;
+      background: $white;
+      .shop-name {
+        width: 100%;
+        margin: 0px 18px 11px 18px;
+        font-size: 16px;
+        font-weight: 600;
+        color: $dark;
+      }
+      .diviling-line {
+        height: 1px;
+        margin: 11px 18px 0px 18px;
+        background-color: $light-line;
+      }
+
+      .commodity-container {
+        margin: 11px 18px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        .commodity-img {
+          flex: none;
+          width: 56px;
+          height: 56px;
+        }
+        .commodity-img img {
+          width: 56px;
+          height: 56px;
+          border-radius: 12px;
+          object-fit: cover;
+        }
+        .commodity-name {
+          flex: 3;
+          margin-left: 18px;
+          font-size: 16px;
+          color: $dark;
+        }
+        .commodity-number {
+          flex: 1;
+          font-size: 16px;
+          color: $dark;
+        }
+        .commodity-total-price {
+          display: flex;
+          justify-content: flex-end;
+          margin-right: 2px;
+          flex: 1;
+          font-size: 16px;
+          color: $dark;
+        }
+      }
+
+      .total-price-container {
+        height: 54px;
+        margin: 0px 18px;
+        display: flex;
+        align-items: center;
+        .total-price-row {
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          .total-price-title {
+            flex: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: $dark;
+          }
+          .total-price {
+            flex: none;
+            margin-left: 39px;
+            font-size: 16px;
+            color: $bright;
+          }
+          .to-pay-button {
+            flex: none;
+            width: auto;
+            height: auto;
+            border-radius: 6px;
+            margin-left: 16px;
+            padding: 5px 23px;
+            font-size: 15px;
+            color: $white;
+          }
+          .can {
+            background-color: $primary;
+          }
+          .no {
+            background-color: $light;
+          }
+        }
+      }
+    }
+  }
+
 }

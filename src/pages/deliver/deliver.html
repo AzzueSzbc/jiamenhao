@@ -30,13 +30,26 @@
   </ion-refresher>
 
   <!--页面加载中时显示-->
-  <div class="Loading" *ngIf="status=='加载中'">
-    努力加载中...
+  <div class="loading" *ngIf="status=='加载中'">
+    <div class="loading-txt">
+      努力加载中...
+    </div>
   </div>
 
   <!--网络异常时显示-->
-  <div class="no-network" *ngIf="status=='没有网络'">
-    网络不给力，请检查网络
+  <div class="error-content-container" *ngIf="status=='没有网络'">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          网络不给力，请检查网络
+        </div>
+      </div>
+      <div class="deal-button-container">
+        <div class="deal-button" (click)="afresh()">
+          重新加载
+        </div>
+      </div>
+    </div>
   </div>
 
   <!--网络正常时显示-->
@@ -144,12 +157,12 @@
       <!--店铺-->
       <div class="shop-container" *ngFor="let shop of shops" (click)="pushOneShop(shop.sellerID)">
         <div class="shop-img-container">
-          <img [src]="pictureWarehouseURL + shop?.sellerShopLogoURL"  class="shop-img">
+          <img [src]="pictureWarehouseURL + shop?.shopLogoURL"  class="shop-img">
         </div>
         <div class="shop-information-container">
           <div class="shop-information-container-first-row">
             <div class="shop-name">
-              {{shop?.sellerShopName}}
+              {{shop?.shopName}}
             </div>
           </div>
           <div class="shop-information-container-second-row">
@@ -164,12 +177,12 @@
               4.5
             </div>
             <div class="shop-monthly-sales">
-              月售 {{shop?.sellerShopMonthlySales}}
+              月售 {{shop?.monthlySales}}
             </div>
           </div>
           <div class="shop-cost">
-            <span class="starting-price">起送 ￥{{shop?.sellerShopStartShippingLimit}}</span>
-            <span class="delivery-price">配送 ￥{{shop?.sellerShopShippingCharge}}</span>
+            <span class="starting-price">起送 ￥{{shop?.startShippingLimit / 100}}</span>
+            <span class="delivery-price">配送 ￥2</span>
           </div>
           <div class="shop-offer-container">
             <div class="shop-offer">

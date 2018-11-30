@@ -23,8 +23,6 @@ $app-direction: ltr;
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
 
 
-
-
 // Named Color Variables
 // --------------------------------------------------
 // Named colors makes it easy to reuse colors on various components.
@@ -46,6 +44,10 @@ $colors: (
 
 $segment-button-md-border-bottom-width: 0px;
 $segment-button-md-font-size: 1.4rem;
+
+$tabs-md-tab-opacity: .5;
+
+$badge-md-border-radius: 12px;
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here

@@ -8,6 +8,7 @@ page-deliver {
     background-color: $primary;
   }
 
+  //顶部导航
   .header-container {
     width: 100%;
     height: 50px;
@@ -72,30 +73,66 @@ page-deliver {
     }
   }
 
-  .Loading {
+  //加载中显示
+  .loading {
     width: 100%;
     height: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
-    color: $dark;
+    .loading-txt {
+      font-size: 18px;
+      color: $dark;
+    }
   }
 
-  .no-network {
+  //出现异常时显示
+  .error-content-container {
     width: 100%;
-    height: 80%;
+    height: 70%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    color: $dark;
+
+    .error-container {
+      width: 100%;
+      height: auto;
+
+      .error-message-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        .error-message {
+          width: auto;
+          height: auto;
+          font-size: 18px;
+          color: $dark;
+        }
+      }
+
+      .deal-button-container {
+        width: 100%;
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        .deal-button {
+          width: auto;
+          height: auto;
+          border-radius: 12px;
+          padding: 10px 50px;
+          background-color: $primary;
+          font-size: 18px;
+          color: $white;
+        }
+      }
+    }
   }
 
+  //
   .dividing-blank {
     width: 100%;
     height: 8px;
   }
+  //店铺分类
   .shop-class-container {
     width: 100%;
     padding: 8px 0px;
@@ -126,6 +163,7 @@ page-deliver {
     }
   }
 
+  //轮播图
   .advertising-slides-container {
     width: 100%;
     height: 100px;
@@ -165,13 +203,13 @@ page-deliver {
       .shop-img-container {
         -webkit-flex: none;
         flex: none;
-        width: 78px;
+        width: 86px;
         height: 78px;
         margin: 12px 0px 18px 16px;
         .shop-img {
-          width: 78px;
+          width: 86px;
           height: 78px;
-          border-radius: 12px;
+          border-radius: 6px;
         }
       }
       .shop-information-container {
@@ -199,7 +237,7 @@ page-deliver {
           display: -webkit-flex;
           display: flex;
           width: 100%;
-          margin-top: 8px;
+          margin-top: 6px;
           .shop-star {
             -webkit-flex: none;
             flex: none;
@@ -223,7 +261,7 @@ page-deliver {
         }
 
         .shop-cost {
-          margin-top: 8px;
+          margin-top: 6px;
           margin-left: 6px;
           font-size: 13px;
           color: #2A2E43;
@@ -245,10 +283,10 @@ page-deliver {
             width: auto;
             height: auto;
             border: 1px solid #FF5E99;
-            border-radius: 6px;
+            border-radius: 3px;
             margin-left: 6px;
-            padding: 1px 3px;
-            font-size: 6px;
+            padding: 1px 2px;
+            font-size: 2px;
             color: #FF5E99;
           }
         }

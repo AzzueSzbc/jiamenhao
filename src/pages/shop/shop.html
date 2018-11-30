@@ -2,7 +2,7 @@
   <div class="header-container">
 
 
-    <img class="header-background" [src]="pictureWarehouseURL + shop?.sellerShopLogoURL">
+    <img class="header-background" [src]="pictureWarehouseURL + shop?.shopLogoURL">
 
 
     <div class="top-blank"></div>
@@ -23,17 +23,21 @@
 
     <div class="header-shop-container">
       <div class="shop-img-container">
-        <img [src]="pictureWarehouseURL + shop?.sellerShopLogoURL">
+        <img [src]="pictureWarehouseURL + shop?.shopLogoURL">
       </div>
       <div class="shop-information-container">
         <div class="shop-name">
-          {{shop?.sellerShopName}}
+          {{shop?.shopName}}
         </div>
         <div class="shop-bulletin">
           {{shop?.sellerShopDescription}}
         </div>
         <div class="shop-business-hours">
-          营业时间:{{shop?.shopMorningOpenTime}}~{{shop?.shopAfterNoonCloseTime}}
+          营业时间:
+          {{shop?.morningOpenTime}}
+          {{shop?.morningCloseTime == shop?.afterNoonOpenTime ?
+            '~' : '~' + ' ' + shop?.morningCloseTime + ' ' + ';' + ' ' + shop?.afterNoonOpenTime + ' ' + '~'}}
+          {{shop?.afterNoonCloseTime}}
         </div>
         <div class="shop-offer-container">
           <div class="shop-offer">特价优惠</div>
@@ -46,9 +50,9 @@
 </ion-header>
 
 <ion-content>
-  <super-tabs toolbarBackground="white" no-shadow>
-    <super-tab [root]="goodsRoot" title="点菜" [rootParams]="sellerParams"></super-tab>
-    <super-tab [root]="ratingRoot" title="评论" [rootParams]="sellerParams"></super-tab>
-    <super-tab [root]="sellerRoot" title="商家" [rootParams]="sellerParams"></super-tab>
+  <super-tabs toolbarBackground="white" no-shadow *ngIf="status=='存在相关数据'">
+    <super-tab [root]="goodsRoot" title="点菜" [rootParams]="goodsParame"></super-tab>
+    <super-tab [root]="ratingRoot" title="评论" [rootParams]="ratingParame"></super-tab>
+    <super-tab [root]="sellerRoot" title="商家" [rootParams]="sellerParame"></super-tab>
   </super-tabs>
 </ion-content>

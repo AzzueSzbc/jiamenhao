@@ -20,11 +20,50 @@
 </ion-header>
 
 <ion-content>
+
+  <!--下拉刷新-->
+  <ion-refresher (ionRefresh)="doRefresh($event)" (ionPull)="doPulling($event)">
+    <ion-refresher-content
+      pullingText="下拉刷新"
+      refreshingText="加载中...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!--页面加载中时显示-->
+  <div class="loading" *ngIf="status=='加载中'">
+    <div class="loading-txt">
+      努力加载中...
+    </div>
+  </div>
+
+  <!--网络异常时显示-->
+  <div class="error-content-container" *ngIf="status=='没有网络'">
+    <div class="error-container">
+      <div class="error-message-container">
+        <div class="error-message">
+          网络不给力，请检查网络
+        </div>
+      </div>
+      <div class="deal-button-container">
+        <div class="deal-button" (click)="afresh()">
+          重新加载
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--网络正常时显示-->
   <super-tabs scrollTabs="true" toolbarBackground="white" no-shadow *ngIf="status=='存在相关数据'">
-    <super-tab 
+    <super-tab
       [root]="class.page"
-      [title]="class.shopProductClassName"
-      [rootParams]="{'commodity': class.product}"
+      [title]="class.name"
+      [rootParams]="{
+        'sellerID': sellerID,
+        'shopName': shop.shopName,
+        'businessHours': shopBusinessHours,
+        'packageCharge': shop.packageCharge,
+        'startShippingLimit': shop.startShippingLimit,
+        'commodites': class.product}"
       *ngFor="let class of shopCommodityClass">
     </super-tab>
   </super-tabs>

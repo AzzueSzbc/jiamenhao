@@ -1,0 +1,38 @@
+<ion-header no-border>
+
+  <div class="header-container">
+    <div class="close-icon-container" (click)="dismiss()">
+      <ion-icon name="ios-arrow-back"></ion-icon>
+    </div>
+    <div class="rating-txt-container">
+      选择支付方式
+    </div>
+  </div>
+
+</ion-header>
+
+<ion-content>
+  <ion-list radio-group [(ngModel)]="pantment">
+    <ion-list-header>
+      第三方支付
+    </ion-list-header>
+    <ion-item>
+      <ion-label>微信</ion-label>
+      <ion-radio value="weixinpay" checked="true"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>支付宝</ion-label>
+      <ion-radio value="alipay"></ion-radio>
+    </ion-item>
+  </ion-list>
+
+  <ion-footer no-shadow no-border>
+    <div class="pay-confirm-container">
+      <div class="confirm-payment-button" (click)="pay()">
+        <div class="confirm-payment">
+          确认支付
+        </div>
+      </div>
+    </div>
+  </ion-footer>
+</ion-content>

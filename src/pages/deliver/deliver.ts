@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, App, ViewController, NavController, NavParams, AlertController } from 'ionic-angular';
+import { App, ViewController, NavController, NavParams, AlertController } from 'ionic-angular';
 import { tap } from 'rxjs/operators';
 import { StatusBar } from '@ionic-native/status-bar';
 
@@ -10,7 +10,6 @@ import { STATUS_BAR_COLOR_PRIMARY } from '../../providers/config';
 
 import { ShopPage } from '../shop/shop';
 
-@IonicPage()
 @Component({
   selector: 'page-deliver',
   templateUrl: 'deliver.html',
@@ -30,7 +29,7 @@ export class DeliverPage {
   //没有相关数据
   //存在相关数据
   //未知错误
-  status: string = "没有网络";
+  status: string = "加载中";
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -43,12 +42,14 @@ export class DeliverPage {
   }
 
   ionViewDidLoad() {
-    this.statusBar.overlaysWebView(false);
-    this.statusBar.backgroundColorByHexString(STATUS_BAR_COLOR_PRIMARY);
     console.log('ionViewDidLoad RatingPage');
   }
 
   ionViewWillEnter() {
+    this.afresh();
+  }
+
+  afresh() {
     //确认用户是否联网
     this.nativePvd.detectNetwork(() => {
       //已联网
@@ -64,6 +65,7 @@ export class DeliverPage {
     }, () => {
       //没有网络
       this.status = "没有网络";
+      this.location = "定位失败";
     });
   }
 
@@ -74,7 +76,7 @@ export class DeliverPage {
       .pipe(
         tap((res) => {
           //console.log("DeliverPage-refreshDisplay-getAllShopData-res:", res);
-          if (res == false) {  //请求失败进行提醒
+          if (res === false) {  //请求失败进行提醒
             this.status = "未知错误";
             this.detectNetworkError();
           } else if (res == null) {
@@ -104,7 +106,6 @@ export class DeliverPage {
       }, (err) => {
       });
     }, () => {
-
       this.nativePvd.presentSimpleToast("加载失败，请检查网络");
       refresher.complete();
     });

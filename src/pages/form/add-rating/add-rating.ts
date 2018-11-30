@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { NativeProvider } from '../../../providers/native/native';
+import { StorageProvider } from '../../../providers/storage/storage';
 import { OrderProvider } from '../../../providers/order/order';
 
 interface ratingCommodity {
@@ -30,24 +31,23 @@ export class AddRatingPage {
     public viewCtrl: ViewController,
     private formBuilder: FormBuilder,
     private nativePvd: NativeProvider,
+    private storagePvd: StorageProvider,
     private orderPvd: OrderProvider) {
-    nativePvd.getStorage('clientid').then((id) => {
-      nativePvd.getStorage('clienttoken').then((token) => {
-        if (token) {
-          orderPvd.getOneOrder({
-            buyerID: id,
-            buyerToken: token,
-            ordersID: navParams.get('orderid')
+    storagePvd.getStorageAccount().then((buyer) => {
+      if (buyer) {
+        orderPvd.getOneOrder({
+          userID: buyer.userID,
+          token: buyer.token,
+          purchaseOrderID: navParams.get('orderID')
+        })
+          .subscribe((res) => {
+            console.log("AddRatingPage-constructor-getOneOrder-res:", res);
+            this.rider = res.rider;
+            this.shopRatingForm = res;
+            console.log("AddRatingPage-constructor-getOneOrder-rider:", this.rider);
+            console.log("AddRatingPage-constructor-getOneOrder-shopRatingForm:", this.shopRatingForm);
           })
-            .subscribe((res) => {
-              console.log("AddRatingPage-constructor-getOneOrder-res:", res);
-              this.rider = res.rider;
-              this.shopRatingForm = res;
-              console.log("AddRatingPage-constructor-getOneOrder-rider:", this.rider);
-              console.log("AddRatingPage-constructor-getOneOrder-shopRatingForm:", this.shopRatingForm);
-            })
-        }
-      });
+      }
     });
 
     this.ratingForm = this.formBuilder.group({
@@ -70,36 +70,34 @@ export class AddRatingPage {
 
   submitRating() {
     if (this.haveRiderAttitude && (this.ratingForm.value.comment.length > 0)) {
-      this.nativePvd.getStorage('clientid').then((buyerID) => {
-        this.nativePvd.getStorage('clienttoken').then((buyerToken) => {
-          if (buyerToken) {
-            this.orderPvd.commentsRider({
-              buyerID: buyerID,
-              buyerToken: buyerToken,
-              riderID: this.rider.riderID,
-              riderCommentRate: this.ratingRiderAttitude,
-              riderCommentContent: ''
-            }).subscribe((res) => {
-              if (res == true) {
-                this.orderPvd.commentsOrder({
-                  buyerID: buyerID,
-                  buyerToken: buyerToken,
-                  ordersID: this.shopRatingForm.ordersID,
-                  ordersCommentRate: this.star,
-                  ordersCommentContent: this.ratingForm.value.comment
-                }).subscribe((res) => {
-                  if (res == true) {
-                    this.navCtrl.pop();
-                  }
-                }, (err) => {
-                  console.log("addRatingPage submitRating commentsOrder err:", err);
-                });
-              }
-            }, (err) => {
-              console.log("addRatingPage submitRating commentsRider err:", err);
-            });
-          }
-        })
+      this.storagePvd.getStorageAccount().then((buyer) => {
+        if (buyer) {
+          this.orderPvd.commentsRider({
+            userID: buyer.userID,
+            token: buyer.token,
+            riderID: this.rider.riderID,
+            riderCommentRate: this.ratingRiderAttitude,
+            riderCommentContent: ''
+          }).subscribe((res) => {
+            if (res == true) {
+              this.orderPvd.commentsOrder({
+                userID: buyer.userID,
+                token: buyer.token,
+                purchaseOrderID: this.shopRatingForm.purchaseOrderID,
+                commentRate: this.star,
+                commentContent: this.ratingForm.value.comment
+              }).subscribe((res) => {
+                if (res == true) {
+                  this.navCtrl.pop();
+                }
+              }, (err) => {
+                console.log("addRatingPage submitRating commentsOrder err:", err);
+              });
+            }
+          }, (err) => {
+            console.log("addRatingPage submitRating commentsRider err:", err);
+          });
+        }
       });
     }
   }

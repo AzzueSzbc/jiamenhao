@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { tap } from 'rxjs/operators';
 import { StatusBar } from '@ionic-native/status-bar';
-import { Network } from '@ionic-native/network';
 
 import { ShopProvider } from '../../providers/shop/shop';
 import { NativeProvider } from '../../providers/native/native';
@@ -11,7 +10,6 @@ import { STATUS_BAR_COLOR_PRIMARY } from '../../providers/config';
 
 import { GoodsPage } from './goods/goods';
 
-@IonicPage()
 @Component({
   selector: 'page-shop',
   templateUrl: 'shop.html',
@@ -24,41 +22,43 @@ export class ShopPage {
   shop: any;
   seller: any;
 
-  isConnect: boolean;
-  isLoading: boolean;
-  isQuery: boolean;
+  //页面状态，状态描述分别为：
+  //没有网络
+  //加载中
+  //用户未登录
+  //没有相关数据
+  //存在相关数据
+  //未知错误
+  status: string = "没有网络";
 
   goodsRoot = GoodsPage;
+  goodsParame: any;
   ratingRoot = 'RatingPage';
+  ratingParame: any;
   sellerRoot = 'SellerPage';
-  sellerParams: any;
+  sellerParame: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public statusBar: StatusBar,
     private nativePvd: NativeProvider,
-    private shopPvd: ShopProvider) {
-    this.sellerParams = {
-      sellerid: navParams.get('sellerid'),
-    };
-  }
+    private shopPvd: ShopProvider) {}
 
   ionViewWillEnter() {
     this.statusBar.overlaysWebView(true);
     //确认用户是否联网
     this.nativePvd.detectNetwork(() => {
       //已联网
-      this.isConnect = true;
+      this.status = "加载中";
       //加载页面
-      this.isLoading = true;
       this.refreshDisplay().subscribe((res) => {
-        console.log("DeliverPage ionViewWillEnter refreshDisplay res:", res);
+        console.log("ShopPage ionViewWillEnter refreshDisplay res:", res);
       }, (err) => {
-        console.log("DeliverPage ionViewWillEnter refreshDisplay err:", err);
+        console.log("ShopPage ionViewWillEnter refreshDisplay err:", err);
       });
     }, () => {
       //没有网络
-      this.isConnect = false;
+      this.status = "没有网络";
     });
   }
 
@@ -76,21 +76,54 @@ export class ShopPage {
             (res) => {
               console.log("ShopPage-refreshDisplay-getOneShopData-res:", res);
               if (res == false) {  //请求失败进行提醒
-                this.isQuery = false;
+                this.status = "未知错误";
                 this.detectNetworkError();
+              } else if (res == null) {
+                this.status = "没有相关数据";
               } else if (res) {
-                this.isQuery = true;
                 this.shop = res;
-              }
-              //停止加载动画显示
-              this.isLoading = false;
+                //时间字段处理（删去xx:yy:zz的:zz）
+                this.shop.afterNoonCloseTime = this.shop.afterNoonCloseTime.substr(0,5);
+                this.shop.afterNoonOpenTime = this.shop.afterNoonOpenTime.substr(0,5);
+                this.shop.morningCloseTime = this.shop.morningCloseTime.substr(0,5);
+                this.shop.morningOpenTime = this.shop.morningOpenTime.substr(0,5);
+                //构建将要传给goodspage的参数goodsParame中的businessHours
+                let businessHours = {
+                  morningOpenTime:  parseInt(this.shop.morningOpenTime.replace(/[^\w]/g,'')),
+                  morningCloseTime: parseInt(this.shop.morningCloseTime.replace(/[^\w]/g,'')),
+                  afterNoonOpenTime:  parseInt(this.shop.afterNoonOpenTime.replace(/[^\w]/g,'')),
+                  afterNoonCloseTime: parseInt(this.shop.afterNoonCloseTime.replace(/[^\w]/g,''))
+                }
+                //构建将要传给goodspage的参数goodsParame
+                this.goodsParame = {
+                  sellerID: this.shop.sellerID,
+                  shopName: this.shop.shopName,
+                  businessHours: businessHours,
+                  commodityClass: this.shop.shopProductClass,
+                  packageCharge: this.shop.packageCharge,
+                  startShippingLimit: this.shop.startShippingLimit,
+                }
+                //构建将要传给ratingpage的参数ratingparame
+                this.ratingParame = {
+                  sellerID: this.shop.sellerID,
+                }
+                //构建将要传给sellerpage的参数sellerparame
+                this.sellerParame = {
+                  seller: {
+                    shopName: this.shop.shopName,
+                    shopTag: this.shop.shopTag,
+                    shopPosition: this.shop.sellerShopPosition,
+                    shopContactPhoneNumber: this.shop.shopContactPhoneNumber
+                  }
+                }
+                console.log("businessHours:", businessHours);
+                console.log("after:", this.shop);
+                this.status = "存在相关数据";
+              } else this.status = "未知错误";
             },
             (err) => {  //http发生错误
-              console.log('home-getallshop-err', err);
-              this.isQuery = false;
+              this.status = "未知错误";
               this.detectNetworkError();
-              //停止加载动画显示
-              this.isLoading = false;
             }
           )
           );
@@ -101,7 +134,7 @@ export class ShopPage {
     this.nativePvd.detectNetwork(() =>{
       this.nativePvd.presentSimpleToast("加载失败，请稍后重试");
     }, () => {
-      this.isConnect = false;
+      this.status = "没有网络";
     });
   }
 

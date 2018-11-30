@@ -25,21 +25,21 @@ export class NativeProvider {
   baidumap_location(): Promise<any> {
     return new Promise((resolve, reject) => {
       cordova.plugins.baidumap_location.getCurrentPosition((result) => {
-            //this.location = (result.locationDescribe).replace('在', '');
-            let location = {
-              latitude: result.latitude,
-              longitude:  result.longitude
-            }
-            this.setStorage('location', location);
-            alert(JSON.stringify(result, null, 4));
-            resolve(result);
-            //console.log("================")
-            //console.log(JSON.stringify(result, null, 4));
-          }, (error) => {
-            //alert(JSON.stringify(error));
-            //this.location = "无法获得当前位置";
-            reject(error);
-          });
+        //this.location = (result.locationDescribe).replace('在', '');
+        let location = {
+          latitude: result.latitude,
+          longitude: result.longitude
+        }
+        this.setStorage('location', location);
+        //alert(JSON.stringify(result, null, 4));
+        resolve(result);
+        //console.log("================")
+        //console.log(JSON.stringify(result, null, 4));
+      }, (error) => {
+        //alert(JSON.stringify(error));
+        //this.location = "无法获得当前位置";
+        reject(error);
+      });
     });
   }
 
@@ -54,8 +54,14 @@ export class NativeProvider {
    * @param  key        缓存键
    * @param  value      缓存值
    */
-  setStorage(key: any, value: any) {
-    this.storage.set(key, value);
+  setStorage(key: any, value: any): Promise<any> {
+    return new Promise((resolve) => {
+      this.storage.set(key, value).then((value) => {
+        resolve(value);
+      }).catch(err => {
+        this.warn('getStorage:' + err);
+      });
+    });
   }
 
   /**
@@ -79,8 +85,14 @@ export class NativeProvider {
    * @method removeStorage
    * @param  key           缓存键
    */
-  removeStorage(key: any) {
-    this.storage.remove(key);
+  removeStorage(key: any): Promise<any> {
+    return new Promise((resolve) => {
+      this.storage.remove(key).then((value) => {
+        resolve(value);
+      }).catch(err => {
+        this.warn('getStorage:' + err);
+      });
+    });
   }
 
   /**
@@ -90,7 +102,7 @@ export class NativeProvider {
    * @param  no            网络不存在时执行的函数
    * @return               [description]
    */
-  detectNetwork(have:()=>void, no:()=>void) {
+  detectNetwork(have: () => void, no: () => void) {
     if (this.network.type == "none") {
       no();
     } else {

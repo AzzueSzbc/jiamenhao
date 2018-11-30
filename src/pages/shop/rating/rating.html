@@ -3,7 +3,7 @@
     <div class="rate-container" *ngFor="let rate of validRate">
       <div class="buyer-avatar-container">
         <div class="buyer-avatar">
-          <img [src]="pictureWarehouseURL + rate?.buyerAvatarURL">
+          <img [src]="pictureWarehouseURL + rate?.avatarURL">
         </div>
       </div>
       <div class="rate-content-container">
@@ -12,19 +12,19 @@
             {{rate?.buyerUserName}}
           </div>
           <div class="rate-time">
-            {{rate?.ordersComment.ordersCommentTime}}
+            {{rate?.sellerOrderComment.commentTime}}
           </div>
         </div>
         <div class="rate-second-row-container">
           <div class="rate-star-txt">评分</div>
           <div class="rate-star" [ngClass]="{
-            'rate-star-color-have': (star <= rate?.ordersComment.ordersCommentRate),
-            'rate-star-color-not': (star > rate?.ordersComment.ordersCommentRate)}" *ngFor="let star of [1,2,3,4,5]">
+            'rate-star-color-have': (star <= rate?.sellerOrderComment.commentRate),
+            'rate-star-color-not': (star > rate?.sellerOrderComment.commentRate)}" *ngFor="let star of [1,2,3,4,5]">
             <ion-icon name="star"></ion-icon>
           </div>
         </div>
         <div class="rate-txt">
-          {{rate?.ordersComment.ordersCommentContent}}
+          {{rate?.sellerOrderComment.commentContent}}
         </div>
       </div>
     </div>

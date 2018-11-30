@@ -61,22 +61,22 @@
 
     <div class="order-list-card">
       <div class="shop-name">
-        家门好
+        {{order.shopName}}
       </div>
       <div class="diviling-line"></div>
       <div *ngFor="let g of order.orderProduct">
         <div class="commodity-container">
           <div class="commodity-img">
-            <img [src]="pictureWarehouseURL + g?.ordersProductPictureURL">
+            <img [src]="pictureWarehouseURL + g?.pictureURL">
           </div>
           <div class="commodity-name">
-            {{g?.ordersProductName}}
+            {{g?.name}}
           </div>
           <div class="commodity-number">
-            x{{g?.ordersProductAmount}}
+            x{{g?.productAmount}}
           </div>
           <div class="commodity-total-price">
-            ￥{{(g?.ordersProductPrice*g?.ordersProductAmount) / 100}}
+            ￥{{(g?.price*g?.productAmount) / 100}}
           </div>
         </div>
         <div class="diviling-line"></div>
@@ -86,7 +86,7 @@
           包装费
         </div>
         <div class="item-content">
-          ￥{{order.packCharge / 100}}
+          ￥{{order.packageCharge / 100}}
         </div>
       </div>
       <div class="diviling-line"></div>
@@ -123,7 +123,7 @@
       </div>
     </div>
 
-    <div class="order-note-card" (click)="PushAddOrderNotePage()">
+    <div class="order-note-card" (click)="pushAddOrderNotePage()">
       <div class="order-note-first-row">
         <div class="order-note-title">
           订单备注

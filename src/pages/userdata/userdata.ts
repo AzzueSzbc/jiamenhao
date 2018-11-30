@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 
 import { NativeProvider } from '../../providers/native/native';
+import { StorageProvider } from '../../providers/storage/storage';
 import { UserProvider } from '../../providers/user/user';
-import { APP_SERVE_URL } from '../../providers/config';
+import { PICTURE_WAREHOUSE_URL } from '../../providers/config';
 
 import { TabsPage } from '../tabs/tabs';
 
@@ -14,7 +15,7 @@ import { TabsPage } from '../tabs/tabs';
 })
 export class UserdataPage {
 
-  hostsURL: string = APP_SERVE_URL;
+  pictureWarehouseURL: string = PICTURE_WAREHOUSE_URL;
 
   userData: any;
   islogined: boolean;
@@ -23,6 +24,7 @@ export class UserdataPage {
     public navParams: NavParams,
     public events: Events,
     private nativePvd: NativeProvider,
+    private storagePvd: StorageProvider,
     private userPvd: UserProvider) {}
 
   ionViewDidLoad() {
@@ -34,37 +36,33 @@ export class UserdataPage {
   }
   //更新显示
   refreshDisplay() {
-    this.nativePvd.getStorage('clientid').then((id) => {
-      this.nativePvd.getStorage('clienttoken').then((token) => {
-        if (token) {
-          this.userPvd.getUserBasicData({
-            buyerID: id,
-            buyerToken: token,
-          })
-          .subscribe(
-            (res) => {
-              if (res == false) {
-                this.islogined = false;
-              }
-              else {
-                this.islogined = true;
-                this.userData = res;
-              }
-            },
-            (err) => {
-              console.log('userdata-getUserBasicData-err', err);
+    this.storagePvd.getStorageAccount().then((buyer) => {
+      if (buyer) {
+        this.userPvd.getUserBasicData(buyer.userID,buyer.token)
+        .subscribe(
+          (res) => {
+            if (res == false) {
+              this.islogined = false;
             }
-          );
-        }
-      });
+            else {
+              this.islogined = true;
+              this.userData = res;
+            }
+          },
+          (err) => {
+            console.log('userdata-getUserBasicData-err', err);
+          }
+        );
+      }
     });
   }
 
   userLogout() {
-    this.nativePvd.removeStorage('clientid');
-    this.nativePvd.removeStorage('clienttoken');
-    this.events.publish('user:logout');
-    this.navCtrl.pop();
+    this.storagePvd.removeStorageAccount().then((val) => {
+      console.log(val);
+      this.events.publish('user:logout');
+      this.navCtrl.pop();
+    });
   }
 
   dismiss() {

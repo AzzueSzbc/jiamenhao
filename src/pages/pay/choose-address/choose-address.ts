@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { NativeProvider } from '../../../providers/native/native';
+import { StorageProvider } from '../../../providers/storage/storage';
 import { UserProvider } from '../../../providers/user/user';
 
 @IonicPage()
@@ -16,6 +17,7 @@ export class ChooseAddressPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private nativePvd: NativeProvider,
+    private storagePvd: StorageProvider,
     private userPvd: UserProvider) {
   }
 
@@ -28,12 +30,9 @@ export class ChooseAddressPage {
   }
 
   refreshDisplay() {
-    this.nativePvd.getStorage('clientid').then((id) => {
-      this.nativePvd.getStorage('clienttoken').then((token) => {
-        this.userPvd.getAllShippingAddress({
-          buyerID: id,
-          buyerToken: token
-        })
+    this.storagePvd.getStorageAccount().then((buyer) => {
+      if (buyer) {
+        this.userPvd.getAllShippingAddress(buyer.userID, buyer.token)
           .subscribe(
             (res) => {
               if (res) {
@@ -44,12 +43,14 @@ export class ChooseAddressPage {
               console.log('get-all-address', err);
             }
           )
-      });
+      }
     });
   }
 
   selectAddress(id) {
-    this.nativePvd.setStorage("addressid", id);
+    this.storagePvd.setStorageAccountDefaultAddressID(parseInt(id)).then((val) => {
+      console.log(val);
+    });
     this.navCtrl.pop();
   }
 

@@ -1,123 +1,186 @@
 import { Injectable } from '@angular/core';
+import { BuyerAccountManagementProvider } from './buyer-account-management';
+import { CouponProvider } from './buyer-coupon';
+import { ShippingAddressProvider } from './buyer-shipping-address';
 
-import { NativeProvider } from '../native/native';
-import { HermesProvider } from '../hermes/hermes';
-import { map } from 'rxjs/operators';
+//import { PostBuyerAccount } from '../config';
+//import { PostBuyerShippingAddressID } from '../config';
+//import { PostBuyerShippingAddress } from '../config';
+
+//获得买家基本信息
+//getBuyerBasicInformation.php
+/*
+发送：
+{
+    userID:买家ID,
+    token:买家token
+}
+ */
+//interface PostGetBuyerBasicInformation extends PostBuyerAccount {}
+
+//查询优惠券
+//getCoupon.php
+/*
+发送：
+{
+    userID:买家ID,
+    token:买家token
+}
+ */
+//interface PostGetCoupon extends PostBuyerAccount {}
+
+//查询收货地址信息（使用地址信息ID）
+//getShippingAddressByID_buyer.php
+/*
+发送：
+{
+    "userID":买家ID,
+    "token":买家token,
+    "buyerShippingAddressID":收货地址信息ID
+}
+ */
+//interface PostGetShippingAddressByID extends PostBuyerAccount,PostBuyerShippingAddressID {}
+
+//查询买家所有收货地址
+//getBuyerShippingAddress.php
+/*
+发送：
+{
+    "userID":买家ID,
+    "token":买家token,
+}
+ */
+//interface PostGetBuyerShippingAddress extends PostBuyerAccount {}
+
+//增加买家收货地址
+//addNewShippingAddress_buyer.php
+/*
+发送：
+{
+    "buyerID":买家ID,
+    "token":买家token,
+    //一次只增加一条地址，多条收货地址需要多次调用此PHP
+    "consigneeAddress":收货人地址,
+    "consigneeName":收货人姓名,
+    "consigneeGender":收货人性别,
+    "consigneePhoneNumber":收货人电话号码
+}
+ */
+//interface PostAddNewShippingAddress extends PostBuyerAccount,PostBuyerShippingAddress {}
+
+//修改买家收货地址
+//buyerModifyShippingAddress.php
+/*
+发送：
+{
+    "buyerID":买家ID,
+    "token":买家token,
+    "buyerShippingAddressID":收货地址ID,
+    "consigneeAddress":收货人地址,
+    "consigneeName":收货人姓名,
+    "consigneeGender":收货人性别,
+    "consigneePhoneNumber":收货人电话号码
+}
+ */
+//interface PostModifyShippingAddress extends PostBuyerAccount,PostBuyerShippingAddressID,PostBuyerShippingAddress {}
 
 @Injectable()
 export class UserProvider {
 
-  constructor(public hermes: HermesProvider,
-    private nativePvd: NativeProvider,) {
-    console.log('Hello UserServiceProvider Provider');
+  constructor(
+    private accountManagement: BuyerAccountManagementProvider,
+    private coupon: CouponProvider,
+    private shippingAddress: ShippingAddressProvider,
+  ) {}
+
+  /**
+   * 获得买家基本信息
+   */
+  public getUserBasicData(userID: number,token: string) {
+    let post = {
+      userID: userID,
+      token: token
+    }
+    return this.accountManagement.getBuyerBasicInformation(post);
   }
 
-
-  public getUserBasicData(post) {
-    return this.hermes.hermes("getBuyerBasicInformation.php", post).pipe(
-      map((data) => {
-        console.log("getUserBasicData data:", data);
-        if (data.querySuccess == false) {
-          this.nativePvd.presentSimpleAlert('用户身份验证过期，请重新登录');
-          return false;
-        } else if (!data.hasOwnProperty('queryResult')) {
-          return false;
-        } else if (data.queryResult) {
-          return data.queryResult[0];
-        } else if (data.queryResult === false || data.queryResult === null || data.queryResult === []) {
-          return null;
-        }
-      })
-    );
+  /**
+   * 查询优惠券
+   */
+  public getCoupon(userID: number,token: string) {
+    let post = {
+      userID: userID,
+      token: token
+    }
+    return this.coupon.getCoupon(post);
   }
 
-  public getCoupon(post) {
-    return this.hermes.hermes('getCoupon.php', post).pipe(
-      map((data) => {
-        if (data.businessStatus.tokenVerifyPassed==false) {
-          this.nativePvd.presentSimpleAlert('用户身份验证过期，请重新登录');
-          return false;
-        } else if (data.systemStatus.querySuccess==false) {
-          this.nativePvd.presentSimpleAlert('加载失败，请检查网络连接');
-          return false;
-        } else if (!data.hasOwnProperty('queryResult')) {
-          return false;
-        } else if (data.queryResult) {
-          return data.queryResult;
-        } else if (data.queryResult === false || data.queryResult === null || data.queryResult === []) {
-          return null;
-        }
-      })
-    )
+  /**
+   * 查询单个收货地址信息（使用地址信息ID）
+   */
+  public getOneShippingAddress(userID: number,token: string,buyerShippingAddressID: number) {
+    let post = {
+      userID: userID,
+      token:  token,
+      buyerShippingAddressID: buyerShippingAddressID
+    }
+    return this.shippingAddress.getShippingAddressByID(post);
   }
 
-  public useCoupon(post) {
-    return this.hermes.hermes('useCoupon.php', post).pipe(
-      map((data) => {
-        if (data.systemStatus.querySuccess == false) {
-          this.nativePvd.presentSimpleAlert('用户身份验证过期，请重新登录');
-          return false;
-        } else if (data.systemStatus.querySuccess == true) {
-          return true;
-        }
-      })
-    );
+  /**
+   * 查询买家所有收货地址
+   */
+  public getAllShippingAddress(userID: number,token: string) {
+    let post = {
+      userID: userID,
+      token:  token,
+    }
+    return this.shippingAddress.getBuyerShippingAddress(post);
   }
 
-  public getOneShippingAddress(post) {
-    return this.hermes.hermes("getShippingAddressByID_buyer.php", post).pipe(
-      map((data) => {
-        console.log("UserProvider getOneShippingAddress data:", data);
-        if (data.querySuccess == false) {
-          this.nativePvd.presentSimpleAlert('用户身份验证过期，请重新登录');
-          return false;
-        } else if (!data.hasOwnProperty('queryResult')) {
-          return false;
-        } else if (data.queryResult) {
-          return data.queryResult;
-        } else if (data.queryResult === false || data.queryResult === null || data.queryResult === []) {
-          return null;
-        }
-      })
-    );
+  /**
+   * 增加买家收货地址
+   */
+  public addNewShippingAddress(
+    userID: number,
+    token: string,
+    consigneeAddress: string,
+    consigneeName:  string,
+    consigneeGender: string,
+    consigneePhoneNumber: string
+  ) {
+    let post = {
+      userID: userID,
+      token: token,
+      consigneeAddress: consigneeAddress,
+      consigneeName:  consigneeName,
+      consigneeGender: consigneeGender,
+      consigneePhoneNumber: consigneePhoneNumber
+    }
+    return this.shippingAddress.addNewShippingAddress(post);
   }
 
-  public getAllShippingAddress(post) {
-    return this.hermes.hermes('getBuyerShippingAddress.php', post).pipe(
-      map((data) => {
-        if (data.querySuccess == false) {
-          this.nativePvd.presentSimpleAlert('用户身份验证过期，请重新登录');
-          return false;
-        } else if (!data.hasOwnProperty('queryResult')) {
-          return false;
-        } else if (data.queryResult) {
-          return data.queryResult;
-        } else if (data.queryResult === false || data.queryResult === null || data.queryResult === []) {
-          return null;
-        }
-      })
-    );
-  }
-
-  public addNewShippingAddress(post) {
-    return this.hermes.hermes('addNewShippingAddress_buyer.php', post).pipe(
-      map((data) => {
-        if (data.querySuccess == false) {
-          this.nativePvd.presentSimpleAlert('提交错误，可能由于用户登录信息过期，或表单填写错误');
-        }
-        return data.querySuccess;
-      })
-    );
-  }
-
-  public modifyShippingAddress(post) {
-    return this.hermes.hermes('buyerModifyShippingAddress.php', post).pipe(
-      map((data) => {
-        if (data.querySuccess == false) {
-          this.nativePvd.presentSimpleAlert('提交错误，可能由于用户登录信息过期，或表单填写错误');
-        }
-        return data.querySuccess;
-      })
-    )
+  /**
+   * 修改买家收货地址
+   */
+  public modifyShippingAddress(
+    userID: number,
+    token: string,
+    buyerShippingAddressID: number,
+    consigneeAddress: string,
+    consigneeName:  string,
+    consigneeGender: string,
+    consigneePhoneNumber: string
+  ) {
+    let post = {
+      userID: userID,
+      token: token,
+      buyerShippingAddressID: buyerShippingAddressID,
+      consigneeAddress: consigneeAddress,
+      consigneeName:  consigneeName,
+      consigneeGender: consigneeGender,
+      consigneePhoneNumber: consigneePhoneNumber
+    }
+    return this.shippingAddress.buyerModifyShippingAddress(post);
   }
 }

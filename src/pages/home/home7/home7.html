@@ -1,18 +1,30 @@
-<!--
-  Generated template for the Home7Page page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>home7</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
+<ion-content>
+  <div  class="item-container" *ngFor="let commodity of commodites">
+    <div  class="item-img-container">
+      <img class="img" width="76" height="76" [src]="pictureWarehouseURL + commodity?.pictureURL">
+    </div>
+    <div  class="item-center-container">
+      <div class="item-title">
+        {{commodity?.name}}
+        <span class="commodity-unit">/ {{commodity?.unit}}</span>
+      </div>
+      <div class="item-description">
+        {{commodity?.description}}
+      </div>
+      <div class="item-sales">
+        <span>月售 {{commodity?.monthlySales}}</span>
+        <span  class="item-favorable">好评率 100%</span>
+      </div>
+    </div>
+    <div class="item-end-container">
+      <div class="item-price">
+        ￥{{commodity?.price / 100}}
+      </div>
+    </div>
+    <div class="item-button">
+      <ion-icon name="ios-remove-circle-outline" color="primary" *ngIf="commodity?.inCartNumber > 0" (click)="onRemoveChage(commodity)"></ion-icon>
+      <span class="item-select" *ngIf="commodity?.inCartNumber > 0">{{commodity?.inCartNumber}}</span>
+      <ion-icon name="ios-add-circle" color="primary" (click)="onAddChange(commodity)"></ion-icon>
+    </div>
+  </div>
 </ion-content>

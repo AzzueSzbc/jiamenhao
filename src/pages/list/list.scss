@@ -8,6 +8,7 @@ page-list {
     background-color: $primary;
   }
 
+  //顶部导航
   .header-container {
     width: 100%;
     display: flex;
@@ -21,6 +22,7 @@ page-list {
     }
   }
 
+  //加载中显示
   .loading {
     width: 100%;
     height: 80%;
@@ -33,33 +35,22 @@ page-list {
     }
   }
 
-  .no-network {
-    width: 100%;
-    height: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .no-network-txt {
-      font-size: 18px;
-      color: $dark;
-    }
-  }
-
-  .not-log-in-content-container {
+  //出现异常时显示
+  .error-content-container {
     width: 100%;
     height: 70%;
     display: flex;
     align-items: center;
 
-    .not-log-in-container {
+    .error-container {
       width: 100%;
       height: auto;
 
-      .not-log-in-txt-container {
+      .error-message-container {
         width: 100%;
         display: flex;
         justify-content: center;
-        .not-log-in-txt {
+        .error-message {
           width: auto;
           height: auto;
           font-size: 18px;
@@ -67,12 +58,12 @@ page-list {
         }
       }
 
-      .log-in-button-container {
+      .deal-button-container {
         width: 100%;
         margin-top: 30px;
         display: flex;
         justify-content: center;
-        .log-in-button {
+        .deal-button {
           width: auto;
           height: auto;
           border-radius: 12px;
@@ -85,18 +76,7 @@ page-list {
     }
   }
 
-  .no-order-container {
-    width: 100%;
-    height: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-      .no-order-txt {
-        font-size: 18px;
-        color: $dark;
-      }
-  }
-
+  //内容
   .order-container {
     width: 100%;
     .order-card {

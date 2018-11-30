@@ -5,11 +5,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Network } from '@ionic-native/network';
 
 import { NativeProvider } from '../providers/native/native';
+import { StorageProvider } from '../providers/storage/storage';
 import { VerifyProvider } from '../providers/verify/verify';
 
 import { TabsPage } from '../pages/tabs/tabs';
 
-import { STATUS_BAR_COLOR_PRIMARY  } from '../providers/config';
+import { STATUS_BAR_COLOR_PRIMARY } from '../providers/config';
 
 
 
@@ -26,37 +27,32 @@ export class MyApp {
     public events: Events,
     private network: Network,
     private nativePvd: NativeProvider,
+    private storagePvd: StorageProvider,
     private verifyPvd: VerifyProvider,
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       splashScreen.hide();
-      this.nativePvd.getStorage('clientid').then((id) => {
-        this.nativePvd.getStorage('clienttoken').then((token) => {
-          if (token) {
-            this.verifyPvd.tokenLogin({
-              buyerID: id,
-              buyerToken: token
-            })
-              .subscribe(
-                (res) => {
-                  console.log('app-res', res);
-                  if (res == true) {  //login success
-                    this.events.publish('user:login');
-                  } else if (res == false) { //login failed
-                    this.events.publish('user:logout');
-                  }
-                },
-                (err) => {
-                  console.log(err);
-                });
-          } else {
-            this.events.publish('user:logout');
-          }
-        });
+      this.storagePvd.getStorageAccount().then((buyer) => {
+        if (buyer) {
+          this.verifyPvd.tokenLogin(buyer.userID, buyer.token)
+            .subscribe(
+              (res) => {
+                console.log('app-res', res);
+                if (res == true) {  //login success
+                  this.events.publish('user:login');
+                } else if (res == false) { //login failed
+                  this.events.publish('user:logout');
+                }
+              },
+              (err) => {
+                console.log(err);
+              });
+        } else {
+          this.events.publish('user:logout');
+        }
       });
-
     });
   }
 }
