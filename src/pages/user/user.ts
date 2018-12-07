@@ -116,7 +116,7 @@ export class UserPage {
   //即将上线
   //转到显示“即将上线”的“我的邀请”页面
   pushMyInvitationPage() {
-    this.app.getRootNav().push('PaymentMethodPage');
+    this.app.getRootNav().push('MyInvitationPage');
   }
 
   //打开客服热线页面

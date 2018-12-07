@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.jiamenhao.client" version="0.1.11" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.jiamenhao.client" version="0.1.19" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>家门好</name>
     <description>生鲜配送</description>
     <author email="hi@jiamenhao.com" href="http://jiamenhao.com/">Half Crusade</author>
@@ -97,7 +97,7 @@
     <plugin name="cordova-hot-code-push-plugin" spec="^1.5.3" />
     <plugin name="cordova-hot-code-push-local-dev-addon" spec="^0.4.2" />
     <chcp>
-        <native-interface version="11" />
+        <native-interface version="19" />
         <config-file url="https://app.jiaenhao.com/buyer/www/chcp.json" />
         <content src="index.html" />
     </chcp>

@@ -30,9 +30,7 @@ export class TabsPage {
       });
     }
 
-  ionViewDidLoad() {
-
-  }
+  ionViewDidLoad() {}
 
   calculate() {
     this.shopNumber = 0;

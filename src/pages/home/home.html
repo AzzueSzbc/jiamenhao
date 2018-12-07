@@ -22,12 +22,12 @@
 <ion-content>
 
   <!--下拉刷新-->
-  <ion-refresher (ionRefresh)="doRefresh($event)" (ionPull)="doPulling($event)">
+  <!--<ion-refresher (ionRefresh)="doRefresh($event)" (ionPull)="doPulling($event)">
     <ion-refresher-content
       pullingText="下拉刷新"
       refreshingText="加载中...">
     </ion-refresher-content>
-  </ion-refresher>
+  </ion-refresher>-->
 
   <!--页面加载中时显示-->
   <div class="loading" *ngIf="status=='加载中'">
